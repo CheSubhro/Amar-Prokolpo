@@ -1,0 +1,104 @@
+mitsubhra_db_user
+
+0MZhT81sFkqlNDWO
+
+
+mongodb+srv://mitsubhra_db_user:0MZhT81sFkqlNDWO@cluster0.thm3ohc.mongodb.net/?appName=Cluster0
+
+
+{
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true
+    },
+    slug: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true
+    },
+    icon: {
+        type: String // এটি হতে পারে FontAwesome ক্লাসের নাম বা SVG কোড
+    },
+    image: {
+        type: String // Cloudinary বা অন্য কোনো স্টোরেজ থেকে আসা ছবির URL
+    },
+    description: {
+        type: String, // ক্যাটাগরি সম্পর্কে ছোট বর্ণনা (SEO-এর জন্য জরুরি)
+    },
+    isActive: {
+        type: Boolean,
+        default: true // কোনো ক্যাটাগরি সাময়িকভাবে হাইড করতে চাইলে এটি কাজে লাগবে
+    },
+    order: {
+        type: Number,
+        default: 0 // মেনুতে ক্যাটাগরিগুলো কোন ক্রমে থাকবে তা নিয়ন্ত্রণ করার জন্য
+    }
+}
+
+
+
+schema colection
+
+{
+    title: { type: String, required: true, trim: true },
+    shortDescription: { type: String, required: true },
+    description: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true }, 
+    image: { type: String, required: true },
+    benefits: [{ type: String }],
+    eligibility: [{ type: String }],
+    requiredDocuments: [{ type: String }],
+    applicationProcess: [{ type: String }],
+    applicationLink: { type: String },
+    
+    helplineNumber: { type: String }, 
+    officialEmail: { type: String },
+    
+    faqs: [{ question: String, answer: String }],
+    deadline: { type: Date },
+    status: { type: String, enum: ['Active', 'Expired', 'Upcoming'], default: 'Active' },
+    viewCount: { type: Number, default: 0 },
+    featured: { type: Boolean, default: false }
+}, 
+{ timestamps: true }
+
+review collection:
+
+{
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    schemeId: { type: Schema.Types.ObjectId, ref: "Scheme", required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, required: true, trim: true },
+    status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+    helpfulCount: { type: Number, default: 0 }
+}, 
+{ timestamps: true }
+
+wishlist collection:
+
+{
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    schemeId: { type: Schema.Types.ObjectId, ref: "Scheme", required: true },
+    notes: { type: String, trim: true }, // ইউজারের নিজস্ব নোট
+    reminderDate: { type: Date }, // রিমাইন্ডার সেট করার জন্য
+    folderName: { type: String, default: "Favorites" }, // ইউজার চাইলে ফোল্ডারে ভাগ করতে পারবে
+    savedAt: { type: Date, default: Date.now }
+}
+
+Support collection:
+
+{
+    userId: { type: Schema.Types.ObjectId, ref: "User" }, 
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true },
+    phoneNumber: { type: String },
+    subject: { type: String, required: true },
+    message: { type: String, required: true },
+    priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Low' },
+    status: { type: String, enum: ['Pending', 'In-Progress', 'Resolved'], default: 'Pending' },
+    adminResponse: { type: String } // অ্যাডমিনের উত্তরের জন্য
+}, 
+{ timestamps: true }
