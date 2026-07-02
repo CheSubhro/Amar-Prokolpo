@@ -13,10 +13,10 @@
         lowercase: true
     },
     icon: {
-        type: String // এটি হতে পারে FontAwesome ক্লাসের নাম বা SVG কোড
+        type: String 
     },
     image: {
-        type: String // Cloudinary বা অন্য কোনো স্টোরেজ থেকে আসা ছবির URL
+        type: String 
     },
     description: {
         type: String, // ক্যাটাগরি সম্পর্কে ছোট বর্ণনা (SEO-এর জন্য জরুরি)
