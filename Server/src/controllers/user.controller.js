@@ -10,18 +10,7 @@ import { lowercase } from '../utils/StringUtils.js'
 
 const registerUser = asyncHandler ( async (req,res) =>{
 
-    // TODO:
-    // get user details from frontend
-    // validation - not empty
-    // check if user already exists: username, email
-    // check for images, check for avatar
-    // upload them to cloudinary, avatar
-    // create user object - create entry in db
-    // remove password and refresh token field from response
-    // check for user creation
-    // return res
-
-    const {fullName, email, username, password } = req.body
+    const {fullName, email, username, password, role } = req.body
     //console.log("email: ", email);
 
     if (
@@ -55,6 +44,7 @@ const registerUser = asyncHandler ( async (req,res) =>{
         throw new ApiError(HttpStatus.BAD_REQUEST, "Avatar file is required")
     }
 
+
     const avatar = await uploadOnCloudinary(avatarLocalPath)
     const coverImage = await uploadOnCloudinary(coverImageLocalPath)
 
@@ -62,14 +52,19 @@ const registerUser = asyncHandler ( async (req,res) =>{
         throw new ApiError(HttpStatus.BAD_REQUEST, "Avatar file is required")
     }
 
+    const userRole = role ? role.toLowerCase() : "admin";
+
     const user = await User.create({
         fullName,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email, 
         password,
-        username: lowercaseUsername
+        username: lowercaseUsername,
+        role: userRole
     })
+
+    
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
