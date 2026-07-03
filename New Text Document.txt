@@ -95,3 +95,12 @@ Support collection:
     adminResponse: { type: String } // অ্যাডমিনের উত্তরের জন্য
 }, 
 { timestamps: true }
+
+
+৪. ইউজার প্রোফাইল ভিউ (Get Other User Profile)
+এখন আপনি শুধু getCurrentUser (নিজের প্রোফাইল) দেখতে পারছেন। কিন্তু অ্যাডমিনের প্রয়োজন হতে পারে নির্দিষ্ট কোনো ইউজারের প্রোফাইল দেখার।
+
+এন্ডপয়েন্ট: GET /users/:username অথবা GET /users/:id।
+
+৫. একটি অ্যাক্টিভিটি লগ (Activity Log)
+যেহেতু এটি CMS, তাই অ্যাডমিন বা মডারেটর কখন কোন ইউজার ডিলিট করলো বা আপডেট করলো, তা ট্র্যাক করার জন্য একটি Audit Log বা Activity Log টেবিল রাখা ভালো।

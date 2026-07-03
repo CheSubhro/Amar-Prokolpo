@@ -1,23 +1,24 @@
 
 // npm i nodemailer
 
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
-// Send an email
-const sendEmail = async (to, subject, body) => {
+export const sendEmail = async (options) => {
+    const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
+        auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+        },
+    });
 
-  const transporter = nodemailer.createTransport({
-    // configure transporter
-  });
+    const mailOptions = {
+        from: '"MyCMS Support" <support@mycms.com>',
+        to: options.email,
+        subject: options.subject,
+        text: options.message,
+    };
 
-  const mailOptions = {
-    from: 'your@email.com',
-    to: to,
-    subject: subject,
-    text: body
-  };
-
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 };
-
-export default sendEmail;

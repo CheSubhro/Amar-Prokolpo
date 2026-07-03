@@ -9,6 +9,8 @@ import { lowercase } from '../utils/StringUtils.js'
 import { generateUserTokens } from "../utils/TokenManager.js"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendEmail } from "../utils/Email.js";
 
 
 const registerUser = asyncHandler ( async (req,res) =>{
@@ -318,6 +320,45 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         );
 });
 
+export const forgotPassword = asyncHandler(async (req, res) => {
+
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) throw new ApiError(HttpStatus.NOT_FOUND, "User not found");
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordExpiry = Date.now() + 15 * 60 * 1000; 
+    await user.save();
+
+    const resetUrl = `${req.protocol}://${req.get("host")}/api/v1/users/reset-password/${resetToken}`;
+    const message = `You requested a password reset. Click here: ${resetUrl}`;
+
+    await sendEmail({ email: user.email, subject: "Password Reset", message });
+    
+    return res.status(200).json(new ApiResponse(200, {}, "Email sent successfully"));
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+
+    const hashedToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
+    
+    const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpiry: { $gt: Date.now() }
+    });
+
+    if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, "Token is invalid or expired");
+
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiry = undefined;
+    await user.save();
+
+    return res.status(200).json(new ApiResponse(200, {}, "Password reset successful"));
+});
+
 
 export {
     registerUser,
@@ -328,7 +369,9 @@ export {
     changeCurrentPassword,
     deleteUser,
     logoutUser,
-    refreshAccessToken
+    refreshAccessToken,
+    forgotPassword,
+    resetPassword
 }
 
 

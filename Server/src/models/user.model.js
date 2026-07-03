@@ -54,6 +54,8 @@ const userSchema = new Schema(
             enum: ["user", "admin", "moderator"], 
             default: "admin" 
         },
+        resetPasswordToken: String,
+        resetPasswordExpiry: Date,
         // Refresh token field
         refreshToken: {
             type: String

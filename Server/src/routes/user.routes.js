@@ -55,6 +55,9 @@ router.route("/update-user/:id").patch(
     updateUser
 );
 
+router.route("/forgot-password").post(forgotPassword);
+router.route("/reset-password/:token").post(resetPassword);
+
 
 
 
