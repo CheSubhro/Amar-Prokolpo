@@ -1,0 +1,32 @@
+info:
+  name: UpdateCategory
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/category/update/6a46357e5b1f05846269816c"
+  body:
+    type: multipart-form
+    data:
+      - name: name
+        type: text
+        value: Agriculture1
+      - name: description
+        type: text
+        value: Information regarding farmers and agriculture-based schemes1
+      - name: order
+        type: text
+        value: "2"
+      - name: isActive
+        type: text
+        value: "true"
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
