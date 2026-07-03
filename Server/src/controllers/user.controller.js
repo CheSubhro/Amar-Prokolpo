@@ -267,7 +267,6 @@ const deleteUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, {}, "User removed successfully"));
 });
 
-
 const logoutUser = asyncHandler(async (req, res) => {
 
     await User.findByIdAndUpdate(
@@ -351,7 +350,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
     if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, "Token is invalid or expired");
 
-    user.password = await bcrypt.hash(req.body.password, 10);
+    user.password = req.body.password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiry = undefined;
     await user.save();

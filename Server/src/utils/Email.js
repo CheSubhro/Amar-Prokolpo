@@ -1,6 +1,5 @@
 
 // npm i nodemailer
-
 import nodemailer from "nodemailer";
 
 export const sendEmail = async (options) => {
