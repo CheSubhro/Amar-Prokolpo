@@ -320,7 +320,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         );
 });
 
-export const forgotPassword = asyncHandler(async (req, res) => {
+const forgotPassword = asyncHandler(async (req, res) => {
 
     const { email } = req.body;
     const user = await User.findOne({ email });
@@ -340,7 +340,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Email sent successfully"));
 });
 
-export const resetPassword = asyncHandler(async (req, res) => {
+const resetPassword = asyncHandler(async (req, res) => {
 
     const hashedToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
     
@@ -351,7 +351,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
 
     if (!user) throw new ApiError(HttpStatus.BAD_REQUEST, "Token is invalid or expired");
 
-    user.password = req.body.password;
+    user.password = await bcrypt.hash(req.body.password, 10);
     user.resetPasswordToken = undefined;
     user.resetPasswordExpiry = undefined;
     await user.save();

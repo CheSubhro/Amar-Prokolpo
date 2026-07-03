@@ -10,7 +10,9 @@ import {
         changeCurrentPassword,
         deleteUser,
         logoutUser ,
-        refreshAccessToken
+        refreshAccessToken,
+        forgotPassword,
+        resetPassword
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
