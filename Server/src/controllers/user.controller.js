@@ -358,8 +358,8 @@ const resetPassword = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Password reset successful"));
 });
 
-export const getUserProfile = asyncHandler(async (req, res) => {
-    
+const getUserProfile = asyncHandler(async (req, res) => {
+
     const { username } = req.params;
 
     if (!username) {
@@ -389,7 +389,8 @@ export {
     logoutUser,
     refreshAccessToken,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getUserProfile
 }
 
 

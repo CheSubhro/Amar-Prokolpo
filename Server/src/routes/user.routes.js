@@ -12,7 +12,8 @@ import {
         logoutUser ,
         refreshAccessToken,
         forgotPassword,
-        resetPassword
+        resetPassword,
+        getUserProfile
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";

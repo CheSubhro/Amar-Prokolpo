@@ -1,0 +1,17 @@
+info:
+  name: GetUserProfile
+  type: http
+  seq: 22
+
+http:
+  method: GET
+  url: "{{baseUrl}}/users/profile/admin_user"
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTQ3NjAzZDZmYzQzYTJhNzQyMGI3YWQiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhZG1pbl91c2VyIiwiaWF0IjoxNzgzMDcyMzYxLCJleHAiOjE3ODMxNTg3NjF9.hP1JkQqyvFHJ17_1nqzd0ICT9uTEhEHwpcBMTumUM5M
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
