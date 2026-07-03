@@ -10,8 +10,8 @@ export const verifyAdmin = asyncHandler(async (req, res, next) => {
     next();
 });
 
-export const verifyModerator = asyncHandler(async (req, res, next) => {
-    if (!req.user || (req.user.role !== "admin" && req.user.role !== "moderator")) {
+export const verifyAdminOrModerator = asyncHandler(async(req, res, next) => {
+    if (req.user?.role !== "admin" && req.user?.role !== "moderator") {
         throw new ApiError(HttpStatus.FORBIDDEN, "Access denied! Admins or Moderators only.");
     }
     next();

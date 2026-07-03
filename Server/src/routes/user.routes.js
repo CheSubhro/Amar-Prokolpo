@@ -13,7 +13,7 @@ import {
         refreshAccessToken
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { verifyAdmin, verifyModerator } from "../middlewares/admin.middleware.js";
+import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
 
 
 const router = Router()
@@ -42,7 +42,7 @@ router.route("/logout").delete(verifyJWT, logoutUser)
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 
 // Admin-only routes
-router.route("/all-user").get(verifyJWT,verifyAdmin,getAllUser);
+router.route("/all-user").get(verifyJWT,verifyAdminOrModerator,getAllUser);
 router.route("/delete-user/:id").delete(verifyJWT, verifyAdmin,deleteUser)
 
 router.route("/update-user/:id").patch(
