@@ -1,0 +1,17 @@
+info:
+  name: LogActivity
+  type: http
+  seq: 24
+
+http:
+  method: GET
+  url: "{{baseUrl}}/users/logs"
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTQ3NjAzZDZmYzQzYTJhNzQyMGI3YWQiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhZG1pbl91c2VyIiwiaWF0IjoxNzgzMDczODc2LCJleHAiOjE3ODMxNjAyNzZ9.8FqdQQRL2MpeVRmYrelODkXQl3YXmDlCvsuDDUt-tIw
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

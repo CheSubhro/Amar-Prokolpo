@@ -4,6 +4,7 @@ import { ApiError } from '../utils/ApiError.js'
 import HttpStatus from '../utils/HttpStatus.js'
 import { ApiResponse } from '../utils/ApiResponse.js'
 import { User } from '../models/user.model.js'
+import { ActivityLog } from "../models/activityLog.model.js";
 import { uploadOnCloudinary, deleteFromCloudinary }  from '../utils/Cloudinary.js'
 import { lowercase } from '../utils/StringUtils.js'
 import { generateUserTokens } from "../utils/TokenManager.js"
@@ -11,7 +12,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendEmail } from "../utils/Email.js";
-import { logActivity } from "../utils/logger.js";
+import { logActivity } from "../utils/Logger.js";
 
 
 const registerUser = asyncHandler ( async (req,res) =>{
@@ -79,6 +80,8 @@ const registerUser = asyncHandler ( async (req,res) =>{
     if (!createdUser) {
         throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong while registering the user")
     }
+
+    await logActivity(user._id, "REGISTER_USER", user._id, `New user registered with username: ${user.username}`, req.ip);
 
     return res.status(HttpStatus.CREATED).json(
         new ApiResponse(HttpStatus.OK, createdUser, "User registered Successfully")
@@ -153,7 +156,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     const user = await User.findById(id);
     if (!user) {
-        throw new ApiError(HttpStatus.NOT_FOUND, "Staff member not found");
+        throw new ApiError(HttpStatus.NOT_FOUND, "User not found");
     }
 
     const updateData = {};
@@ -214,7 +217,8 @@ const updateUser = asyncHandler(async (req, res) => {
         { $set: updateData },
         { new: true, runValidators: true }
     ).select("-password -refreshToken");
-
+    
+    await logActivity(req.user._id, "UPDATE_USER", id, `Admin updated profile for: ${user.username}`,req.ip);
     return res.status(HttpStatus.OK).json(
         new ApiResponse(HttpStatus.OK, updatedUser, "User profile updated successfully")
     );
@@ -238,6 +242,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
     user.password = newPassword; 
     await user.save({ validateBeforeSave: false });
 
+    await logActivity(req.user._id, "PASSWORD_CHANGE", req.user._id, `User changed their own password`, req.ip);
     return res
         .status(HttpStatus.OK)
         .json(new ApiResponse(HttpStatus.OK, {}, "Password changed successfully"));
@@ -262,7 +267,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     const deletedUser = await User.findByIdAndDelete(id);
-    await logActivity(req.user._id, "DELETE_USER", id, `Admin deleted user: ${user.username}`);
+    await logActivity(req.user._id, "DELETE_USER", id, `Admin deleted user: ${user.username}`,req.ip);
     return res
         .status(HttpStatus.OK)
         .json(new ApiResponse(HttpStatus.OK, {}, "User removed successfully"));
@@ -356,6 +361,8 @@ const resetPassword = asyncHandler(async (req, res) => {
     user.resetPasswordExpiry = undefined;
     await user.save();
 
+    await logActivity(user._id, "RESET_PASSWORD", user._id, `Password reset successful for user: ${user.username}`, req.ip || "unknown");
+
     return res.status(200).json(new ApiResponse(200, {}, "Password reset successful"));
 });
 
@@ -379,6 +386,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 const getAllLogs = asyncHandler(async (req, res) => {
+
     const logs = await ActivityLog.find().sort({ timestamp: -1 });
     return res.status(200).json(new ApiResponse(200, logs, "Logs fetched successfully"));
 });

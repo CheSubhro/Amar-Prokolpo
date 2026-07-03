@@ -5,7 +5,7 @@ info:
 
 http:
   method: PATCH
-  url: "{{baseUrl}}/users/update-user/6a4746d0c10f91144afe7702"
+  url: "{{baseUrl}}/users/update-user/6a47603d6fc43a2a7420b7ad"
   body:
     type: multipart-form
     data:
@@ -35,7 +35,9 @@ http:
         value:
           - C:\Users\CHE\Downloads\Gemini_Generated_Image_qvunpnqvunpnqvun.png
         contentType: File
-  auth: inherit
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2YTQ3NjAzZDZmYzQzYTJhNzQyMGI3YWQiLCJlbWFpbCI6ImFkbWluQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhZG1pbl91c2VyIiwiaWF0IjoxNzgzMDczODc2LCJleHAiOjE3ODMxNjAyNzZ9.8FqdQQRL2MpeVRmYrelODkXQl3YXmDlCvsuDDUt-tIw
 
 settings:
   encodeUrl: true

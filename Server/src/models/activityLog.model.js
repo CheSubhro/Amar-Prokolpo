@@ -6,6 +6,7 @@ const activityLogSchema = new Schema({
     action: { type: String, required: true }, 
     targetUserId: { type: Schema.Types.ObjectId, ref: "User" },
     details: { type: String },
+    ipAddress: { type: String },
     timestamp: { type: Date, default: Date.now }
 });
 
