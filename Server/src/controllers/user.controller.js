@@ -358,6 +358,25 @@ const resetPassword = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Password reset successful"));
 });
 
+export const getUserProfile = asyncHandler(async (req, res) => {
+    
+    const { username } = req.params;
+
+    if (!username) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "Username is required");
+    }
+
+    const user = await User.findOne({ username }).select("-password -refreshToken");
+
+    if (!user) {
+        throw new ApiError(HttpStatus.NOT_FOUND, "User does not exist");
+    }
+
+    return res
+        .status(HttpStatus.OK)
+        .json(new ApiResponse(HttpStatus.OK, user, "User profile fetched successfully"));
+});
+
 
 export {
     registerUser,

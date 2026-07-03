@@ -44,8 +44,12 @@ router.route("/logout").delete(verifyJWT, logoutUser)
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 
 // Admin-only routes
-router.route("/all-user").get(verifyJWT,verifyAdminOrModerator,getAllUser);
 router.route("/delete-user/:id").delete(verifyJWT, verifyAdmin,deleteUser)
+
+// Admin & Moderator routes
+router.route("/all-user").get(verifyJWT,verifyAdminOrModerator,getAllUser);
+router.route("/profile/:username").get(verifyJWT, verifyAdminOrModerator, getUserProfile);
+
 
 router.route("/update-user/:id").patch(
     verifyJWT,
