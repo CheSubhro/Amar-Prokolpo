@@ -216,13 +216,37 @@ const updateUser = asyncHandler(async (req, res) => {
     );
 });
 
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+
+    const { oldPassword, newPassword } = req.body;
+
+    if (!oldPassword || !newPassword) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "Both old and new passwords are required");
+    }
+
+    const user = await User.findById(req.user?._id);
+
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordCorrect) {
+        throw new ApiError(HttpStatus.UNAUTHORIZED, "Invalid old password");
+    }
+
+    user.password = newPassword; 
+    await user.save({ validateBeforeSave: false });
+
+    return res
+        .status(HttpStatus.OK)
+        .json(new ApiResponse(HttpStatus.OK, {}, "Password changed successfully"));
+});
+
 
 export {
     registerUser,
     loginUser,
     getCurrentUser,
     getAllUser,
-    updateUser
+    updateUser,
+    changeCurrentPassword
 }
 
 
