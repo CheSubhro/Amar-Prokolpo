@@ -11,6 +11,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendEmail } from "../utils/Email.js";
+import { logActivity } from "../utils/logger.js";
 
 
 const registerUser = asyncHandler ( async (req,res) =>{
@@ -261,7 +262,7 @@ const deleteUser = asyncHandler(async (req, res) => {
     }
 
     const deletedUser = await User.findByIdAndDelete(id);
-
+    await logActivity(req.user._id, "DELETE_USER", id, `Admin deleted user: ${user.username}`);
     return res
         .status(HttpStatus.OK)
         .json(new ApiResponse(HttpStatus.OK, {}, "User removed successfully"));
@@ -377,6 +378,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, user, "User profile fetched successfully"));
 });
 
+const getAllLogs = asyncHandler(async (req, res) => {
+    const logs = await ActivityLog.find().sort({ timestamp: -1 });
+    return res.status(200).json(new ApiResponse(200, logs, "Logs fetched successfully"));
+});
+
 
 export {
     registerUser,
@@ -390,7 +396,8 @@ export {
     refreshAccessToken,
     forgotPassword,
     resetPassword,
-    getUserProfile
+    getUserProfile,
+    getAllLogs
 }
 
 

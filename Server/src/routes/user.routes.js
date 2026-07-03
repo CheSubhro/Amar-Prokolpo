@@ -13,7 +13,8 @@ import {
         refreshAccessToken,
         forgotPassword,
         resetPassword,
-        getUserProfile
+        getUserProfile,
+        getAllLogs
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -46,6 +47,7 @@ router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
 
 // Admin-only routes
 router.route("/delete-user/:id").delete(verifyJWT, verifyAdmin,deleteUser)
+router.route("/logs").get(verifyJWT, verifyAdmin, getAllLogs);
 
 // Admin & Moderator routes
 router.route("/all-user").get(verifyJWT,verifyAdminOrModerator,getAllUser);
@@ -64,6 +66,8 @@ router.route("/update-user/:id").patch(
 
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").post(resetPassword);
+
+
 
 
 
