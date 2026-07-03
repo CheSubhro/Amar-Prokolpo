@@ -132,10 +132,21 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, req.user, "User fetched successfully"));
 });
 
+const getAllUser = asyncHandler(async (req, res) => {
+    const staffs = await User.find({
+        role: { $in: ['user', 'admin', 'moderator'] }
+    }).select("-password -refreshToken");
+
+    return res
+        .status(HttpStatus.OK)
+        .json(new ApiResponse(HttpStatus.OK, staffs, "System users fetched successfully"));
+});
+
 export {
     registerUser,
     loginUser,
-    getCurrentUser
+    getCurrentUser,
+    getAllUser
 }
 
 
