@@ -5,7 +5,8 @@ import {
         registerUser,
         loginUser, 
         getCurrentUser,
-        getAllUser
+        getAllUser,
+        updateUser
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -28,6 +29,15 @@ router.route("/register").post(
 
 router.route("/login").post(loginUser);
 router.route("/current-user").get(verifyJWT, getCurrentUser);
-router.route("/all-user").get(verifyJWT, getAllUser)
+router.route("/all-user").get(verifyJWT, getAllUser);
+router.route("/update-user/:id").patch(
+    verifyJWT,
+    upload.fields([
+        { name: "avatar", maxCount: 1 },
+        { name: "coverImage", maxCount: 1 }
+    ]),
+    updateUser
+);
+
 
 export default router

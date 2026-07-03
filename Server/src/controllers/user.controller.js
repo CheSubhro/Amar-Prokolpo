@@ -4,7 +4,7 @@ import { ApiError } from '../utils/ApiError.js'
 import HttpStatus from '../utils/HttpStatus.js'
 import { ApiResponse } from '../utils/ApiResponse.js'
 import { User } from '../models/user.model.js'
-import { uploadOnCloudinary }  from '../utils/Cloudinary.js'
+import { uploadOnCloudinary, deleteFromCloudinary }  from '../utils/Cloudinary.js'
 import { lowercase } from '../utils/StringUtils.js'
 import { generateUserTokens } from "../utils/TokenManager.js"
 import bcrypt from "bcrypt";
@@ -142,11 +142,87 @@ const getAllUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, staffs, "System users fetched successfully"));
 });
 
+const updateUser = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+    const { fullName, email, username, password, role } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+        throw new ApiError(HttpStatus.NOT_FOUND, "Staff member not found");
+    }
+
+    const updateData = {};
+
+    if (fullName) updateData.fullName = fullName;
+    
+    if (role) {
+        const validRoles = ['user', 'admin', 'moderator']; 
+        if (!validRoles.includes(role.toLowerCase())) {
+            throw new ApiError(HttpStatus.BAD_REQUEST, "Invalid role configuration");
+        }
+        updateData.role = role.toLowerCase();
+    }
+    
+    if (email) {
+        const emailExists = await User.findOne({ email: email.toLowerCase(), _id: { $ne: id } });
+        if (emailExists) throw new ApiError(HttpStatus.CONFLICT, "Email is already taken");
+        updateData.email = email.toLowerCase().trim();
+    }
+
+    if (username) {
+        const usernameExists = await User.findOne({ username: username.toLowerCase(), _id: { $ne: id } });
+        if (usernameExists) throw new ApiError(HttpStatus.CONFLICT, "Username is already taken");
+        updateData.username = username.toLowerCase().trim();
+    }
+
+    if (password && password.trim() !== "") {
+        updateData.password = password; 
+    }
+
+    // image Update Logic
+    if (req.files) {
+        // Avatar Update
+        if (req.files.avatar && req.files.avatar[0]) {
+            const avatarLocalPath = req.files.avatar[0].path;
+            const uploadedAvatar = await uploadOnCloudinary(avatarLocalPath);
+            if (uploadedAvatar) {
+                // old image delete logic
+                if (user.avatar) await deleteFromCloudinary(user.avatar);
+                updateData.avatar = uploadedAvatar.url;
+            }
+        }
+
+        // Cover Image Update
+        if (req.files.coverImage && req.files.coverImage[0]) {
+            const coverImageLocalPath = req.files.coverImage[0].path;
+            const uploadedCover = await uploadOnCloudinary(coverImageLocalPath);
+            if (uploadedCover) {
+                // old image delete logic
+                if (user.coverImage) await deleteFromCloudinary(user.coverImage);
+                updateData.coverImage = uploadedCover.url;
+            }
+        }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { $set: updateData },
+        { new: true, runValidators: true }
+    ).select("-password -refreshToken");
+
+    return res.status(HttpStatus.OK).json(
+        new ApiResponse(HttpStatus.OK, updatedUser, "User profile updated successfully")
+    );
+});
+
+
 export {
     registerUser,
     loginUser,
     getCurrentUser,
-    getAllUser
+    getAllUser,
+    updateUser
 }
 
 

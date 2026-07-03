@@ -1,0 +1,44 @@
+info:
+  name: UpdateAdmin
+  type: http
+  seq: 8
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/users/update-user/6a4746d0c10f91144afe7702"
+  body:
+    type: multipart-form
+    data:
+      - name: fullName
+        type: text
+        value: System Admin
+        contentType: Text
+      - name: username
+        type: text
+        value: admin_user
+        contentType: Text
+      - name: email
+        type: text
+        value: admin@example.com
+        contentType: Text
+      - name: role
+        type: text
+        value: admin
+        contentType: Text
+      - name: avatar
+        type: file
+        value:
+          - C:\Users\CHE\Downloads\Gemini_Generated_Image_5z0po15z0po15z0p.png
+        contentType: File
+      - name: coverImage
+        type: file
+        value:
+          - C:\Users\CHE\Downloads\Gemini_Generated_Image_qvunpnqvunpnqvun.png
+        contentType: File
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
