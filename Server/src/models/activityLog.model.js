@@ -7,7 +7,9 @@ const activityLogSchema = new Schema({
     targetUserId: { type: Schema.Types.ObjectId, ref: "User" },
     details: { type: String },
     ipAddress: { type: String },
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now },
+    targetModelId: { type: Schema.Types.ObjectId }, 
+    targetModelName: { type: String }
 });
 
 export const ActivityLog = mongoose.model("ActivityLog", activityLogSchema);

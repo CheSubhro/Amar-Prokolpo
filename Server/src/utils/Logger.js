@@ -14,12 +14,18 @@ const logger = winston.createLogger({
 });
 
 // Database Logger
-export const logActivity = async (adminId, action, targetUserId, details, ipAddress) => {
-	try {
-		await ActivityLog.create({ adminId, action, targetUserId, details, ipAddress });
-	} catch (error) {
-		logger.error("Failed to save activity log to database: " + error.message);
-	}
+export const logActivity = async (adminId, action, details, targetUserId = null, ipAddress = null) => {
+    try {
+        await ActivityLog.create({ 
+            adminId, 
+            action, 
+            details, 
+            targetUserId, 
+            ipAddress 
+        });
+    } catch (error) {
+        logger.error("Failed to save activity log to database: " + error.message);
+    }
 };
 
 export default logger;

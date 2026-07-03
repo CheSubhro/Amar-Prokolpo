@@ -67,12 +67,4 @@ router.route("/update-user/:id").patch(
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").post(resetPassword);
 
-
-
-
-
-
-
- 
-
 export default router
