@@ -7,7 +7,8 @@ import {
         getCurrentUser,
         getAllUser,
         updateUser,
-        changeCurrentPassword
+        changeCurrentPassword,
+        deleteUser
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -40,6 +41,8 @@ router.route("/update-user/:id").patch(
     updateUser
 );
 router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
+router.route("/delete-user/:id").delete(verifyJWT, deleteUser)
+
 
 
 export default router

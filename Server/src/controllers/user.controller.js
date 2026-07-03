@@ -239,6 +239,31 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, {}, "Password changed successfully"));
 });
 
+const deleteUser = asyncHandler(async (req, res) => {
+
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    
+    if (!user) {
+        throw new ApiError(HttpStatus.NOT_FOUND, "User member not found");
+    }
+
+    if (user.avatar) {
+        await deleteFromCloudinary(user.avatar);
+    }
+    
+    if (user.coverImage) {
+        await deleteFromCloudinary(user.coverImage);
+    }
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    return res
+        .status(HttpStatus.OK)
+        .json(new ApiResponse(HttpStatus.OK, {}, "User removed successfully"));
+});
+
 
 export {
     registerUser,
@@ -246,7 +271,8 @@ export {
     getCurrentUser,
     getAllUser,
     updateUser,
-    changeCurrentPassword
+    changeCurrentPassword,
+    deleteUser
 }
 
 
