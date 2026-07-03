@@ -8,6 +8,7 @@ import { uploadOnCloudinary, deleteFromCloudinary }  from '../utils/Cloudinary.j
 import { lowercase } from '../utils/StringUtils.js'
 import { generateUserTokens } from "../utils/TokenManager.js"
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 
 const registerUser = asyncHandler ( async (req,res) =>{
@@ -285,6 +286,38 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(HttpStatus.OK, {}, "User logged out successfully"));
 });
 
+const refreshAccessToken = asyncHandler(async (req, res) => {
+
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+
+    if (!incomingRefreshToken) {
+        throw new ApiError(HttpStatus.UNAUTHORIZED, "Unauthorized request");
+    }
+
+    const decodedToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET);
+    
+    const user = await User.findById(decodedToken?._id);
+
+    if (!user || incomingRefreshToken !== user.refreshToken) {
+        throw new ApiError(HttpStatus.UNAUTHORIZED, "Refresh token is expired or invalid");
+    }
+
+    const { accessToken, refreshToken: newRefreshToken } = await generateUserTokens(user._id);
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    };
+
+    return res
+        .status(HttpStatus.OK)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", newRefreshToken, options)
+        .json(
+            new ApiResponse(HttpStatus.OK, { accessToken, refreshToken: newRefreshToken }, "Access token refreshed")
+        );
+});
+
 
 export {
     registerUser,
@@ -294,7 +327,8 @@ export {
     updateUser,
     changeCurrentPassword,
     deleteUser,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
 
 
