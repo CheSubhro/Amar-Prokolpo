@@ -342,7 +342,9 @@ const forgotPassword = asyncHandler(async (req, res) => {
 
     await sendEmail({ email: user.email, subject: "Password Reset", message });
     
-    return res.status(200).json(new ApiResponse(200, {}, "Email sent successfully"));
+    return res
+    .status(HttpStatus.OK)
+    .json(new ApiResponse(HttpStatus.OK, {}, "Email sent successfully"));
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
@@ -363,7 +365,9 @@ const resetPassword = asyncHandler(async (req, res) => {
 
     await logActivity(user._id, "RESET_PASSWORD", user._id, `Password reset successful for user: ${user.username}`, req.ip || "unknown");
 
-    return res.status(200).json(new ApiResponse(200, {}, "Password reset successful"));
+    return res
+    .status(HttpStatus.OK)
+    .json(new ApiResponse(HttpStatus.OK, {}, "Password reset successful"));
 });
 
 const getUserProfile = asyncHandler(async (req, res) => {
@@ -388,7 +392,9 @@ const getUserProfile = asyncHandler(async (req, res) => {
 const getAllLogs = asyncHandler(async (req, res) => {
 
     const logs = await ActivityLog.find().sort({ timestamp: -1 });
-    return res.status(200).json(new ApiResponse(200, logs, "Logs fetched successfully"));
+    return res
+    .status(HttpStatus.OK)
+    .json(new ApiResponse(HttpStatus.OK, logs, "Logs fetched successfully"));
 });
 
 
