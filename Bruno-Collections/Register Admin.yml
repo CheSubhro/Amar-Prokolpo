@@ -23,7 +23,7 @@ http:
         contentType: Text
       - name: password
         type: text
-        value: Admin@123
+        value: "{{newPassword}}"
         contentType: Text
       - name: role
         type: text
