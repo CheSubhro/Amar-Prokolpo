@@ -6,6 +6,8 @@ import { ApiResponse } from '../utils/ApiResponse.js'
 import { User } from '../models/user.model.js'
 import { uploadOnCloudinary }  from '../utils/Cloudinary.js'
 import { lowercase } from '../utils/StringUtils.js'
+import { generateUserTokens } from "../utils/TokenManager.js"
+import bcrypt from "bcrypt";
 
 
 const registerUser = asyncHandler ( async (req,res) =>{
@@ -81,8 +83,59 @@ const registerUser = asyncHandler ( async (req,res) =>{
 
 })
 
+const loginUser = asyncHandler(async (req, res) => {
+
+    const { email, username, password } = req.body;
+
+    if (!username && !email) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "Username or email is required");
+    }
+
+    const user = await User.findOne({
+        $or: [{ username }, { email }]
+    });
+
+    if (!user) {
+        throw new ApiError(HttpStatus.NOT_FOUND, "User does not exist");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+        throw new ApiError(HttpStatus.UNAUTHORIZED, "Invalid user credentials");
+    }
+
+    const { accessToken, refreshToken } = await generateUserTokens(user._id);
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    };
+
+    return res
+        .status(HttpStatus.OK)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(
+            new ApiResponse(
+                HttpStatus.OK,
+                { user: loggedInUser, accessToken, refreshToken },
+                "User logged in successfully"
+            )
+        );
+});
+
+const getCurrentUser = asyncHandler(async (req, res) => {
+    return res
+        .status(HttpStatus.OK)
+        .json(new ApiResponse(HttpStatus.OK, req.user, "User fetched successfully"));
+});
+
 export {
-    registerUser
+    registerUser,
+    loginUser,
+    getCurrentUser
 }
 
 
