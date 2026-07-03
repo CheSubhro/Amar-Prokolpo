@@ -13,10 +13,12 @@ import {
         refreshAccessToken
     } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { verifyAdmin, verifyModerator } from "../middlewares/admin.middleware.js";
 
 
 const router = Router()
 
+// Public Route
 router.route("/register").post(
     upload.fields([
         {
@@ -32,21 +34,31 @@ router.route("/register").post(
 )
 
 router.route("/login").post(loginUser);
+router.route("/refresh-token").post(refreshAccessToken);
+
+// Protected routes (Login required)
 router.route("/current-user").get(verifyJWT, getCurrentUser);
-router.route("/all-user").get(verifyJWT, getAllUser);
+router.route("/logout").delete(verifyJWT, logoutUser)
+router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
+
+// Admin-only routes
+router.route("/all-user").get(verifyJWT,verifyAdmin,getAllUser);
+router.route("/delete-user/:id").delete(verifyJWT, verifyAdmin,deleteUser)
+
 router.route("/update-user/:id").patch(
     verifyJWT,
+    verifyAdmin,
     upload.fields([
         { name: "avatar", maxCount: 1 },
         { name: "coverImage", maxCount: 1 }
     ]),
     updateUser
 );
-router.route("/change-password").patch(verifyJWT, changeCurrentPassword);
-router.route("/delete-user/:id").delete(verifyJWT, deleteUser)
-router.route("/logout").delete(verifyJWT, logoutUser)
 
-router.route("/refresh-token").post(refreshAccessToken);
+
+
+
+
  
 
 export default router
