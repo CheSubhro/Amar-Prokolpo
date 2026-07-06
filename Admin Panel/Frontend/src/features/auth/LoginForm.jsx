@@ -1,25 +1,43 @@
 
 import React, { useState } from 'react';
-import { Box, Typography } from '@mui/material';
-import { Card, Input, Button } from '../../components/common/index';
+import { Box, Typography, Paper, TextField, Button as MuiButton } from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LoginForm = ({ onLogin }) => {
-    
     const [formData, setFormData] = useState({ email: '', password: '' });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
     return (
-        <Card sx={{ maxWidth: 400, mx: 'auto', mt: 8, p: 3 }}>
-            <Typography variant="h5" textAlign="center" mb={2}>Admin Login</Typography>
-            <Box component="form" display="flex" flexDirection="column" gap={2}>
-                <Input name="email" label="Email" type="email" onChange={handleChange} fullWidth />
-                <Input name="password" label="Password" type="password" onChange={handleChange} fullWidth />
-                <Button onClick={() => onLogin(formData)} fullWidth>Login</Button>
+        <Paper elevation={3} sx={{ maxWidth: 400, mx: 'auto', mt: 10, p: 4, borderRadius: 3, textAlign: 'center' }}>
+            <Box sx={{ mb: 2, color: 'primary.main' }}>
+                <LockOutlinedIcon fontSize="large" />
             </Box>
-        </Card>
+            <Typography variant="h5" fontWeight="700" sx={{ mb: 1 }}>Admin Login</Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Enter your credentials to continue</Typography>
+
+            <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                <TextField 
+                    label="Email Address" 
+                    variant="outlined" 
+                    fullWidth 
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                />
+                <TextField 
+                    label="Password" 
+                    type="password" 
+                    variant="outlined" 
+                    fullWidth 
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                />
+                <MuiButton 
+                    variant="contained" 
+                    size="large" 
+                    onClick={() => onLogin(formData)}
+                    sx={{ py: 1.5, mt: 1, fontWeight: 'bold' }}
+                >
+                    LOGIN
+                </MuiButton>
+            </Box>
+        </Paper>
     );
 };
 
