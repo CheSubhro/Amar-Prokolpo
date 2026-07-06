@@ -17,7 +17,7 @@ const StyledChip = styled(Chip)(({ theme, customStyles }) => ({
     ...customStyles
 }));
 
-const Badge = ({ variant, status, children, icon, ...props }) => {
+const CustomBadge = ({ variant, status, children, icon, ...props }) => {
     const rawKey = (variant || status || 'info').toLowerCase();
     const activeKey = rawKey === 'inactive' ? 'warning' : rawKey;
 
@@ -41,4 +41,4 @@ const Badge = ({ variant, status, children, icon, ...props }) => {
     );
 };
 
-export default Badge;
+export default CustomBadge;

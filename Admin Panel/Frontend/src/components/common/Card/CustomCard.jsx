@@ -2,11 +2,11 @@
 import React from 'react';
 import { Card as MuiCard, CardContent } from '@mui/material';
 
-const Card = ({ children, ...props }) => {
+const CustomCard = ({ children, ...props }) => {
     return (
         <MuiCard elevation={2} {...props}>
             <CardContent>{children}</CardContent>
         </MuiCard>
     );
 };
-export default Card;
+export default CustomCard;

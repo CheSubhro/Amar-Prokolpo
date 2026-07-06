@@ -20,7 +20,7 @@ const CustomSelect = ({
                 value={value}
                 onChange={onChange}
                 label={label}
-                IconComponent={ArrowDropDownIcon} // MUI আইকন ব্যবহারের জন্য
+                IconComponent={ArrowDropDownIcon} 
                 {...props}
             >
                 {options.map((option) => (

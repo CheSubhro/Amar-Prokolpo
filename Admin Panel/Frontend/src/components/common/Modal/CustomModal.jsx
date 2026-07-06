@@ -8,7 +8,7 @@ const style = {
     width: 400, bgcolor: 'background.paper', boxShadow: 24, p: 4, borderRadius: 2
 };
 
-const Modal = ({ open, onClose, title, children }) => {
+const CustomModal = ({ open, onClose, title, children }) => {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={style}>
@@ -21,4 +21,4 @@ const Modal = ({ open, onClose, title, children }) => {
         </Modal>
     );
 };
-export default Modal;
+export default CustomModal;

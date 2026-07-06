@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Box, Typography, Button } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+// import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 class ErrorBoundary extends Component {
     state = { hasError: false };
@@ -11,7 +11,7 @@ class ErrorBoundary extends Component {
         if (this.state.hasError) {
             return (
                 <Box textAlign="center" p={5}>
-                    <ErrorOutlineIcon color="error" sx={{ fontSize: 60 }} />
+                    {/* <ErrorOutlineIcon color="error" sx={{ fontSize: 60 }} /> */}
                     <Typography variant="h6">Something went wrong!</Typography>
                     <Button onClick={() => window.location.reload()}>Reload</Button>
                 </Box>

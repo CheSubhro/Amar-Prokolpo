@@ -2,7 +2,7 @@
 import React from 'react';
 import { Pagination as MuiPagination, Stack } from '@mui/material';
 
-const Pagination = ({ count, page, onChange, ...props }) => {
+const CustomPagination = ({ count, page, onChange, ...props }) => {
     return (
         <Stack spacing={2} alignItems="center" my={2}>
             <MuiPagination 
@@ -15,4 +15,4 @@ const Pagination = ({ count, page, onChange, ...props }) => {
         </Stack>
     );
 };
-export default Pagination;
+export default CustomPagination;

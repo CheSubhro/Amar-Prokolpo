@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 
-const Button = ({ children, startIcon, endIcon, variant = "contained", ...props }) => {
+const CustomButton = ({ children, startIcon, endIcon, variant = "contained", ...props }) => {
     return (
         <Button 
             variant={variant} 
@@ -14,4 +14,4 @@ const Button = ({ children, startIcon, endIcon, variant = "contained", ...props 
         </Button>
     );
 };
-export default Button;
+export default CustomButton;
