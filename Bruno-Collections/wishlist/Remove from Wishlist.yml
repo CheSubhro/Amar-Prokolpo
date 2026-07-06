@@ -1,0 +1,15 @@
+info:
+  name: Remove from Wishlist
+  type: http
+  seq: 21
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/wishlist/wishlistId"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

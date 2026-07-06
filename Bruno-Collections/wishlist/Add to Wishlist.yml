@@ -1,0 +1,23 @@
+info:
+  name: Add to Wishlist
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/wishlist"
+  body:
+    type: json
+    data: |-
+      {
+        "schemeId": "6a4636b55b1f058462698171",
+        "notes": "its very special for me",
+        "folderName": "Education"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
