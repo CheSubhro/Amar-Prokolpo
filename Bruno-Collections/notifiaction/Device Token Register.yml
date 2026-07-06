@@ -1,0 +1,22 @@
+info:
+  name: Device Token Register
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/notifications/register-token"
+  body:
+    type: json
+    data: |-
+      {
+        "token": "fcm_token_string_from_your_app",
+        "deviceType": "android"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
