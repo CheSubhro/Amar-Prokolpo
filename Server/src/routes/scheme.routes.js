@@ -7,7 +7,8 @@ import {
     getAllSchemes,
     getSchemeBySlug,
     updateScheme,
-    deleteScheme
+    deleteScheme,
+    getTopViewedSchemes
 } from "../controllers/scheme.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -24,6 +25,8 @@ router.route("/create").post(
     validateScheme,        
     createScheme
 );
+
+router.get("/top-viewed", getTopViewedSchemes);
 
 router.route("/all").get(getAllSchemes);
 
@@ -43,6 +46,5 @@ router.route("/delete/:id").delete(
     deleteScheme
 );
 
-router.get("/top-viewed", getTopViewedSchemes);
 
 export default router
