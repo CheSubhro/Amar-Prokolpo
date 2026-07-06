@@ -102,7 +102,17 @@ const getSchemeBySlug = asyncHandler(async (req, res) => {
     scheme.viewCount += 1;
     await scheme.save();
 
-    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, scheme, "Scheme fetched"));
+    const relatedSchemes = await Scheme.find({
+        category: scheme.category._id, 
+        _id: { $ne: scheme._id },      
+        isPublished: true              
+    })
+    .limit(4) 
+    .select("title shortDescription image slug"); 
+
+    res.status(HttpStatus.OK).json(
+        new ApiResponse(HttpStatus.OK, { scheme, relatedSchemes }, "Scheme fetched successfully")
+    );
 });
 
 const updateScheme = asyncHandler(async (req, res) => {

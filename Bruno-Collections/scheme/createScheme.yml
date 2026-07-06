@@ -73,6 +73,10 @@ http:
       - name: deadline
         type: text
         value: 2026-12-31
+      - name: ""
+        type: text
+        value: ""
+        disabled: true
   auth: inherit
 
 settings:
