@@ -3,7 +3,6 @@ import { body, validationResult } from 'express-validator';
 import { ApiError } from '../utils/ApiError.js';
 import HttpStatus from '../utils/HttpStatus.js';
 
-
 const parseArrayFields = (req, res, next) => {
     ['benefits', 'eligibility', 'requiredDocuments', 'applicationProcess', 'faqs'].forEach(field => {
         if (req.body[field] && typeof req.body[field] === 'string') {

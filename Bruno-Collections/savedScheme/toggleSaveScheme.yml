@@ -1,0 +1,21 @@
+info:
+  name: toggleSaveScheme
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/saved-schemes/toggle"
+  body:
+    type: json
+    data: |-
+      {
+        "schemeId": "6a4b49582e6efa4aa6fbed0f"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

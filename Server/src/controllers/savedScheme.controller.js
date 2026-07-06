@@ -4,6 +4,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import HttpStatus from '../utils/HttpStatus.js';
 import { SavedScheme } from '../models/savedScheme.model.js';
+import { logActivity } from "../utils/Logger.js";
 
 const toggleSaveScheme = asyncHandler(async (req, res) => {
     
@@ -14,10 +15,12 @@ const toggleSaveScheme = asyncHandler(async (req, res) => {
 
     if (existing) {
         await SavedScheme.findByIdAndDelete(existing._id);
-        return res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, { isSaved: false }, "Scheme removed from saved list"));
+        await logActivity(userId, "UNSAVE_SCHEME", `Scheme ${schemeId} removed from saved`);
+        return res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, { isSaved: false }, "Scheme removed"));
     } else {
         const saved = await SavedScheme.create({ user: userId, scheme: schemeId });
-        return res.status(HttpStatus.CREATED).json(new ApiResponse(HttpStatus.CREATED, { isSaved: true }, "Scheme saved successfully"));
+        await logActivity(userId, "SAVE_SCHEME", `Scheme ${schemeId} saved`);
+        return res.status(HttpStatus.CREATED).json(new ApiResponse(HttpStatus.CREATED, { isSaved: true }, "Scheme saved"));
     }
 });
 
