@@ -3,6 +3,7 @@ import { asyncHandler } from '../utils/AsyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import HttpStatus from '../utils/HttpStatus.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
+import { Category } from '../models/category.model.js';
 import { Scheme } from '../models/scheme.model.js';
 import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/Cloudinary.js';
 import { logActivity } from "../utils/Logger.js";

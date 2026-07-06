@@ -3,7 +3,21 @@ import { body, validationResult } from 'express-validator';
 import { ApiError } from '../utils/ApiError.js';
 import HttpStatus from '../utils/HttpStatus.js';
 
+
+const parseArrayFields = (req, res, next) => {
+    ['benefits', 'eligibility', 'requiredDocuments', 'applicationProcess', 'faqs'].forEach(field => {
+        if (req.body[field] && typeof req.body[field] === 'string') {
+            try {
+                req.body[field] = JSON.parse(req.body[field]);
+            } catch (e) {
+                req.body[field] = []; 
+            }
+        }
+    });
+    next();
+};
 export const validateScheme = [
+    parseArrayFields,
     body('title')
         .trim()
         .notEmpty().withMessage('Title is required')
@@ -39,6 +53,18 @@ export const validateScheme = [
     body('eligibility')
         .optional()
         .isArray().withMessage('Eligibility must be an array'),
+    
+    body('requiredDocuments')
+        .optional()
+        .isArray().withMessage('Required Documents must be an array'),
+
+    body('applicationProcess')
+        .optional()
+        .isArray().withMessage('Application Process must be an array'),
+
+    body('faqs')
+        .optional()
+        .isArray().withMessage('FAQs must be an array'),    
 
     (req, res, next) => {
         const errors = validationResult(req);

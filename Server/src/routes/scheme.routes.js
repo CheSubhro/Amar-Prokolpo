@@ -42,3 +42,5 @@ router.route("/delete/:id").delete(
     verifyAdminOrModerator,
     deleteScheme
 );
+
+export default router
