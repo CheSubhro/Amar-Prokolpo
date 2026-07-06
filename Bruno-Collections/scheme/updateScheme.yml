@@ -1,0 +1,42 @@
+info:
+  name: updateScheme
+  type: http
+  seq: 7
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/scheme/update/6a4636b55b1f058462698171"
+  body:
+    type: multipart-form
+    data:
+      - name: title
+        type: text
+        value: National Merit Scholarship - Updated
+        contentType: Text
+      - name: shortDescription
+        type: text
+        value: "Updated: Financial help for bright students"
+        contentType: Text
+      - name: benefits
+        type: text
+        value: '["Monthly stipend", "Book allowance", "Laptop support"]'
+        contentType: Text
+      - name: eligibility
+        type: text
+        value: '["Must be 10th pass", "Family income < 3L"]'
+        contentType: Text
+      - name: status
+        type: text
+        value: Upcoming
+        contentType: Text
+      - name: featured
+        type: text
+        value: "true"
+        contentType: Text
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

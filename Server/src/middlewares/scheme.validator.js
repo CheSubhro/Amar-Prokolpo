@@ -18,20 +18,25 @@ const parseArrayFields = (req, res, next) => {
 };
 export const validateScheme = [
     parseArrayFields,
+
     body('title')
+        .optional()
         .trim()
         .notEmpty().withMessage('Title is required')
         .isLength({ min: 5 }).withMessage('Title must be at least 5 characters long'),
 
     body('shortDescription')
+        .optional()
         .trim()
         .notEmpty().withMessage('Short description is required'),
 
     body('description')
+        .optional()
         .trim()
         .notEmpty().withMessage('Full description is required'),
 
     body('category')
+        .optional()
         .isMongoId().withMessage('Invalid Category ID format'),
 
     body('status')

@@ -1,0 +1,15 @@
+info:
+  name: getSchemeBySlug
+  type: http
+  seq: 6
+
+http:
+  method: GET
+  url: "{{baseUrl}}/scheme/national-merit-scholarship-scheme"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
