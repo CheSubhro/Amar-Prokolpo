@@ -2,30 +2,64 @@
 import { Review } from "../models/review.model.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { ApiError } from "../utils/ApiError.js"; 
+import { logActivity } from "../utils/logActivity.js"; 
 import HttpStatus from "../utils/HttpStatus.js";
 
 const addReview = asyncHandler(async (req, res) => {
-    
+
     const { schemeId, rating, comment } = req.body;
+
+    if (!schemeId || !rating || !comment) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "All fields (schemeId, rating, comment) are required");
+    }
+
     const review = await Review.create({
         userId: req.user._id,
         schemeId,
         rating,
         comment
     });
+
+    if (!review) throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to create review");
+
+    await logActivity(req.user._id, "ADD_REVIEW", `User added a review for scheme ${schemeId}`);
+
     res.status(HttpStatus.CREATED).json(new ApiResponse(HttpStatus.CREATED, review, "Review submitted for approval"));
 });
 
 const getApprovedReviews = asyncHandler(async (req, res) => {
+
     const { schemeId } = req.params;
-    const reviews = await Review.find({ schemeId, status: 'Approved' }).populate("userId", "fullName");
+    
+    if (!schemeId) throw new ApiError(HttpStatus.BAD_REQUEST, "Scheme ID is required");
+
+    const reviews = await Review.find({ schemeId, status: 'Approved' })
+        .populate("userId", "fullName") 
+        .sort({ createdAt: -1 });
+
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "Reviews fetched"));
 });
 
 const toggleHelpful = asyncHandler(async (req, res) => {
+
     const { reviewId } = req.params;
-    const review = await Review.findByIdAndUpdate(reviewId, { $inc: { helpfulCount: 1 } }, { new: true });
+    
+    if (!reviewId) throw new ApiError(HttpStatus.BAD_REQUEST, "Review ID is required");
+
+    const review = await Review.findByIdAndUpdate(
+        reviewId, 
+        { $inc: { helpfulCount: 1 } }, 
+        { new: true }
+    );
+
+    if (!review) throw new ApiError(HttpStatus.NOT_FOUND, "Review not found");
+
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, review, "Helpful count updated"));
 });
 
-export { addReview, getApprovedReviews, toggleHelpful };
+export { 
+    addReview, 
+    getApprovedReviews, 
+    toggleHelpful 
+};
