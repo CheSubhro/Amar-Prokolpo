@@ -1,18 +1,7 @@
 
-আপনার অ্যাডমিন প্যানেলে যখন "Publish" বাটনটি তৈরি করবেন, তখন রিকোয়েস্টটি এভাবে পাঠাবেন:
+import mongoose, { Schema } from "mongoose";
 
-Method: PATCH
-
-URL: {{baseUrl}}/scheme/update/:id
-
-Body: { "isPublished": true }
-
-
-
-
-Support collection:
-
-{
+const supportSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User" }, 
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true },
@@ -21,9 +10,7 @@ Support collection:
     message: { type: String, required: true },
     priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Low' },
     status: { type: String, enum: ['Pending', 'In-Progress', 'Resolved'], default: 'Pending' },
-    adminResponse: { type: String } // অ্যাডমিনের উত্তরের জন্য
-}, 
-{ timestamps: true }
+    adminResponse: { type: String }
+}, { timestamps: true });
 
-
-
+export const Support = mongoose.model("Support", supportSchema);
