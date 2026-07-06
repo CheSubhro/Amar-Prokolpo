@@ -57,8 +57,40 @@ const createScheme = asyncHandler(async (req, res) => {
 });
 
 const getAllSchemes = asyncHandler(async (req, res) => {
-    const schemes = await Scheme.find().populate("category", "name"); 
-    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, schemes, "Schemes fetched"));
+    
+    const { search, category, status, featured, page = 1, limit = 10 } = req.query;
+    
+    let query = {};
+
+    if (search) {
+        query.$or = [
+            { title: { $regex: search, $options: 'i' } },
+            { shortDescription: { $regex: search, $options: 'i' } }
+        ];
+    }
+
+    if (category) query.category = category;
+    if (status) query.status = status;
+    if (featured !== undefined) query.featured = featured === 'true';
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const schemes = await Scheme.find(query)
+        .populate("category", "name")
+        .skip(skip)
+        .limit(parseInt(limit))
+        .sort({ createdAt: -1 }); 
+
+    const total = await Scheme.countDocuments(query); 
+
+    res.status(HttpStatus.OK).json(
+        new ApiResponse(HttpStatus.OK, { 
+            schemes, 
+            total, 
+            page: parseInt(page),
+            totalPages: Math.ceil(total / parseInt(limit)) 
+        }, "Schemes fetched successfully")
+    );
 });
 
 const getSchemeBySlug = asyncHandler(async (req, res) => {
