@@ -8,7 +8,6 @@ import { Category } from '../models/category.model.js'
 import { uploadOnCloudinary, deleteFromCloudinary }  from '../utils/Cloudinary.js'
 import { logActivity } from "../utils/Logger.js";
 
-
 const createCategory = asyncHandler ( async (req,res) =>{
 
     const { name, description, order = 0, isActive = true } = req.body;

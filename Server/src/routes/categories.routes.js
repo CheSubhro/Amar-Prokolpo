@@ -11,7 +11,7 @@ import {
     } from "../controllers/categories.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
-import { validateCategory } from "../middlewares/validator.middleware.js";
+import { validateCategory } from "../middlewares/category.validator.js";
 
 const router = Router()
 

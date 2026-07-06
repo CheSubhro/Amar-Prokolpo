@@ -1,36 +1,4 @@
 
-{
-    name: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true
-    },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true
-    },
-    icon: {
-        type: String 
-    },
-    image: {
-        type: String 
-    },
-    description: {
-        type: String, // ক্যাটাগরি সম্পর্কে ছোট বর্ণনা (SEO-এর জন্য জরুরি)
-    },
-    isActive: {
-        type: Boolean,
-        default: true // কোনো ক্যাটাগরি সাময়িকভাবে হাইড করতে চাইলে এটি কাজে লাগবে
-    },
-    order: {
-        type: Number,
-        default: 0 // মেনুতে ক্যাটাগরিগুলো কোন ক্রমে থাকবে তা নিয়ন্ত্রণ করার জন্য
-    }
-}
-
 
 
 schema colection
