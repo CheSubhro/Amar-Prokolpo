@@ -28,6 +28,8 @@ import savedSchemeRouter from './routes/savedScheme.routes.js'
 import notificationRouter from "./routes/notification.routes.js"
 import reviewRouter from "./routes/review.routes.js"
 import wishlistRouter from "./routes/wishlist.routes.js"
+import supportRouter from "./routes/support.routes.js";
+
 
 
 //routes declaration
@@ -38,6 +40,7 @@ app.use("/api/v1/saved-schemes", savedSchemeRouter);
 app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/reviews", reviewRouter);
 app.use("/api/v1/wishlist", wishlistRouter);
+app.use("/api/v1/support", supportRouter);
 
 
 export { app }
