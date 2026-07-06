@@ -1,9 +1,18 @@
 
 import { Router } from "express";
-import { updateDeviceToken } from "../controllers/notification.controller.js";
+import { 
+    updateDeviceToken, 
+    getNotifications, 
+    markAsRead 
+} from "../controllers/notification.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
-router.route("/register-token").post(verifyJWT, updateDeviceToken);
+
+router.use(verifyJWT);
+
+router.route("/register-token").post(updateDeviceToken);
+router.route("/list").get(getNotifications);
+router.route("/read/:notificationId").patch(markAsRead);
 
 export default router;
