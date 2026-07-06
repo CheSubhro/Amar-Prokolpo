@@ -8,11 +8,11 @@ import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/Cloudinary.js
 import { logActivity } from "../utils/Logger.js";
 
 const createScheme = asyncHandler(async (req, res) => {
-    
+
     const { 
         title, shortDescription, description, category, applicationLink, 
-        helplineNumber, officialEmail, faqs, deadline, status, featured,
-        benefits, eligibility, requiredDocuments, applicationProcess 
+        helplineNumber, officialEmail, deadline, status, featured,
+        benefits, eligibility, requiredDocuments, applicationProcess, faqs 
     } = req.body;
 
     const imagePath = req.file?.path;
@@ -21,18 +21,31 @@ const createScheme = asyncHandler(async (req, res) => {
     const uploadResult = await uploadOnCloudinary(imagePath);
     if (!uploadResult) throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed");
 
-    const parseArray = (data) => (typeof data === 'string' ? JSON.parse(data) : data);
+    const parseArray = (data) => {
+        try {
+            return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
+        } catch (error) {
+            return [];
+        }
+    };
 
     const scheme = await Scheme.create({
-        title, shortDescription, description, category,
+        title, 
+        shortDescription, 
+        description, 
+        category,
         image: uploadResult.url,
-        benefits: parseArray(benefits) || [],
-        eligibility: parseArray(eligibility) || [],
-        requiredDocuments: parseArray(requiredDocuments) || [],
-        applicationProcess: parseArray(applicationProcess) || [],
-        applicationLink, helplineNumber, officialEmail,
-        faqs: parseArray(faqs) || [],
-        deadline, status, featured
+        benefits: parseArray(benefits),
+        eligibility: parseArray(eligibility),
+        requiredDocuments: parseArray(requiredDocuments),
+        applicationProcess: parseArray(applicationProcess),
+        applicationLink, 
+        helplineNumber, 
+        officialEmail,
+        faqs: parseArray(faqs), 
+        deadline: deadline ? new Date(deadline) : null, 
+        status, 
+        featured
     });
 
     await logActivity(req.user?._id, "CREATE_SCHEME", `Scheme ${title} created`);
