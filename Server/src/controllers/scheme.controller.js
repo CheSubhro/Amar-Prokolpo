@@ -154,10 +154,25 @@ const deleteScheme = asyncHandler(async (req, res) => {
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, {}, "Scheme deleted"));
 });
 
+const getTopViewedSchemes = asyncHandler(async (req, res) => {
+    
+    const limit = parseInt(req.query.limit) || 5; 
+
+    const topSchemes = await Scheme.find({ isPublished: true })
+        .sort({ viewCount: -1 }) 
+        .limit(limit)
+        .select("title viewCount slug image"); 
+
+    res.status(HttpStatus.OK).json(
+        new ApiResponse(HttpStatus.OK, topSchemes, "Top viewed schemes fetched successfully")
+    );
+});
+
 export { 
     createScheme,
     getAllSchemes, 
     getSchemeBySlug, 
     updateScheme,
-    deleteScheme 
+    deleteScheme,
+    getTopViewedSchemes 
 };

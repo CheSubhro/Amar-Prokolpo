@@ -43,4 +43,6 @@ router.route("/delete/:id").delete(
     deleteScheme
 );
 
+router.get("/top-viewed", getTopViewedSchemes);
+
 export default router
