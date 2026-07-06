@@ -6,6 +6,8 @@ import {
     createScheme,
     getAllSchemes,
     getSchemeBySlug,
+    updateScheme,
+    deleteScheme
 } from "../controllers/scheme.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -26,3 +28,17 @@ router.route("/create").post(
 router.route("/all").get(getAllSchemes);
 
 router.route("/:slug").get(getSchemeBySlug);
+
+router.route("/update/:id").patch(
+    verifyJWT,
+    verifyAdminOrModerator,
+    upload.single("image"),
+    validateScheme, 
+    updateScheme
+);
+
+router.route("/delete/:id").delete(
+    verifyJWT,
+    verifyAdminOrModerator,
+    deleteScheme
+);
