@@ -1,73 +1,27 @@
 
-
 import React from 'react';
-import { Box, Stack, Text, Link, HStack } from '@chakra-ui/react';
-import { FiGithub, FiTwitter, FiLinkedin } from 'react-icons/fi';
+import { Box, Typography, Link } from '@mui/material';
+import { Card, Tooltip } from '../../common/index'; 
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 const Footer = () => {
-    const currentYear = new Date().getFullYear();
-
     return (
-        <Box 
-            as="footer" 
-            bg="#f8fafc" // Soft and premium metallic gray background
-            color="gray.500" 
-            borderTop="1px solid" 
-            borderColor="gray.100"
-            w="100%"
-            mt="auto" // Forces footer to the bottom of the layout structure
-        >
-            <Stack 
-                maxW="6xl" 
-                mx="auto"
-                px="6"
-                py="6" 
-                direction={{ base: 'column', sm: 'row' }} 
-                spaceY={{ base: '3', sm: '0' }} // Supplies structural vertical spacing on mobile viewports
-                justify="space-between" 
-                align="center"
-            >
-                {/* ©️ Copyright Text Label */}
-                <Text fontSize="sm" fontWeight="medium" color="gray.500">
-                    &copy; {currentYear} <Box as="span" fontWeight="bold" color="blue.600">CheSubhro</Box>. All rights reserved.
-                </Text>
-
-                {/* 🔗 Social Media Action Anchors (Targeted externally, standard routing preventions omitted) */}
-                <HStack spaceX="6">
-                    <Link 
-                        href="https://github.com/CheSubhro" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        fontSize="lg"
-                        color="gray.500"
-                        _hover={{ color: "blue.600", transform: "scale(1.1)" }}
-                        transition="all 0.2s"
-                    >
-                        <FiGithub />
-                    </Link>
-                    
-                    <Link 
-                        href="#" 
-                        fontSize="lg"
-                        color="gray.500"
-                        _hover={{ color: "sky.500", transform: "scale(1.1)" }}
-                        transition="all 0.2s"
-                    >
-                        <FiTwitter />
-                    </Link>
-                    
-                    <Link 
-                        href="#" 
-                        fontSize="lg"
-                        color="gray.500"
-                        _hover={{ color: "blue.700", transform: "scale(1.1)" }}
-                        transition="all 0.2s"
-                    >
-                        <FiLinkedin />
-                    </Link>
-                </HStack>
-            </Stack>
-        </Box>
+        <Card sx={{ mt: 4, borderRadius: 0, bgcolor: 'grey.50' }}>
+            <Box display="flex" flexDirection="column" alignItems="center" py={2}>
+                <Typography variant="body2" color="text.secondary" display="flex" alignItems="center">
+                Developed with <FavoriteIcon color="error" sx={{ mx: 0.5, fontSize: 16 }} /> by CheSubhro © {new Date().getFullYear()}
+                </Typography>
+                
+                <Box mt={1} display="flex" gap={2}>
+                <Tooltip title="View Documentation">
+                    <Link href="#" underline="hover">Docs</Link>
+                </Tooltip>
+                <Tooltip title="Report a Bug">
+                    <Link href="#" underline="hover">Support</Link>
+                </Tooltip>
+                </Box>
+            </Box>
+        </Card>
     );
 };
 
