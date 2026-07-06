@@ -58,8 +58,38 @@ const toggleHelpful = asyncHandler(async (req, res) => {
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, review, "Helpful count updated"));
 });
 
+const updateReviewStatus = asyncHandler(async (req, res) => {
+
+    const { reviewId } = req.params;
+    const { status } = req.body; 
+
+    if (!['Approved', 'Rejected'].includes(status)) {
+        throw new ApiError(HttpStatus.BAD_REQUEST, "Invalid status");
+    }
+
+    const review = await Review.findByIdAndUpdate(
+        reviewId,
+        { status },
+        { new: true }
+    );
+
+    if (!review) throw new ApiError(HttpStatus.NOT_FOUND, "Review not found");
+
+    await logActivity(req.user._id, "UPDATE_REVIEW_STATUS", `Review ${reviewId} status changed to ${status}`);
+
+    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, review, `Review ${status} successfully`));
+});
+
+const getPendingReviews = asyncHandler(async (req, res) => {
+    
+    const reviews = await Review.find({ status: 'Pending' }).populate("userId", "fullName");
+    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "Pending reviews fetched"));
+});
+
 export { 
     addReview, 
     getApprovedReviews, 
-    toggleHelpful 
+    toggleHelpful,
+    updateReviewStatus,
+    getPendingReviews
 };
