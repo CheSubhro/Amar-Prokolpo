@@ -6,11 +6,12 @@ import {
         createCategory,
         getAllCategories,
         updateCategory,
+        getCategoryBySlug,
         deleteCategory 
     } from "../controllers/categories.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
-
+import { validateCategory } from "../middlewares/validator.middleware.js";
 
 const router = Router()
 
@@ -26,8 +27,10 @@ router.route("/create").post(
         {
             name: "image",
             maxCount: 1
-        }
+        },
+        
     ]),
+    validateCategory,
     createCategory
 )
 
@@ -40,8 +43,11 @@ router.route("/update/:id").patch(
         { name: "icon", maxCount: 1 },
         { name: "image", maxCount: 1 }
     ]),
+    validateCategory,
     updateCategory
 );
+
+router.route("/:slug").get(getCategoryBySlug);
 
 router.route("/delete/:id").delete(verifyJWT,verifyAdmin,deleteCategory);
 

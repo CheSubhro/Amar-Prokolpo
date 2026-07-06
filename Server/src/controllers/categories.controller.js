@@ -11,11 +11,7 @@ import { logActivity } from "../utils/Logger.js";
 
 const createCategory = asyncHandler ( async (req,res) =>{
 
-    const { name, description, order, isActive } = req.body;
-
-    if (!name) {
-        throw new ApiError(HttpStatus.BAD_REQUEST, "Category name is required");
-    }
+    const { name, description, order = 0, isActive = true } = req.body;
 
     let imageUrl = "";
     let iconUrl = "";
@@ -49,7 +45,8 @@ const createCategory = asyncHandler ( async (req,res) =>{
 
 const getAllCategories = asyncHandler ( async (req,res) =>{
 
-    const categories = await Category.find().sort({ order: 1 });
+    const query = req.query.active === 'true' ? { isActive: true } : {};
+    const categories = await Category.find(query).sort({ order: 1 });
 
     res.status(HttpStatus.OK).json(
         new ApiResponse(HttpStatus.OK, categories, "Categories fetched successfully")
@@ -93,6 +90,21 @@ const updateCategory = asyncHandler ( async (req,res) =>{
     );
 })
 
+const getCategoryBySlug = asyncHandler(async (req, res) => {
+
+    const { slug } = req.params;
+
+    const category = await Category.findOne({ slug });
+
+    if (!category) {
+        throw new ApiError(HttpStatus.NOT_FOUND, "Category not found");
+    }
+
+    res.status(HttpStatus.OK).json(
+        new ApiResponse(HttpStatus.OK, category, "Category fetched successfully")
+    );
+});
+
 const deleteCategory = asyncHandler ( async (req,res) =>{
 
     const { id } = req.params;
@@ -103,6 +115,7 @@ const deleteCategory = asyncHandler ( async (req,res) =>{
     }
 
     if (category.image) await deleteFromCloudinary(category.image);
+    if (category.icon) await deleteFromCloudinary(category.icon);
 
     await logActivity(req.user?._id, "DELETE_CATEGORY", `Category ${category.name} deleted`);
 
@@ -116,6 +129,7 @@ const deleteCategory = asyncHandler ( async (req,res) =>{
 export {
     createCategory,
     getAllCategories,
+    getCategoryBySlug,
     updateCategory,
     deleteCategory
 }
