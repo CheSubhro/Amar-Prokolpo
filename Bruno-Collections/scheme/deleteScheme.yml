@@ -1,0 +1,15 @@
+info:
+  name: deleteScheme
+  type: http
+  seq: 8
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/scheme/delete/6a4636b55b1f058462698171"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
