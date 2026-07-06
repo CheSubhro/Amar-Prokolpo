@@ -57,10 +57,10 @@ const createScheme = asyncHandler(async (req, res) => {
 });
 
 const getAllSchemes = asyncHandler(async (req, res) => {
+
+    const { search, category, status, featured, page = 1, limit = 10, isAdmin } = req.query;
     
-    const { search, category, status, featured, page = 1, limit = 10 } = req.query;
-    
-    let query = {};
+    let query = isAdmin === 'true' ? {} : { isPublished: true };
 
     if (search) {
         query.$or = [

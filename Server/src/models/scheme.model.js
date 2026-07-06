@@ -31,6 +31,10 @@ const schemeSchema = new Schema(
             enum: ['Active', 'Expired', 'Upcoming'], 
             default: 'Active' 
         },
+        isPublished: { 
+            type: Boolean,
+            default: false 
+        },
         viewCount: { type: Number, default: 0 },
         featured: { type: Boolean, default: false }
     }, 

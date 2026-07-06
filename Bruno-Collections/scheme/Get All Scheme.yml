@@ -5,13 +5,10 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/scheme/all/?status=Active&featured=true"
+  url: "{{baseUrl}}/scheme/all/?isPublished=false"
   params:
-    - name: status
-      value: Active
-      type: query
-    - name: featured
-      value: "true"
+    - name: isPublished
+      value: "false"
       type: query
   auth: inherit
 
