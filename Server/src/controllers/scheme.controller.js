@@ -46,7 +46,8 @@ const createScheme = asyncHandler(async (req, res) => {
         faqs: parseArray(faqs), 
         deadline: deadline ? new Date(deadline) : null, 
         status, 
-        featured
+        featured,
+        isPublished: req.body.isPublished || false
     });
 
     await logActivity(req.user?._id, "CREATE_SCHEME", `Scheme ${title} created`);
