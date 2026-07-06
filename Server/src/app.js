@@ -20,11 +20,14 @@ app.use(cookieParser())
 import userRouter from './routes/user.routes.js'
 import categoryRouter from './routes/categories.routes.js'
 import schemeRouter from './routes/scheme.routes.js'
+import savedSchemeRouter from './routes/savedScheme.routes.js'
+
 
 //routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/category", categoryRouter)
 app.use("/api/v1/scheme", schemeRouter)
+app.use("/api/v1/saved-schemes", savedSchemeRouter);
 
 
 export { app }
