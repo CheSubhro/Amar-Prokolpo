@@ -59,7 +59,7 @@ const createScheme = asyncHandler(async (req, res) => {
 
 const getAllSchemes = asyncHandler(async (req, res) => {
 
-    const { search, category, status, featured, page = 1, limit = 10, isAdmin } = req.query;
+    const { search, category, status, featured, page = 1, limit = 10, isAdmin, compact } = req.query;
     
     let query = isAdmin === 'true' ? {} : { isPublished: true };
 
@@ -76,12 +76,17 @@ const getAllSchemes = asyncHandler(async (req, res) => {
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const schemes = await Scheme.find(query)
+    let queryBuilder = Scheme.find(query)
         .populate("category", "name")
         .skip(skip)
         .limit(parseInt(limit))
-        .sort({ createdAt: -1 }); 
+        .sort({ createdAt: -1 });
 
+    if (compact === 'true') {
+        queryBuilder = queryBuilder.select("title image shortDescription slug category");
+    }
+
+    const schemes = await queryBuilder;
     const total = await Scheme.countDocuments(query); 
 
     res.status(HttpStatus.OK).json(
@@ -155,7 +160,7 @@ const deleteScheme = asyncHandler(async (req, res) => {
 });
 
 const getTopViewedSchemes = asyncHandler(async (req, res) => {
-    
+
     const limit = parseInt(req.query.limit) || 5; 
 
     const topSchemes = await Scheme.find({ isPublished: true })
