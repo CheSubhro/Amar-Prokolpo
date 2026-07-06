@@ -7,42 +7,7 @@ URL: {{baseUrl}}/scheme/update/:id
 
 Body: { "isPublished": true }
 
-schema colection
 
-{
-    title: { type: String, required: true, trim: true },
-    shortDescription: { type: String, required: true },
-    description: { type: String, required: true },
-    category: { type: Schema.Types.ObjectId, ref: "Category", required: true }, 
-    image: { type: String, required: true },
-    benefits: [{ type: String }],
-    eligibility: [{ type: String }],
-    requiredDocuments: [{ type: String }],
-    applicationProcess: [{ type: String }],
-    applicationLink: { type: String },
-    
-    helplineNumber: { type: String }, 
-    officialEmail: { type: String },
-    
-    faqs: [{ question: String, answer: String }],
-    deadline: { type: Date },
-    status: { type: String, enum: ['Active', 'Expired', 'Upcoming'], default: 'Active' },
-    viewCount: { type: Number, default: 0 },
-    featured: { type: Boolean, default: false }
-}, 
-{ timestamps: true }
-
-review collection:
-
-{
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    schemeId: { type: Schema.Types.ObjectId, ref: "Scheme", required: true },
-    rating: { type: Number, required: true, min: 1, max: 5 },
-    comment: { type: String, required: true, trim: true },
-    status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
-    helpfulCount: { type: Number, default: 0 }
-}, 
-{ timestamps: true }
 
 wishlist collection:
 
