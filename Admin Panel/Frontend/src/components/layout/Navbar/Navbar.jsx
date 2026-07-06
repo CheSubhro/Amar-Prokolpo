@@ -14,7 +14,7 @@ const Navbar = ({ toggleSidebar }) => {
                 </IconButton>
                 
                 <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-                    Admin Panel
+                    Amar Prokolpo
                 </Typography>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
