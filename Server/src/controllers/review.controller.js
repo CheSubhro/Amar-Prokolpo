@@ -3,7 +3,7 @@ import { Review } from "../models/review.model.js";
 import { asyncHandler } from "../utils/AsyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js"; 
-import { logActivity } from "../utils/logActivity.js"; 
+import { logActivity } from "../utils/Logger.js"; 
 import HttpStatus from "../utils/HttpStatus.js";
 
 const addReview = asyncHandler(async (req, res) => {
@@ -81,7 +81,7 @@ const updateReviewStatus = asyncHandler(async (req, res) => {
 });
 
 const getPendingReviews = asyncHandler(async (req, res) => {
-    
+
     const reviews = await Review.find({ status: 'Pending' }).populate("userId", "fullName");
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "Pending reviews fetched"));
 });

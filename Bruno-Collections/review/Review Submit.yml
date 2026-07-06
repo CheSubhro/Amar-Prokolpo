@@ -1,0 +1,23 @@
+info:
+  name: Review Submit
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/reviews/add"
+  body:
+    type: json
+    data: |-
+      {
+        "schemeId": "6a4636b55b1f058462698171",
+        "rating": 5,
+        "comment": "This is Very Good Scheme!"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

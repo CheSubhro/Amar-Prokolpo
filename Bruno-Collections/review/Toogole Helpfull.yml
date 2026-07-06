@@ -1,11 +1,11 @@
 info:
-  name: Get All Scheme
+  name: Toogole Helpfull
   type: http
-  seq: 5
+  seq: 16
 
 http:
-  method: GET
-  url: "{{baseUrl}}/scheme/all"
+  method: PATCH
+  url: "{{baseUrl}}/reviews/helpful/6a4b86d2ecb7d88947a82323"
   auth: inherit
 
 settings:

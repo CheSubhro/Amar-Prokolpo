@@ -1,0 +1,21 @@
+info:
+  name: updateReviewStatus
+  type: http
+  seq: 18
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/reviews/admin/status/6a4b86d2ecb7d88947a82323"
+  body:
+    type: json
+    data: |-
+      {
+        "status": "Approved" 
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
