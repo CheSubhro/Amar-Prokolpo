@@ -1,0 +1,22 @@
+info:
+  name: Respond - Admin Only
+  type: http
+  seq: 24
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/support/respond/6a4b96a4a2ea3edd4637d138"
+  body:
+    type: json
+    data: |-
+      {
+        "adminResponse": "We have fixed the caching issue. Please check again.",
+        "status": "Resolved"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
