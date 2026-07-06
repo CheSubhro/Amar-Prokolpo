@@ -22,6 +22,7 @@ import categoryRouter from './routes/categories.routes.js'
 import schemeRouter from './routes/scheme.routes.js'
 import savedSchemeRouter from './routes/savedScheme.routes.js'
 import notificationRouter from "./routes/notification.routes.js"
+import reviewRouter from "./routes/review.routes.js"
 
 
 //routes declaration
@@ -30,6 +31,7 @@ app.use("/api/v1/category", categoryRouter)
 app.use("/api/v1/scheme", schemeRouter)
 app.use("/api/v1/saved-schemes", savedSchemeRouter);
 app.use("/api/v1/notifications", notificationRouter);
+app.use("/api/v1/reviews", reviewRouter);
 
 
 export { app }
