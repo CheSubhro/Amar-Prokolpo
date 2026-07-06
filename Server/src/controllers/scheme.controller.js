@@ -7,13 +7,17 @@ import { Category } from '../models/category.model.js';
 import { Scheme } from '../models/scheme.model.js';
 import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/Cloudinary.js';
 import { logActivity } from "../utils/Logger.js";
+import { DeviceToken } from "../models/deviceToken.model.js";
+import { sendPushNotification } from "../services/notification.service.js";
+import { Notification } from "../models/notification.model.js";
 
 const createScheme = asyncHandler(async (req, res) => {
 
     const { 
         title, shortDescription, description, category, applicationLink, 
         helplineNumber, officialEmail, deadline, status, featured,
-        benefits, eligibility, requiredDocuments, applicationProcess, faqs 
+        benefits, eligibility, requiredDocuments, applicationProcess, faqs,
+        isPublished 
     } = req.body;
 
     const imagePath = req.file?.path;
@@ -47,10 +51,29 @@ const createScheme = asyncHandler(async (req, res) => {
         deadline: deadline ? new Date(deadline) : null, 
         status, 
         featured,
-        isPublished: req.body.isPublished || false
+        isPublished: isPublished === 'true' 
     });
 
     await logActivity(req.user?._id, "CREATE_SCHEME", `Scheme ${title} created`);
+
+    if (isPublished === 'true') {
+        const deviceTokens = await DeviceToken.find({});
+        
+        deviceTokens.forEach(async (device) => {
+            await sendPushNotification(
+                device.token, 
+                "নতুন স্কিম এসেছে!", 
+                `নতুন স্কিম: ${title} দেখে নিন।`
+            );
+
+            await Notification.create({
+                user: device.user,
+                title: "নতুন স্কিম এসেছে!",
+                message: `নতুন স্কিম: ${title} দেখে নিন।`,
+                type: 'NEW_SCHEME'
+            });
+        });
+    }
 
     res.status(HttpStatus.CREATED).json(
         new ApiResponse(HttpStatus.CREATED, scheme, "Scheme created successfully")
