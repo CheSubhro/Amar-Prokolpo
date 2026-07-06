@@ -4,7 +4,8 @@ import { Box, Typography, Paper, TextField, Button as MuiButton } from '@mui/mat
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LoginForm = ({ onLogin }) => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+
+    const [formData, setFormData] = useState({ username: '', password: '' });
 
     return (
         <Paper elevation={3} sx={{ maxWidth: 400, mx: 'auto', mt: 10, p: 4, borderRadius: 3, textAlign: 'center' }}>
@@ -16,10 +17,10 @@ const LoginForm = ({ onLogin }) => {
 
             <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                 <TextField 
-                    label="Email Address" 
+                    label="Username" 
                     variant="outlined" 
                     fullWidth 
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    onChange={(e) => setFormData({...formData, username: e.target.value})}
                 />
                 <TextField 
                     label="Password" 

@@ -1,11 +1,24 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import LoginForm from '../../features/auth/LoginForm';
+import { loginUser } from '../../features/auth/authSlice';
 import bgImage from '../../assets/images/loginbg.jpg';
+
 
 const LoginPage = () => {
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogin = async (formData) => {
+        const resultAction = await dispatch(loginUser(formData));
+        if (loginUser.fulfilled.match(resultAction)) {
+            navigate('/'); 
+        }
+    };
 
     return (
         <Box 
@@ -22,9 +35,11 @@ const LoginPage = () => {
             }}
         >
             <Box sx={{ width: '100%', maxWidth: 450, px: 2 }}>
-                <LoginForm />
+                <LoginForm onLogin={handleLogin}/>
             </Box>
-        </Box>        
+        </Box>    
+        
+        
     );
 };
 
