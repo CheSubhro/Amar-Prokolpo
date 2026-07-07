@@ -26,6 +26,14 @@ export const updateCategory = createAsyncThunk('category/update', async ({ categ
     }
 });
 
+export const getCategoryBySlug = createAsyncThunk('category/getBySlug', async (slug, thunkAPI) => {
+    try {
+        return await categoryService.getCategoryBySlug(slug);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch category");
+    }
+});
+
 const categorySlice = createSlice({
     name: 'categories',
     initialState: {
@@ -86,7 +94,20 @@ const categorySlice = createSlice({
             .addCase(updateCategory.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
-            });
+            })
+            // Get Category By Slug
+            .addCase(getCategoryBySlug.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getCategoryBySlug.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedCategory = action.payload.data; 
+            })
+            .addCase(getCategoryBySlug.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
     }
 });
 

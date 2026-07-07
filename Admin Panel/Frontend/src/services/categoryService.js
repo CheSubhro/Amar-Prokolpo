@@ -20,9 +20,15 @@ const updateCategory = async (categoryId, categoryData) => {
     return response.data;
 };
 
+const getCategoryBySlug = async (slug) => {
+    const response = await api.get(`/category/${slug}`);
+    return response.data;
+};
+
 const categoryService = { 
     createCategory,
     getAllCategories,
-    updateCategory
+    updateCategory,
+    getCategoryBySlug
 };
 export default categoryService;
