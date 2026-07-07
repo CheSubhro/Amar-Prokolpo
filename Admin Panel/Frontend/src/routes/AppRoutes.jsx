@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import AdminLayout from '../layouts/AdminLayout';
 import ProtectedRoute from '../components/ProtectedRoute';
 import Login from '../pages/Auth/Login';
-import Register from '../pages/Auth/Register';
+import Register from '../pages/Auth/RegisterPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import NotFound from '../pages/NotFound/NotFound';
 

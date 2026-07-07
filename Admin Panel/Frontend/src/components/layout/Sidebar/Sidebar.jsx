@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {logoutUser}  from '../../../features/auth/authSlice';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Divider, Avatar, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -12,8 +13,10 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
 
+
 const Sidebar = ({ open, onClose }) => {
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { user } = useSelector((state) => state.auth);
@@ -33,9 +36,10 @@ const Sidebar = ({ open, onClose }) => {
         { text: 'Logout', icon: <LogoutIcon />, path: '/logout' },
     ];
 
-    const handleNavigation = (path) => {
+    const handleNavigation = async (path) => {
         if (path === '/logout') {
-            console.log("Logging out...");
+            await dispatch(logoutUser());
+            navigate('/login'); 
         } else {
             navigate(path);
         }

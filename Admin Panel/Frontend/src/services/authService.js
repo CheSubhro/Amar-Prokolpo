@@ -8,14 +8,16 @@ const register = async (userData) => {
 
 const login = async (userData) => {
     const response = await api.post('/users/login', userData);
-    if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-    }
     return response.data;
 };
 
-const logout = () => {
-    localStorage.removeItem('token');
+const getCurrentUser = async () => {
+    const response = await api.get('/users/current-user');
+    return response.data;
+};
+
+const logout = async () => {
+    await api.delete('/users/logout');
 };
 
 const authService = { login, logout, getCurrentUser, register };
