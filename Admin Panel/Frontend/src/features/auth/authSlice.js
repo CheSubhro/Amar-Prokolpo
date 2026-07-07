@@ -158,12 +158,12 @@ const authSlice = createSlice({
             })
             // Refresh Token
             .addCase(refreshToken.fulfilled, (state, action) => {
-                // সাধারণত সার্ভার নতুন টোকেন রিটার্ন করে
                 state.isAuthenticated = true;
-                // যদি টোকেন স্টোরেজ থেকে ম্যানেজ করেন তবে এখানে আপডেট করুন
+                if (action.payload.data) {
+                    state.user = action.payload.data;
+                }
             })
             .addCase(refreshToken.rejected, (state) => {
-                // রিফ্রেশ টোকেনও যদি কাজ না করে, তবে অবশ্যই লগআউট করে দিতে হবে
                 state.user = null;
                 state.isAuthenticated = false;
             })
