@@ -18,6 +18,15 @@ export const getAllSchemes = createAsyncThunk('scheme/getAll', async (_, thunkAP
     }
 });
 
+export const deleteScheme = createAsyncThunk('scheme/delete', async (schemeId, thunkAPI) => {
+    try {
+        await schemeService.deleteScheme(schemeId);
+        return schemeId; 
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to delete scheme");
+    }
+});
+
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
@@ -69,6 +78,20 @@ const schemeSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload || "Failed to fetch schemes, please try again later.";
             })
+            // Delete Scheme
+            .addCase(deleteScheme.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(deleteScheme.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Scheme deleted successfully!";
+                state.schemes = state.schemes.filter(scheme => scheme._id !== action.payload);
+            })
+            .addCase(deleteScheme.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
     }
 });
 

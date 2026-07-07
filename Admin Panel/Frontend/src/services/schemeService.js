@@ -13,8 +13,14 @@ const getAllSchemes = async () => {
     return response.data;
 };
 
+const deleteScheme = async (schemeId) => {
+    const response = await api.delete(`/scheme/delete/${schemeId}`);
+    return response.data;
+};
+
 const schemeService = { 
     createScheme,
-    getAllSchemes
+    getAllSchemes,
+    deleteScheme
 };
 export default schemeService;
