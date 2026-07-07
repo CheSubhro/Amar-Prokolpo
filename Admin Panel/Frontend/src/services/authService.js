@@ -24,5 +24,10 @@ const logout = async () => {
     await api.delete('/users/logout');
 };
 
-const authService = { login, logout, getCurrentUser, register };
+const changePassword = async (passwords) => {
+    const response = await api.patch('/users/change-password', passwords);
+    return response.data;
+};
+
+const authService = { login, logout, getCurrentUser, register, changePassword };
 export default authService;
