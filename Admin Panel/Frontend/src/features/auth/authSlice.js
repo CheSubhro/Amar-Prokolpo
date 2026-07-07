@@ -18,11 +18,11 @@ export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, 
     }
 });
 
-export const registerUser = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
+export const registerUser = createAsyncThunk('auth/register', async (formData, thunkAPI) => {
     try {
-        return await authService.register(userData); 
+        return await authService.register(formData);
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
+        return thunkAPI.rejectWithValue(error.response?.data || "Registration failed");
     }
 });
 

@@ -2,7 +2,11 @@
 import api from './api';
 
 const register = async (userData) => {
-    const response = await api.post('/users/register', userData); 
+    const response = await api.post('/users/register', userData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
     return response.data;
 };
 
