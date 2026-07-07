@@ -27,7 +27,12 @@ const categorySlice = createSlice({
             .addCase(createCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.successMessage = "Category created successfully!";
-                // নতুন তৈরি হওয়া ক্যাটাগরি লিস্টে যোগ করতে পারেন
+                
+                if (action.payload.data) {
+                    state.categories.unshift(action.payload.data);
+                }
+                
+                state.error = null;
             })
             .addCase(createCategory.rejected, (state, action) => {
                 state.isLoading = false;
