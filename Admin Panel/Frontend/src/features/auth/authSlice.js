@@ -42,6 +42,14 @@ export const changePassword = createAsyncThunk('auth/changePassword', async (pas
     }
 });
 
+export const deleteUser = createAsyncThunk('auth/deleteUser', async (userId, thunkAPI) => {
+    try {
+        return await authService.deleteUser(userId);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to delete user");
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -96,6 +104,18 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(changePassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Delete User
+            .addCase(deleteUser.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteUser.fulfilled, (state) => {
+                state.isLoading = false;
+                // আপনি চাইলে এখানে সাকসেস মেসেজ বা স্টেট আপডেট করতে পারেন
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })
