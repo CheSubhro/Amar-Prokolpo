@@ -10,6 +10,14 @@ export const getAllUsers = createAsyncThunk('users/getAll', async (_, thunkAPI) 
     }
 });
 
+export const getUserProfile = createAsyncThunk('users/getProfile', async (username, thunkAPI) => {
+    try {
+        return await userService.getUserProfile(username);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch profile");
+    }
+});
+
 const userSlice = createSlice({
     name: 'users',
     initialState: { users: [], isLoading: false, error: null },
@@ -23,7 +31,15 @@ const userSlice = createSlice({
             .addCase(getAllUsers.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
-            });
+            })
+
+            .addCase(getUserProfile.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getUserProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedUser = action.payload.data;
+            })
     }
 });
 

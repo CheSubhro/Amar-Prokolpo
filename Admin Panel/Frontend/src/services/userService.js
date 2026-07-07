@@ -6,5 +6,13 @@ const getAllUsers = async () => {
     return response.data;
 };
 
-const userService = { getAllUsers };
+const getUserProfile = async (username) => {
+    const response = await api.get(`/users/profile/${username}`);
+    return response.data;
+};
+
+const userService = { 
+    getAllUsers,
+    getUserProfile
+};
 export default userService;
