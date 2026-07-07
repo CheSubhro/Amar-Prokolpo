@@ -18,6 +18,14 @@ export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, 
     }
 });
 
+export const registerUser = createAsyncThunk('auth/register', async (userData, thunkAPI) => {
+    try {
+        return await authService.register(userData); 
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -52,6 +60,10 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.user = null;
             })
+            // Register Admin
+            .addCase(registerUser.pending, (state) => { state.isLoading = true; })
+            .addCase(registerUser.fulfilled, (state) => { state.isLoading = false; })
+            .addCase(registerUser.rejected, (state, action) => { state.isLoading = false; state.error = action.payload; })
         }       
 });
 
