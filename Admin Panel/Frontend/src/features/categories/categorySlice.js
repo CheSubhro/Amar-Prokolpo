@@ -18,6 +18,14 @@ export const getAllCategories = createAsyncThunk('category/getAll', async (_, th
     }
 });
 
+export const updateCategory = createAsyncThunk('category/update', async ({ categoryId, formData }, thunkAPI) => {
+    try {
+        return await categoryService.updateCategory(categoryId, formData);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to update category");
+    }
+});
+
 const categorySlice = createSlice({
     name: 'categories',
     initialState: {
@@ -57,6 +65,25 @@ const categorySlice = createSlice({
                 state.categories = action.payload.data;
             })
             .addCase(getAllCategories.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+
+            // Update Category
+            .addCase(updateCategory.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updateCategory.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Category updated successfully!";
+                
+                const index = state.categories.findIndex(cat => cat._id === action.payload.data._id);
+                if (index !== -1) {
+                    state.categories[index] = action.payload.data;
+                }
+            })
+            .addCase(updateCategory.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });
