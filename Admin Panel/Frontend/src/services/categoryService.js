@@ -8,7 +8,13 @@ const createCategory = async (categoryData) => {
     return response.data;
 };
 
+const getAllCategories = async () => {
+    const response = await api.get('/category/all');
+    return response.data;
+};
+
 const categoryService = { 
-    createCategory
+    createCategory,
+    getAllCategories
 };
 export default categoryService;
