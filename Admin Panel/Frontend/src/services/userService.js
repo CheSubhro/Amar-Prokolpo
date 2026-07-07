@@ -11,8 +11,18 @@ const getUserProfile = async (username) => {
     return response.data;
 };
 
+const updateUserDetails = async (userId, userData) => {
+    const response = await api.patch(`/users/update-user/${userId}`, userData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+};
+
 const userService = { 
     getAllUsers,
-    getUserProfile
+    getUserProfile,
+    updateUserDetails
 };
 export default userService;

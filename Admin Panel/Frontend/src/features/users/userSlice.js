@@ -18,9 +18,23 @@ export const getUserProfile = createAsyncThunk('users/getProfile', async (userna
     }
 });
 
+export const updateUserDetails = createAsyncThunk('users/updateProfile', async ({ userId, formData }, thunkAPI) => {
+    try {
+        return await userService.updateUserDetails(userId, formData);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to update profile");
+    }
+});
+
 const userSlice = createSlice({
     name: 'users',
-    initialState: { users: [], isLoading: false, error: null },
+    initialState: { 
+        users: [], 
+        selectedUser: null, 
+        isLoading: false,
+        error: null,
+        successMessage: null, 
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getAllUsers.pending, (state) => { state.isLoading = true; })
@@ -39,6 +53,23 @@ const userSlice = createSlice({
             .addCase(getUserProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.selectedUser = action.payload.data;
+            })
+            // Update User Details
+            .addCase(updateUserDetails.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+                state.successMessage = null; 
+            })
+            .addCase(updateUserDetails.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedUser = action.payload.data; 
+                state.successMessage = action.payload.message || "Profile updated successfully!";
+                state.error = null;
+            })
+            .addCase(updateUserDetails.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+                state.successMessage = null;
             })
     }
 });
