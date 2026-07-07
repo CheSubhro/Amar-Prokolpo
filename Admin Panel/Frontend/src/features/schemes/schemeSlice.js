@@ -40,7 +40,7 @@ const schemeSlice = createSlice({
             })
             .addCase(createScheme.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload;
+                state.error = action.payload ||"Failed to create schemes, please try again later." ;
             })
             // Get All Schemes
             .addCase(getAllSchemes.pending, (state) => {
