@@ -39,6 +39,11 @@ const forgotPassword = async (email) => {
     return response.data;
 };
 
+const refreshToken = async () => {
+    const response = await api.post('/users/refresh-token');
+    return response.data;
+};
+
 const authService = { 
     login, 
     logout, 
@@ -46,6 +51,7 @@ const authService = {
     register, 
     changePassword,
     deleteUser, 
-    forgotPassword 
+    forgotPassword,
+    refreshToken 
 };
 export default authService;

@@ -58,6 +58,14 @@ export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (ema
     }
 });
 
+export const refreshToken = createAsyncThunk('auth/refreshToken', async (_, thunkAPI) => {
+    try {
+        return await authService.refreshToken();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Session expired");
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -147,6 +155,17 @@ const authSlice = createSlice({
             .addCase(forgotPassword.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
+            })
+            // Refresh Token
+            .addCase(refreshToken.fulfilled, (state, action) => {
+                // সাধারণত সার্ভার নতুন টোকেন রিটার্ন করে
+                state.isAuthenticated = true;
+                // যদি টোকেন স্টোরেজ থেকে ম্যানেজ করেন তবে এখানে আপডেট করুন
+            })
+            .addCase(refreshToken.rejected, (state) => {
+                // রিফ্রেশ টোকেনও যদি কাজ না করে, তবে অবশ্যই লগআউট করে দিতে হবে
+                state.user = null;
+                state.isAuthenticated = false;
             })
         }       
 });
