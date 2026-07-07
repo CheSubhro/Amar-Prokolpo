@@ -34,5 +34,18 @@ const deleteUser = async (userId) => {
     return response.data;
 };
 
-const authService = { login, logout, getCurrentUser, register, changePassword,deleteUser };
+const forgotPassword = async (email) => {
+    const response = await api.post('/users/forgot-password', { email });
+    return response.data;
+};
+
+const authService = { 
+    login, 
+    logout, 
+    getCurrentUser, 
+    register, 
+    changePassword,
+    deleteUser, 
+    forgotPassword 
+};
 export default authService;

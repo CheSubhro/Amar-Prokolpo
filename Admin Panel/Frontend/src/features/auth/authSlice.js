@@ -50,6 +50,14 @@ export const deleteUser = createAsyncThunk('auth/deleteUser', async (userId, thu
     }
 });
 
+export const forgotPassword = createAsyncThunk('auth/forgotPassword', async (email, thunkAPI) => {
+    try {
+        return await authService.forgotPassword(email);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to send reset link");
+    }
+});
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: { 
@@ -124,6 +132,20 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
                 state.message = null; 
+            })
+            // Forgot Password
+            .addCase(forgotPassword.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+                state.message = null;
+            })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.message = action.payload.message || "Reset link sent to your email!";
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
             })
         }       
 });
