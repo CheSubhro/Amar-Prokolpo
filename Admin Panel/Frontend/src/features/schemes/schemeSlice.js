@@ -27,6 +27,14 @@ export const deleteScheme = createAsyncThunk('scheme/delete', async (schemeId, t
     }
 });
 
+export const getSchemeBySlug = createAsyncThunk('scheme/getBySlug', async (slug, thunkAPI) => {
+    try {
+        return await schemeService.getSchemeBySlug(slug);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch scheme details");
+    }
+});
+
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
@@ -89,6 +97,19 @@ const schemeSlice = createSlice({
                 state.schemes = state.schemes.filter(scheme => scheme._id !== action.payload);
             })
             .addCase(deleteScheme.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Get Scheme By Slug
+            .addCase(getSchemeBySlug.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getSchemeBySlug.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.selectedScheme = action.payload.data; 
+            })
+            .addCase(getSchemeBySlug.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });

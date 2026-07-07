@@ -18,9 +18,15 @@ const deleteScheme = async (schemeId) => {
     return response.data;
 };
 
+const getSchemeBySlug = async (slug) => {
+    const response = await api.get(`/scheme/${slug}`);
+    return response.data;
+};
+
 const schemeService = { 
     createScheme,
     getAllSchemes,
-    deleteScheme
+    deleteScheme,
+    getSchemeBySlug
 };
 export default schemeService;
