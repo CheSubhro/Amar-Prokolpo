@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Divider, Avatar, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -10,10 +11,16 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 const Sidebar = ({ open, onClose }) => {
+
     const navigate = useNavigate();
+
+    const { user } = useSelector((state) => state.auth);
+
+    const getInitials = (name) => {
+        return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';
+    };
 
     const menuItems = [
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
@@ -45,11 +52,26 @@ const Sidebar = ({ open, onClose }) => {
             }}
         >
             <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: 'primary.main', color: 'white' }}>
-                <Avatar sx={{ width: 60, height: 60, mb: 1, bgcolor: 'secondary.main' }}>
-                    <AdminPanelSettingsIcon fontSize="large" />
-                </Avatar>
-                <Typography variant="h6">Admin Name</Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>admin@example.com</Typography>
+            <Avatar 
+                src={user?.avatar} 
+                alt={user?.name}
+                sx={{ 
+                    width: 60, 
+                    height: 60, 
+                    mb: 1, 
+                    bgcolor: 'secondary.main',
+                    fontSize: '1.5rem',
+                    fontWeight: 'bold'
+                }}
+            >
+                {!user?.avatar && getInitials(user?.name)}
+            </Avatar>
+                <Typography variant="h6">
+                    {user?.fullName || 'Admin Name'} 
+                </Typography>
+                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                    {user?.email || 'admin@example.com'}
+                </Typography>
             </Box>
             
             <Divider />
