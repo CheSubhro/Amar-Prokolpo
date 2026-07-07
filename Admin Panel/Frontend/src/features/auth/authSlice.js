@@ -56,6 +56,7 @@ const authSlice = createSlice({
         user: null, 
         isLoading: false, 
         error: null,
+        message: null,
         isAuthenticated: false, 
         isInitialLoading: true 
     },
@@ -111,13 +112,18 @@ const authSlice = createSlice({
             .addCase(deleteUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(deleteUser.fulfilled, (state) => {
+            .addCase(deleteUser.fulfilled, (state, action) => {
                 state.isLoading = false;
-                // আপনি চাইলে এখানে সাকসেস মেসেজ বা স্টেট আপডেট করতে পারেন
+                state.message = "User deleted successfully!"; 
+                if (state.user && state.user._id === action.meta.arg) {
+                    state.user = null;
+                    state.isAuthenticated = false;
+                }
             })
             .addCase(deleteUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
+                state.message = null; 
             })
         }       
 });
