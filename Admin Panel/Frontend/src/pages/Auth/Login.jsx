@@ -15,6 +15,7 @@ const LoginPage = () => {
 
     const handleLogin = async (formData) => {
         const resultAction = await dispatch(loginUser(formData));
+        
         if (loginUser.fulfilled.match(resultAction)) {
             navigate('/'); 
         }

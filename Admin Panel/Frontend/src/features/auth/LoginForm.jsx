@@ -4,8 +4,13 @@ import { Box, Typography, Paper, TextField, Button as MuiButton } from '@mui/mat
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 const LoginForm = ({ onLogin }) => {
-
+    
     const [formData, setFormData] = useState({ username: '', password: '' });
+
+    const handleSubmit = (e) => {
+        e.preventDefault(); 
+        onLogin(formData);
+    };
 
     return (
         <Paper elevation={3} sx={{ maxWidth: 400, mx: 'auto', mt: 10, p: 4, borderRadius: 3, textAlign: 'center' }}>
@@ -15,7 +20,7 @@ const LoginForm = ({ onLogin }) => {
             <Typography variant="h5" fontWeight="700" sx={{ mb: 1 }}>Admin Login</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Enter your credentials to continue</Typography>
 
-            <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
                 <TextField 
                     label="Username" 
                     variant="outlined" 
@@ -30,9 +35,9 @@ const LoginForm = ({ onLogin }) => {
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                 />
                 <MuiButton 
+                    type="submit" 
                     variant="contained" 
                     size="large" 
-                    onClick={() => onLogin(formData)}
                     sx={{ py: 1.5, mt: 1, fontWeight: 'bold' }}
                 >
                     LOGIN
