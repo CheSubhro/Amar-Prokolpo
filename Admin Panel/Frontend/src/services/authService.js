@@ -44,6 +44,11 @@ const refreshToken = async () => {
     return response.data;
 };
 
+const resetPassword = async (token, newPassword) => {
+    const response = await api.post(`/users/reset-password/${token}`, { password: newPassword });
+    return response.data;
+};
+
 const authService = { 
     login, 
     logout, 
@@ -52,6 +57,7 @@ const authService = {
     changePassword,
     deleteUser, 
     forgotPassword,
-    refreshToken 
+    refreshToken,
+    resetPassword 
 };
 export default authService;
