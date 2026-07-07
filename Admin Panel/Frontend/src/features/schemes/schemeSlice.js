@@ -21,10 +21,22 @@ export const getAllSchemes = createAsyncThunk('scheme/getAll', async (_, thunkAP
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
-        schemes: [],
-        isLoading: false,
-        error: null,
-        successMessage: null,
+        schemes: [],           
+        selectedScheme: null,  
+        isLoading: false,      
+        error: null,           
+        successMessage: null,  
+        pagination: {          
+            currentPage: 1,
+            totalPages: 0,
+            totalItems: 0
+        }
+    },
+    reducers: {
+        clearMessages: (state) => {
+            state.successMessage = null;
+            state.error = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -32,6 +44,7 @@ const schemeSlice = createSlice({
             .addCase(createScheme.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
+                state.successMessage = null;
             })
             .addCase(createScheme.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -40,8 +53,9 @@ const schemeSlice = createSlice({
             })
             .addCase(createScheme.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload ||"Failed to create schemes, please try again later." ;
+                state.error = action.payload || "Failed to create scheme, please try again later.";
             })
+            
             // Get All Schemes
             .addCase(getAllSchemes.pending, (state) => {
                 state.isLoading = true;
@@ -49,7 +63,7 @@ const schemeSlice = createSlice({
             })
             .addCase(getAllSchemes.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.schemes = action.payload.data; 
+                state.schemes = action.payload.data;
             })
             .addCase(getAllSchemes.rejected, (state, action) => {
                 state.isLoading = false;
