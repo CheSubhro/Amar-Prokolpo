@@ -23,10 +23,16 @@ const getSchemeBySlug = async (slug) => {
     return response.data;
 };
 
+const getTopViewedSchemes = async () => {
+    const response = await api.get('/scheme/top-viewed');
+    return response.data;
+};
+
 const schemeService = { 
     createScheme,
     getAllSchemes,
     deleteScheme,
-    getSchemeBySlug
+    getSchemeBySlug,
+    getTopViewedSchemes
 };
 export default schemeService;

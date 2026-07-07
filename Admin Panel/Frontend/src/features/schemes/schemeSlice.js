@@ -35,10 +35,19 @@ export const getSchemeBySlug = createAsyncThunk('scheme/getBySlug', async (slug,
     }
 });
 
+export const getTopViewedSchemes = createAsyncThunk('scheme/getTopViewed', async (_, thunkAPI) => {
+    try {
+        return await schemeService.getTopViewedSchemes();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch top schemes");
+    }
+});
+
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
-        schemes: [],           
+        schemes: [], 
+        topSchemes: [],          
         selectedScheme: null,  
         isLoading: false,      
         error: null,           
@@ -98,7 +107,7 @@ const schemeSlice = createSlice({
             })
             .addCase(deleteScheme.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload;
+                state.error = action.payload || "Failed to delete schemes, please try again later.";
             })
             // Get Scheme By Slug
             .addCase(getSchemeBySlug.pending, (state) => {
@@ -111,8 +120,21 @@ const schemeSlice = createSlice({
             })
             .addCase(getSchemeBySlug.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.payload;
-            });
+                state.error = action.payload || "Failed to Get Scheme By Slug, please try again later.";
+            })
+            // Get Top Viewed Schemes
+            .addCase(getTopViewedSchemes.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getTopViewedSchemes.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.topSchemes = action.payload.data; 
+            })
+            .addCase(getTopViewedSchemes.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || "Failed to Get Top Viewed Schemes, please try again later.";
+            })
     }
 });
 
