@@ -10,6 +10,14 @@ export const createScheme = createAsyncThunk('scheme/create', async (formData, t
     }
 });
 
+export const getAllSchemes = createAsyncThunk('scheme/getAll', async (_, thunkAPI) => {
+    try {
+        return await schemeService.getAllSchemes();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data || "Failed to fetch schemes");
+    }
+});
+
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
@@ -20,6 +28,7 @@ const schemeSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // Create Scheme
             .addCase(createScheme.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -32,7 +41,20 @@ const schemeSlice = createSlice({
             .addCase(createScheme.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
-            });
+            })
+            // Get All Schemes
+            .addCase(getAllSchemes.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getAllSchemes.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.schemes = action.payload.data; 
+            })
+            .addCase(getAllSchemes.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || "Failed to fetch schemes, please try again later.";
+            })
     }
 });
 

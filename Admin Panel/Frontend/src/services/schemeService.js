@@ -8,5 +8,13 @@ const createScheme = async (schemeData) => {
     return response.data;
 };
 
-const schemeService = { createScheme };
+const getAllSchemes = async () => {
+    const response = await api.get('/scheme/all');
+    return response.data;
+};
+
+const schemeService = { 
+    createScheme,
+    getAllSchemes
+};
 export default schemeService;
