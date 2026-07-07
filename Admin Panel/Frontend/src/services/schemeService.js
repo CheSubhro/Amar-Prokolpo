@@ -28,11 +28,19 @@ const getTopViewedSchemes = async () => {
     return response.data;
 };
 
+const updateScheme = async (schemeId, schemeData) => {
+    const response = await api.patch(`/scheme/update/${schemeId}`, schemeData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};
+
 const schemeService = { 
     createScheme,
     getAllSchemes,
     deleteScheme,
     getSchemeBySlug,
-    getTopViewedSchemes
+    getTopViewedSchemes,
+    updateScheme
 };
 export default schemeService;

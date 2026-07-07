@@ -43,6 +43,14 @@ export const getTopViewedSchemes = createAsyncThunk('scheme/getTopViewed', async
     }
 });
 
+export const updateScheme = createAsyncThunk('scheme/update', async ({ schemeId, formData }, thunkAPI) => {
+    try {
+        return await schemeService.updateScheme(schemeId, formData);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to update scheme");
+    }
+});
+
 const schemeSlice = createSlice({
     name: 'schemes',
     initialState: {
@@ -135,6 +143,27 @@ const schemeSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload || "Failed to Get Top Viewed Schemes, please try again later.";
             })
+            // Update Scheme
+            .addCase(updateScheme.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updateScheme.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Scheme updated successfully!";
+                
+                const index = state.schemes.findIndex(scheme => scheme._id === action.payload.data._id);
+                if (index !== -1) {
+                    state.schemes[index] = action.payload.data;
+                }
+                if (state.selectedScheme && state.selectedScheme._id === action.payload.data._id) {
+                    state.selectedScheme = action.payload.data;
+                }
+            })
+            .addCase(updateScheme.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload || "Failed to Update Scheme, please try again later.";
+            });
     }
 });
 
