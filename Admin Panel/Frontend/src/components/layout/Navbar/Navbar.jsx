@@ -30,7 +30,7 @@ const Navbar = ({ toggleSidebar }) => {
                 </IconButton>
                 
                 <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: '800', letterSpacing: '0.5px', color: 'primary.dark' }}>
-                    AMAR PROKOLPO
+                    Amar <Prokolpo></Prokolpo>
                 </Typography>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
