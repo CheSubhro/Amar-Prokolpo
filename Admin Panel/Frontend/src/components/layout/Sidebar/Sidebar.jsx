@@ -3,6 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {logoutUser}  from '../../../features/auth/authSlice';
+import { useAuth } from '../../../hooks/useAuth';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Divider, Avatar, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -12,6 +13,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import SupportIcon from '@mui/icons-material/Support';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Spinner } from '../../common/index';
 
 
 const Sidebar = ({ open, onClose }) => {
@@ -19,7 +21,17 @@ const Sidebar = ({ open, onClose }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { user } = useSelector((state) => state.auth);
+    const { user, isInitialLoading } = useAuth();
+
+    if (isInitialLoading) {
+        return (
+            <Drawer anchor="left" open={open} onClose={onClose}>
+                <Box sx={{ width: 250, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                    <Spinner /> 
+                </Box>
+            </Drawer>
+        );
+    }
 
     const getInitials = (name) => {
         return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';

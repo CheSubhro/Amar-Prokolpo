@@ -11,7 +11,7 @@ import notificationReducer from '../features/notifications/notificationSlice'
 import supportReducer from '../features/support/supportSlice'
 import wishlistReducer from '../features/wishlist/wishlistSlice'
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
         auth: authReducer, 
         users: userReducer,
