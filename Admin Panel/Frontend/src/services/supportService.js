@@ -11,8 +11,14 @@ const respondToTicket = async (ticketId, responseData) => {
     return response.data;
 };
 
+const getAllTickets = async () => {
+    const response = await api.get('/support/all');
+    return response.data;
+};
+
 const supportService = { 
     createTicket,
-    respondToTicket
+    respondToTicket,
+    getAllTickets
 };
 export default supportService;

@@ -18,6 +18,14 @@ export const respondToTicket = createAsyncThunk('support/respond', async ({ tick
     }
 });
 
+export const getAllTickets = createAsyncThunk('support/getAll', async (_, thunkAPI) => {
+    try {
+        return await supportService.getAllTickets();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch tickets");
+    }
+});
+
 const supportSlice = createSlice({
     name: 'support',
     initialState: {
@@ -68,6 +76,19 @@ const supportSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
             })
+            // Get All Tickets
+            .addCase(getAllTickets.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getAllTickets.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.tickets = action.payload.data; 
+            })
+            .addCase(getAllTickets.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
     }
 });
 
