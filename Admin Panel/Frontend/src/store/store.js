@@ -5,6 +5,7 @@ import authReducer from '../features/auth/authSlice'
 import userReducer from '../features/users/userSlice'
 import categoryReducer from '../features/categories/categorySlice'
 import schemeReducer from '../features/schemes/schemeSlice'
+import supportReducer from '../features/support/supportSlice'
 
 const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
         logs: logReducer,
         categories: categoryReducer,
         schemes: schemeReducer,
+        support: supportReducer,
     },
 });
 
