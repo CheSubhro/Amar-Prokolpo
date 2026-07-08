@@ -1,58 +1,70 @@
 
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
+import { Menu as MenuIcon, Notifications, Person, Lock, Logout, Settings } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from '../../common/index'; 
 
 const Navbar = ({ toggleSidebar }) => {
-    
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
 
-    const handleNavigate = (path) => {
-        navigate(path);
-        handleMenuClose();
-    };
-
     return (
-        <AppBar position="sticky" sx={{ bgcolor: 'background.paper', color: 'text.primary', boxShadow: 1 }}>
+        <AppBar position="sticky" sx={{ bgcolor: 'white', color: 'text.primary', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
             <Toolbar>
-                <IconButton edge="start" onClick={toggleSidebar} sx={{ mr: 2 }}>
+                <IconButton onClick={toggleSidebar} sx={{ mr: 2, color: 'primary.main' }}>
                     <MenuIcon />
                 </IconButton>
                 
-                <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-                    Amar Prokolpo
+                <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: '800', letterSpacing: '0.5px', color: 'primary.dark' }}>
+                    AMAR PROKOLPO
                 </Typography>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Tooltip title="Notifications">
-                        <IconButton color="inherit">
-                            <NotificationsIcon />
+                        <IconButton sx={{ color: 'text.secondary' }}>
+                            <Notifications />
                         </IconButton>
                     </Tooltip>
                     
-                    {/* Avatar with Clickable Menu */}
                     <Avatar 
                         onClick={handleMenuOpen} 
-                        sx={{ bgcolor: 'primary.main', width: 35, height: 35, cursor: 'pointer' }}
+                        sx={{ ml: 1, bgcolor: 'primary.main', width: 40, height: 40, cursor: 'pointer', border: '2px solid #e0e0e0' }}
                     >
                         A
                     </Avatar>
 
                     <Menu
                         anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
+                        open={open}
                         onClose={handleMenuClose}
+                        PaperProps={{
+                            elevation: 0,
+                            sx: {
+                                overflow: 'visible',
+                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.12))',
+                                mt: 1.5,
+                                width: 200,
+                                '& .MuiAvatar-root': { width: 32, height: 32, ml: -0.5, mr: 1 },
+                            },
+                        }}
+                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
-                        <MenuItem onClick={() => handleNavigate('/profile')}>Profile</MenuItem>
-                        <MenuItem onClick={() => handleNavigate('/change-password')}>Change Password</MenuItem>
-                        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+                        <MenuItem onClick={() => {navigate('/profile'); handleMenuClose();}}>
+                            <ListItemIcon><Person fontSize="small" /></ListItemIcon> Profile
+                        </MenuItem>
+                        <MenuItem onClick={() => {navigate('/change-password'); handleMenuClose();}}>
+                            <ListItemIcon><Lock fontSize="small" /></ListItemIcon> Change Password
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
+                            <ListItemIcon><Logout fontSize="small" color="error" /></ListItemIcon> Logout
+                        </MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>
