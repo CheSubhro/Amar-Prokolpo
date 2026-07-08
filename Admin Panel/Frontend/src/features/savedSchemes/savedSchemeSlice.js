@@ -13,18 +13,28 @@ export const toggleSaveScheme = createAsyncThunk('savedScheme/toggle', async (sc
 const savedSchemeSlice = createSlice({
     name: 'savedSchemes',
     initialState: {
-        savedList: [], 
+        savedList: [],
         isLoading: false,
+        error: null,
     },
     extraReducers: (builder) => {
         builder
+            .addCase(toggleSaveScheme.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
             .addCase(toggleSaveScheme.fulfilled, (state, action) => {
-                const { schemeId, isSaved } = action.payload.data; 
+                state.isLoading = false;
+                const { schemeId, isSaved } = action.payload.data;
                 if (isSaved) {
                     state.savedList.push(schemeId);
                 } else {
                     state.savedList = state.savedList.filter(id => id !== schemeId);
                 }
+            })
+            .addCase(toggleSaveScheme.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
             });
     }
 });
