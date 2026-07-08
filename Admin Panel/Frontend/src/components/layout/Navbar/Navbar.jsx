@@ -1,17 +1,26 @@
 
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
-import { Menu as MenuIcon, Notifications, Person, Lock, Logout, Settings } from '@mui/icons-material';
+import { Menu as MenuIcon, Notifications, Person, Lock, Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { Tooltip } from '../../common/index'; 
 
 const Navbar = ({ toggleSidebar }) => {
+
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
+
+    const handleLogout = async () => {
+        await logout();
+        handleMenuClose();
+        navigate('/login');
+    };
 
     return (
         <AppBar position="sticky" sx={{ bgcolor: 'white', color: 'text.primary', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
@@ -62,7 +71,7 @@ const Navbar = ({ toggleSidebar }) => {
                             <ListItemIcon><Lock fontSize="small" /></ListItemIcon> Change Password
                         </MenuItem>
                         <Divider />
-                        <MenuItem onClick={handleMenuClose} sx={{ color: 'error.main' }}>
+                        <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
                             <ListItemIcon><Logout fontSize="small" color="error" /></ListItemIcon> Logout
                         </MenuItem>
                     </Menu>

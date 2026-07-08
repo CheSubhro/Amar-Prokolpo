@@ -11,16 +11,14 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import SupportIcon from '@mui/icons-material/Support';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Spinner } from '../../common/index';
 
 
 const Sidebar = ({ open, onClose }) => {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { user, isInitialLoading, logout } = useAuth();
+    const { user, isInitialLoading } = useAuth();
 
     if (isInitialLoading) {
         return (
@@ -44,16 +42,10 @@ const Sidebar = ({ open, onClose }) => {
         { text: 'Notifications', icon: <NotificationsIcon />, path: '/notifications' },
         { text: 'Reviews', icon: <ReviewsIcon />, path: '/reviews' },
         { text: 'Support Tickets', icon: <SupportIcon />, path: '/support' },
-        { text: 'Logout', icon: <LogoutIcon />, path: '/logout' },
     ];
 
-    const handleNavigation = async (path) => {
-        if (path === '/logout') {
-            await logout(); 
-            navigate('/login'); 
-        } else {
-            navigate(path);
-        }
+    const handleNavigation = (path) => {
+        navigate(path);
         onClose();
     };
 
