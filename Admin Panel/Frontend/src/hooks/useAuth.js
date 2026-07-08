@@ -1,6 +1,6 @@
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser, getCurrentUser } from '../features/auth/authSlice'; 
+import { loginUser, getCurrentUser, logoutUser } from '../features/auth/authSlice'; 
 
 export const useAuth = () => {
 
@@ -11,6 +11,8 @@ export const useAuth = () => {
 
     const checkAuth = () => dispatch(getCurrentUser());
 
+    const logout = () => dispatch(logoutUser());
+
     return { 
         user, 
         isLoading, 
@@ -18,6 +20,7 @@ export const useAuth = () => {
         login, 
         isAuthenticated, 
         isInitialLoading, 
-        checkAuth 
+        checkAuth,
+        logout 
     };
 };

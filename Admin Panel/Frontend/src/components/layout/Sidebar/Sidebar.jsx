@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import {logoutUser}  from '../../../features/auth/authSlice';
+import { useDispatch } from 'react-redux';
 import { useAuth } from '../../../hooks/useAuth';
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Divider, Avatar, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -21,7 +20,7 @@ const Sidebar = ({ open, onClose }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { user, isInitialLoading } = useAuth();
+    const { user, isInitialLoading, logout } = useAuth();
 
     if (isInitialLoading) {
         return (
@@ -50,7 +49,7 @@ const Sidebar = ({ open, onClose }) => {
 
     const handleNavigation = async (path) => {
         if (path === '/logout') {
-            await dispatch(logoutUser());
+            await logout(); 
             navigate('/login'); 
         } else {
             navigate(path);
