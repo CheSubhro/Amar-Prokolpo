@@ -11,8 +11,14 @@ const markAsRead = async (notificationId) => {
     return response.data;
 };
 
+const getNotifications = async () => {
+    const response = await api.get('/notifications/list');
+    return response.data;
+};
+
 const notificationService = { 
     registerToken,
-    markAsRead
+    markAsRead,
+    getNotifications
 };
 export default notificationService;

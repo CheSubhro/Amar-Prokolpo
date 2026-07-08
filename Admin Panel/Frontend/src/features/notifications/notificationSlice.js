@@ -18,6 +18,14 @@ export const markNotificationAsRead = createAsyncThunk('notification/markAsRead'
     }
 });
 
+export const getNotifications = createAsyncThunk('notification/fetchAll', async (_, thunkAPI) => {
+    try {
+        return await notificationService.getNotifications();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch notifications");
+    }
+});
+
 const notificationSlice = createSlice({
     name: 'notifications',
     initialState: {
@@ -48,7 +56,20 @@ const notificationSlice = createSlice({
             })
             .addCase(markNotificationAsRead.rejected, (state, action) => {
                 state.error = action.payload;
-            });
+            })
+            // Get Notifications
+            .addCase(getNotifications.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getNotifications.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.notifications = action.payload.data; 
+            })
+            .addCase(getNotifications.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
     }
 });
 
