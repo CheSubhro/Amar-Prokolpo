@@ -26,6 +26,14 @@ export const toggleHelpful = createAsyncThunk('review/toggleHelpful', async (rev
     }
 });
 
+export const getPendingReviews = createAsyncThunk('review/getPending', async (_, thunkAPI) => {
+    try {
+        return await reviewService.getPendingReviews();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch pending reviews");
+    }
+});
+
 const reviewSlice = createSlice({
     name: 'reviews',
     initialState: {
@@ -71,7 +79,12 @@ const reviewSlice = createSlice({
                 state.error = action.payload;
             })
             // Toggle Helpful
+            .addCase(toggleHelpful.pending, (state) => {
+                state.isLoading = true; 
+                state.error = null;
+            })
             .addCase(toggleHelpful.fulfilled, (state, action) => {
+                state.isLoading = false;
                 const updatedReview = action.payload.data;
                 
                 const index = state.reviews.findIndex(rev => rev._id === updatedReview._id);
@@ -80,8 +93,22 @@ const reviewSlice = createSlice({
                 }
             })
             .addCase(toggleHelpful.rejected, (state, action) => {
+                state.isLoading = false;
                 state.error = action.payload;
-            });
+            })
+            // Get Pending Reviews
+            .addCase(getPendingReviews.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getPendingReviews.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.pendingReviews = action.payload.data; 
+            })
+            .addCase(getPendingReviews.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
     }
 });
 

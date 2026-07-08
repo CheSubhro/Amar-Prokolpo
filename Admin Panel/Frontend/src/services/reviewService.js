@@ -16,9 +16,15 @@ const toggleHelpful = async (reviewId) => {
     return response.data;
 };
 
+const getPendingReviews = async () => {
+    const response = await api.get('/reviews/admin/pending');
+    return response.data;
+};
+
 const reviewService = { 
     addReview,
     getReviewsBySchemeId,
-    toggleHelpful
+    toggleHelpful,
+    getPendingReviews
 };
 export default reviewService;
