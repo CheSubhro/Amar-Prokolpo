@@ -18,6 +18,14 @@ export const getReviewsBySchemeId = createAsyncThunk('review/getBySchemeId', asy
     }
 });
 
+export const toggleHelpful = createAsyncThunk('review/toggleHelpful', async (reviewId, thunkAPI) => {
+    try {
+        return await reviewService.toggleHelpful(reviewId);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to update helpful status");
+    }
+});
+
 const reviewSlice = createSlice({
     name: 'reviews',
     initialState: {
@@ -60,6 +68,18 @@ const reviewSlice = createSlice({
             })
             .addCase(getReviewsBySchemeId.rejected, (state, action) => {
                 state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Toggle Helpful
+            .addCase(toggleHelpful.fulfilled, (state, action) => {
+                const updatedReview = action.payload.data;
+                
+                const index = state.reviews.findIndex(rev => rev._id === updatedReview._id);
+                if (index !== -1) {
+                    state.reviews[index] = updatedReview;
+                }
+            })
+            .addCase(toggleHelpful.rejected, (state, action) => {
                 state.error = action.payload;
             });
     }

@@ -11,8 +11,14 @@ const getReviewsBySchemeId = async (schemeId) => {
     return response.data;
 };
 
+const toggleHelpful = async (reviewId) => {
+    const response = await api.patch(`/reviews/helpful/${reviewId}`);
+    return response.data;
+};
+
 const reviewService = { 
     addReview,
-    getReviewsBySchemeId
+    getReviewsBySchemeId,
+    toggleHelpful
 };
 export default reviewService;
