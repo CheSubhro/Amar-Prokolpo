@@ -21,10 +21,16 @@ const getPendingReviews = async () => {
     return response.data;
 };
 
+const updateReviewStatus = async (reviewId, statusData) => {
+    const response = await api.patch(`/reviews/admin/status/${reviewId}`, statusData);
+    return response.data;
+};
+
 const reviewService = { 
     addReview,
     getReviewsBySchemeId,
     toggleHelpful,
-    getPendingReviews
+    getPendingReviews,
+    updateReviewStatus
 };
 export default reviewService;

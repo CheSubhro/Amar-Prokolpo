@@ -34,6 +34,14 @@ export const getPendingReviews = createAsyncThunk('review/getPending', async (_,
     }
 });
 
+export const updateReviewStatus = createAsyncThunk('review/updateStatus', async ({ reviewId, status }, thunkAPI) => {
+    try {
+        return await reviewService.updateReviewStatus(reviewId, { status });
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to update review status");
+    }
+});
+
 const reviewSlice = createSlice({
     name: 'reviews',
     initialState: {
@@ -109,6 +117,20 @@ const reviewSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload;
             })
+            // Update Review Status
+            .addCase(updateReviewStatus.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updateReviewStatus.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Review status updated successfully!";
+                state.pendingReviews = state.pendingReviews.filter(rev => rev._id !== action.payload.data._id);
+            })
+            .addCase(updateReviewStatus.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
     }
 });
 
