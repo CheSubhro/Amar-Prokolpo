@@ -10,6 +10,14 @@ export const addToWishlist = createAsyncThunk('wishlist/add', async (wishlistDat
     }
 });
 
+export const removeFromWishlist = createAsyncThunk('wishlist/remove', async (wishlistId, thunkAPI) => {
+    try {
+        return await wishlistService.removeFromWishlist(wishlistId);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to remove from wishlist");
+    }
+});
+
 const wishlistSlice = createSlice({
     name: 'wishlist',
     initialState: {
@@ -38,6 +46,20 @@ const wishlistSlice = createSlice({
                 state.items.push(action.payload.data);
             })
             .addCase(addToWishlist.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Remove From Wishlist
+            .addCase(removeFromWishlist.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(removeFromWishlist.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Removed from wishlist successfully!";
+                state.items = state.items.filter(item => item._id !== action.meta.arg);
+            })
+            .addCase(removeFromWishlist.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });

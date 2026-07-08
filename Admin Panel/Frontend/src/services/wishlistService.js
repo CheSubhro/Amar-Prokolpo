@@ -6,5 +6,13 @@ const addToWishlist = async (wishlistData) => {
     return response.data;
 };
 
-const wishlistService = { addToWishlist };
+const removeFromWishlist = async (wishlistId) => {
+    const response = await api.delete(`/wishlist/${wishlistId}`);
+    return response.data;
+};
+
+const wishlistService = { 
+    addToWishlist,
+    removeFromWishlist
+};
 export default wishlistService;
