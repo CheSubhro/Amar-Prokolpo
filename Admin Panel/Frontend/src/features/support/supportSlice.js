@@ -10,6 +10,14 @@ export const createTicket = createAsyncThunk('support/create', async (ticketData
     }
 });
 
+export const respondToTicket = createAsyncThunk('support/respond', async ({ ticketId, responseData }, thunkAPI) => {
+    try {
+        return await supportService.respondToTicket(ticketId, responseData);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to send response");
+    }
+});
+
 const supportSlice = createSlice({
     name: 'support',
     initialState: {
@@ -27,6 +35,7 @@ const supportSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            //Create Ticket
             .addCase(createTicket.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -40,7 +49,25 @@ const supportSlice = createSlice({
             .addCase(createTicket.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
-            });
+            })
+            // Respond To Ticket
+            .addCase(respondToTicket.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(respondToTicket.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.successMessage = "Response sent successfully!";
+                const updatedTicket = action.payload.data;
+                const index = state.tickets.findIndex(t => t._id === updatedTicket._id);
+                if (index !== -1) {
+                    state.tickets[index] = updatedTicket;
+                }
+            })
+            .addCase(respondToTicket.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
     }
 });
 
