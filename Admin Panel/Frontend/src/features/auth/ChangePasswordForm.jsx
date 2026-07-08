@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { Input, Button, Spinner } from '../../../components/common';
+import { Input, Button, Spinner } from '../../components/common';
 
 const ChangePasswordForm = ({ onSubmit, isLoading }) => {
-    
+
     const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
 
     const handleSubmit = (e) => {
