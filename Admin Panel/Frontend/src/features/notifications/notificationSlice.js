@@ -10,6 +10,14 @@ export const registerDeviceToken = createAsyncThunk('notification/register', asy
     }
 });
 
+export const markNotificationAsRead = createAsyncThunk('notification/markAsRead', async (notificationId, thunkAPI) => {
+    try {
+        return await notificationService.markAsRead(notificationId);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to mark as read");
+    }
+});
+
 const notificationSlice = createSlice({
     name: 'notifications',
     initialState: {
@@ -29,6 +37,16 @@ const notificationSlice = createSlice({
             })
             .addCase(registerDeviceToken.rejected, (state, action) => {
                 state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Mark Notification As Read
+            .addCase(markNotificationAsRead.fulfilled, (state, action) => {
+                const notification = state.notifications.find(n => n._id === action.payload.data._id);
+                if (notification) {
+                    notification.isRead = true;
+                }
+            })
+            .addCase(markNotificationAsRead.rejected, (state, action) => {
                 state.error = action.payload;
             });
     }

@@ -6,7 +6,13 @@ const registerToken = async (tokenData) => {
     return response.data;
 };
 
+const markAsRead = async (notificationId) => {
+    const response = await api.patch(`/notifications/read/${notificationId}`);
+    return response.data;
+};
+
 const notificationService = { 
-    registerToken
+    registerToken,
+    markAsRead
 };
 export default notificationService;
