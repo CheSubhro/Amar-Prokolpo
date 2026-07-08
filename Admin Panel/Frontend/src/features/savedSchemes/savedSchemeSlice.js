@@ -16,26 +16,31 @@ const savedSchemeSlice = createSlice({
         savedList: [],
         isLoading: false,
         error: null,
+        successMessage: null,
     },
     extraReducers: (builder) => {
         builder
-            .addCase(toggleSaveScheme.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(toggleSaveScheme.fulfilled, (state, action) => {
-                state.isLoading = false;
-                const { schemeId, isSaved } = action.payload.data;
-                if (isSaved) {
-                    state.savedList.push(schemeId);
-                } else {
-                    state.savedList = state.savedList.filter(id => id !== schemeId);
-                }
-            })
-            .addCase(toggleSaveScheme.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.payload;
-            });
+        .addCase(toggleSaveScheme.pending, (state) => {
+            state.isLoading = true;
+            state.error = null;
+            state.successMessage = null; 
+        })
+        .addCase(toggleSaveScheme.fulfilled, (state, action) => {
+            state.isLoading = false;
+            const { schemeId, isSaved } = action.payload.data;
+            
+            state.successMessage = isSaved ? "Scheme saved successfully!" : "Scheme removed from saved!";
+            
+            if (isSaved) {
+                state.savedList.push(schemeId);
+            } else {
+                state.savedList = state.savedList.filter(id => id !== schemeId);
+            }
+        })
+        .addCase(toggleSaveScheme.rejected, (state, action) => {
+            state.isLoading = false;
+            state.error = action.payload || "Failed to Toggle Save Scheme, please try again later."; 
+        });
     }
 });
 
