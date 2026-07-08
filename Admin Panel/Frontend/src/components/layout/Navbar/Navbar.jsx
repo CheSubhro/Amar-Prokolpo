@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
 import { Menu as MenuIcon, Notifications, Person, Lock, Logout } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../../hooks/useAuth';
 import { Tooltip } from '../../common/index'; 
 
 const Navbar = ({ toggleSidebar }) => {
@@ -30,7 +30,7 @@ const Navbar = ({ toggleSidebar }) => {
                 </IconButton>
                 
                 <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: '800', letterSpacing: '0.5px', color: 'primary.dark' }}>
-                    Amar <Prokolpo></Prokolpo>
+                    Amar Prokolpo
                 </Typography>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -51,16 +51,6 @@ const Navbar = ({ toggleSidebar }) => {
                         anchorEl={anchorEl}
                         open={open}
                         onClose={handleMenuClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.12))',
-                                mt: 1.5,
-                                width: 200,
-                                '& .MuiAvatar-root': { width: 32, height: 32, ml: -0.5, mr: 1 },
-                            },
-                        }}
                         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
