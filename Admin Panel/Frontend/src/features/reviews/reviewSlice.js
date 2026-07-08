@@ -10,6 +10,14 @@ export const addReview = createAsyncThunk('review/add', async (reviewData, thunk
     }
 });
 
+export const getReviewsBySchemeId = createAsyncThunk('review/getBySchemeId', async (schemeId, thunkAPI) => {
+    try {
+        return await reviewService.getReviewsBySchemeId(schemeId);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch reviews");
+    }
+});
+
 const reviewSlice = createSlice({
     name: 'reviews',
     initialState: {
@@ -26,6 +34,7 @@ const reviewSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            // Add Review
             .addCase(addReview.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -37,6 +46,19 @@ const reviewSlice = createSlice({
                 state.reviews.unshift(action.payload.data); 
             })
             .addCase(addReview.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // Get Reviews By Scheme Id
+            .addCase(getReviewsBySchemeId.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getReviewsBySchemeId.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.reviews = action.payload.data; 
+            })
+            .addCase(getReviewsBySchemeId.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             });

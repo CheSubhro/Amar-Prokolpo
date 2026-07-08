@@ -6,5 +6,13 @@ const addReview = async (reviewData) => {
     return response.data;
 };
 
-const reviewService = { addReview };
+const getReviewsBySchemeId = async (schemeId) => {
+    const response = await api.get(`/reviews/${schemeId}`);
+    return response.data;
+};
+
+const reviewService = { 
+    addReview,
+    getReviewsBySchemeId
+};
 export default reviewService;
