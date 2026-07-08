@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChangePasswordForm } from '../../features/auth/ChangePasswordForm'; 
+import ChangePasswordForm  from '../../features/auth/ChangePasswordForm'; 
 import { Card } from '../../components/common';
 import { useAuth } from '../../hooks/useAuth';
 
