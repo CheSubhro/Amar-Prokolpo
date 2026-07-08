@@ -11,8 +11,14 @@ const removeFromWishlist = async (wishlistId) => {
     return response.data;
 };
 
+const getWishlist = async () => {
+    const response = await api.get('/wishlist');
+    return response.data;
+};
+
 const wishlistService = { 
     addToWishlist,
-    removeFromWishlist
+    removeFromWishlist,
+    getWishlist
 };
 export default wishlistService;
