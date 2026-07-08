@@ -6,6 +6,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/RegisterPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import ProfilePage from '../pages/Profile/ProfilePage';
 import ChangePasswordPage from '../pages/Profile/ChangePasswordPage';
 import NotFound from '../pages/NotFound/NotFound';
 
@@ -18,6 +19,7 @@ const AppRoutes = () => {
 
             {/* Protected Route */}
             <Route path="/" element={<ProtectedRoute><AdminLayout><Dashboard /></AdminLayout></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><AdminLayout><ProfilePage /></AdminLayout></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute><AdminLayout><ChangePasswordPage /></AdminLayout></ProtectedRoute>} />
             {/* 404 Not Found Route */}
             <Route path="*" element={<NotFound />} />
