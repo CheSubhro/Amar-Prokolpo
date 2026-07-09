@@ -1,23 +1,23 @@
 
-import React,{useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { ErrorBoundary } from './components/common';
-import AppRoutes from './routes/AppRoutes';
-import { useAuth } from './hooks/useAuth';
+import MainLayout from './layouts/MainLayout';
 
 function App() {
-
-    const { checkAuth } = useAuth();
-    useEffect(() => {
-        checkAuth(); 
-    }, []);
     return (
-        <Router>
-            <ErrorBoundary>
-                    <AppRoutes />
-            </ErrorBoundary> 
-        </Router>
-    );
+        <ChakraProvider value={defaultSystem}>
+            <Router>
+                <ErrorBoundary>
+                    <MainLayout>
+                        {/* <Home /> */}
+                        <h1>Welcome to CheSubhro's App</h1>
+                    </MainLayout>
+                </ErrorBoundary> 
+            </Router>
+        </ChakraProvider>
+    )
 }
 
-export default App;
+export default App

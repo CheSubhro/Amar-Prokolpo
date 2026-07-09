@@ -1,14 +1,11 @@
 
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-import InboxIcon from '@mui/icons-material/Inbox';
+import { VStack, Text, Icon } from '@chakra-ui/react';
+import { FiInbox } from 'react-icons/fi'; // react-icons install 
 
-const EmptyState = ({ message = "No data available" }) => {
-    return (
-        <Box display="flex" flexDirection="column" alignItems="center" p={4}>
-            <InboxIcon sx={{ fontSize: 50, color: 'text.secondary', mb: 1 }} />
-            <Typography color="text.secondary">{message}</Typography>
-        </Box>
-    );
-};
+const EmptyState = ({ message = "No Data Found" }) => (
+    <VStack py={10} spacing={3}>
+        <Icon as={FiInbox} w={12} h={12} color="gray.400" />
+        <Text color="gray.500">{message}</Text>
+    </VStack>
+);
 export default EmptyState;

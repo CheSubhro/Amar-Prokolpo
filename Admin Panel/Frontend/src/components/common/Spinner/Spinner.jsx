@@ -1,12 +1,23 @@
 
 import React from 'react';
-import { CircularProgress, Box } from '@mui/material';
+import { Spinner as ChakraSpinner, Center, Text, VStack } from '@chakra-ui/react';
 
-const Spinner = ({ size = 40 }) => {
+const Spinner = ({ label = "Loading...", ...props }) => {
     return (
-        <Box display="flex" justifycontent="center" alignitems="center" p={2}>
-            <CircularProgress size={size} />
-        </Box>
+        <Center py={10} w="100%">
+        <VStack>
+            <ChakraSpinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            {...props}
+            />
+            {label && <Text color="gray.500" fontSize="sm">{label}</Text>}
+        </VStack>
+        </Center>
     );
 };
+
 export default Spinner;

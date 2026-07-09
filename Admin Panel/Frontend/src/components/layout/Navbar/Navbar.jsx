@@ -1,73 +1,125 @@
 
+// src/components/layout/Navbar/Navbar.jsx
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Box, Avatar, Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
-import { Menu as MenuIcon, Notifications, Person, Lock, Logout } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../hooks/useAuth';
-import { Tooltip } from '../../common/index'; 
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Flex, Button, HStack, Link, Stack } from '@chakra-ui/react';
+import { FiMenu, FiX } from 'react-icons/fi';
 
-const Navbar = ({ toggleSidebar }) => {
+const Navbar = () => {
+    // 🆕 In v3, managing the mobile drawer/menu state using a basic React state is recommended over useDisclosure
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleMenu = () => setIsOpen(!isOpen);
 
-    const navigate = useNavigate();
-    const { logout } = useAuth();
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-
-    const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-    const handleMenuClose = () => setAnchorEl(null);
-
-    const handleLogout = async () => {
-        await logout();
-        handleMenuClose();
-        navigate('/login');
-    };
+    // Consolidated navigation links array
+    const navLinks = [
+        { label: 'Home', path: '/' },
+        { label: 'Products', path: '/products' },
+        { label: 'About', path: '/about' },
+    ];
 
     return (
-        <AppBar position="sticky" sx={{ bgcolor: 'white', color: 'text.primary', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
-            <Toolbar>
-                <IconButton onClick={toggleSidebar} sx={{ mr: 2, color: 'primary.main' }}>
-                    <MenuIcon />
-                </IconButton>
+        <Box 
+            bg="white" 
+            px={{ base: "4", md: "6" }} // 🆕 Slightly reduced mobile padding to 4 to prevent icons from touching the viewport edges
+            boxShadow="sm" 
+            position="sticky" 
+            top="0" 
+            zIndex="1000" 
+            borderBottom="1px solid" 
+            borderColor="gray.100"
+        >
+            {/* 🆕 Explicitly set w="100%" alongside h="16" to ensure contents stay perfectly contained within the viewport */}
+            <Flex h="16" w="100%" alignItems="center" justifyContent="space-between">
                 
-                <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: '800', letterSpacing: '0.5px', color: 'primary.dark' }}>
-                    Amar Prokolpo
-                </Typography>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Tooltip title="Notifications">
-                        <IconButton sx={{ color: 'text.secondary' }}>
-                            <Notifications />
-                        </IconButton>
-                    </Tooltip>
-                    
-                    <Avatar 
-                        onClick={handleMenuOpen} 
-                        sx={{ ml: 1, bgcolor: 'primary.main', width: 40, height: 40, cursor: 'pointer', border: '2px solid #e0e0e0' }}
-                    >
-                        A
-                    </Avatar>
-
-                    <Menu
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={handleMenuClose}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
-                        <MenuItem onClick={() => {navigate('/profile'); handleMenuClose();}}>
-                            <ListItemIcon><Person fontSize="small" /></ListItemIcon> Profile
-                        </MenuItem>
-                        <MenuItem onClick={() => {navigate('/change-password'); handleMenuClose();}}>
-                            <ListItemIcon><Lock fontSize="small" /></ListItemIcon> Change Password
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
-                            <ListItemIcon><Logout fontSize="small" color="error" /></ListItemIcon> Logout
-                        </MenuItem>
-                    </Menu>
+                {/* 📱 Modern toggle button for mobile screens */}
+                <Box 
+                    display={{ base: 'block', md: 'none' }} 
+                    onClick={toggleMenu} 
+                    fontSize="2xl" 
+                    cursor="pointer"
+                    color="gray.700"
+                    mr="2" // 🆕 Added a subtle right margin for structural breathing room on smaller viewports
+                >
+                    {isOpen ? <FiX /> : <FiMenu />}
                 </Box>
-            </Toolbar>
-        </AppBar>
+                
+                {/* 🏷️ Brand Logo and Desktop Menu */}
+                <HStack spaceX={{ base: "2", md: "8" }} alignItems="center"> {/* 🆕 Optimized spacing for narrow mobile displays */}
+                    <Box 
+                        as={RouterLink} 
+                        to="/" 
+                        fontWeight="extrabold" 
+                        fontSize={{ base: "lg", md: "xl" }} // 🆕 Scaled down logo font size slightly (lg) on mobile viewports
+                        color="blue.600"
+                        letterSpacing="tight"
+                        _hover={{ textDecoration: 'none' }}
+                    >
+                        CheSubhro
+                    </Box>
+
+                    {/* 💻 Desktop Navigation */}
+                    <HStack as="nav" spaceX="6" display={{ base: 'none', md: 'flex' }}>
+                        {navLinks.map((link) => (
+                            <Link 
+                                key={link.label}
+                                as={RouterLink} 
+                                to={link.path}
+                                fontWeight="medium"
+                                color="gray.600"
+                                fontSize="sm"
+                                transition="all 0.2s"
+                                _hover={{ color: "blue.600", textDecoration: "none" }}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </HStack>
+                </HStack>
+
+                {/* 🔑 Right Side Action Button */}
+                {/* 🆕 Kept at minW="fit-content" inside the flex container to guarantee the action element never squishes or breaks onto new lines */}
+                <Flex alignItems="center" minW="fit-content"> 
+                    <Button 
+                        as={RouterLink}
+                        to="/login"
+                        bg="blue.600" 
+                        color="white"
+                        size="sm" 
+                        borderRadius="lg"
+                        px={{ base: "3", md: "5" }} // 🆕 Compressed horizontal padding to 3 on mobile for a tighter, cleaner button footprint
+                        fontWeight="semibold"
+                        _hover={{ bg: "blue.700" }}
+                        boxShadow="0 4px 12px rgba(37, 99, 235, 0.15)"
+                    >
+                        Login
+                    </Button>
+                </Flex>
+            </Flex>
+
+            {/* Mobile Menu Content */}
+            {isOpen && (
+                <Box pb="4" display={{ md: 'none' }}>
+                    <Stack as="nav" spaceY="3" mt="2">
+                        {navLinks.map((link) => (
+                            <Link 
+                                key={link.label}
+                                as={RouterLink} 
+                                to={link.path}
+                                onClick={toggleMenu}
+                                fontWeight="medium"
+                                color="gray.700"
+                                py="2"
+                                px="3"
+                                borderRadius="md"
+                                _hover={{ bg: "blue.50", color: "blue.600", textDecoration: "none" }}
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                    </Stack>
+                </Box>
+            )}
+        </Box>
     );
 };
 

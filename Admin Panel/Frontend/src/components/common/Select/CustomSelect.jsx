@@ -1,36 +1,47 @@
 
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import { Box, Select, createListCollection } from '@chakra-ui/react';
 
-const CustomSelect = ({ 
-    label, 
-    value, 
-    onChange, 
-    options = [], 
-    error, 
-    helperText, 
-    fullWidth = true, 
-    ...props 
-}) => {
+const CustomSelect = ({ label, value, onValueChange, options = [], placeholder = "Select option", flex }) => {
+    
+    const collection = createListCollection({
+        items: options.map(opt => ({
+            label: opt.label || opt,
+            value: opt.value || opt
+        }))
+    });
+
     return (
-        <FormControl fullWidth={fullWidth} error={error} sx={{ my: 1 }}>
-            <InputLabel>{label}</InputLabel>
-            <Select
-                value={value}
-                onChange={onChange}
-                label={label}
-                IconComponent={ArrowDropDownIcon} 
-                {...props}
+        <Box flex={flex || "1"}>
+            {label && (
+                <label style={{ fontSize: '14px', fontWeight: 'bold', display: 'block', marginBottom: '6px' }}>
+                    {label}
+                </label>
+            )}
+            <Select.Root 
+                collection={collection}
+                value={[value]} 
+                onValueChange={(details) => {
+                    if (details.value && details.value.length > 0) {
+                        onValueChange(details.value[0]);
+                    }
+                }}
             >
-                {options.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
-            </Select>
-            {helperText && <FormHelperText>{helperText}</FormHelperText>}
-        </FormControl>
+                <Select.Trigger>
+                    <Select.ValueText placeholder={placeholder} />
+                </Select.Trigger>
+                <Select.Content portal>
+                    {collection.items.map((item) => (
+                        <Select.Item 
+                            key={item.value} 
+                            item={item}
+                        >
+                            {item.label}
+                        </Select.Item>
+                    ))}
+                </Select.Content>
+            </Select.Root>
+        </Box>
     );
 };
 
