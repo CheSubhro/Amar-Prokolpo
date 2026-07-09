@@ -1,15 +1,16 @@
 
 import React, { useState } from 'react';
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, MenuItem } from '@mui/material';
 import { Button } from '../../components/common';
 
 const EditUserForm = ({ user, onUpdate, onClose }) => {
-    
     const [formData, setFormData] = useState({
         fullName: user?.fullName || '',
         email: user?.email || '',
         role: user?.role || ''
     });
+
+    const roles = ['admin', 'user', 'moderator'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,11 +30,21 @@ const EditUserForm = ({ user, onUpdate, onClose }) => {
                 value={formData.email} 
                 disabled 
             />
+            {/* Role Select Input */}
             <TextField 
+                select
                 label="Role" 
                 value={formData.role} 
                 onChange={(e) => setFormData({...formData, role: e.target.value})} 
-            />
+                fullWidth
+            >
+                {roles.map((role) => (
+                    <MenuItem key={role} value={role}>
+                        {role.charAt(0).toUpperCase() + role.slice(1)}
+                    </MenuItem>
+                ))}
+            </TextField>
+            
             <Button type="submit">Save Changes</Button>
         </Box>
     );
