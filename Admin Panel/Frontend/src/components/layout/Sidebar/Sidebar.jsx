@@ -50,7 +50,6 @@ const Sidebar = () => {
                 },
             }}
         >
-            {/* প্রোফাইল সেকশন */}
             <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: '#f8f9fa' }}>
                 <Avatar 
                     src={user?.avatar} 
@@ -68,7 +67,6 @@ const Sidebar = () => {
             
             <Divider />
             
-            {/* মেনু লিস্ট */}
             <List sx={{ mt: 1, px: 1 }}>
                 {menuItems.map((item) => (
                     <ListItemButton 
@@ -89,7 +87,7 @@ const Sidebar = () => {
                         <ListItemIcon sx={{ minWidth: 40, color: location.pathname === item.path ? 'white' : 'text.secondary' }}>
                             {item.icon}
                         </ListItemIcon>
-                        <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: 500 }} />
+                        <ListItemText primary={item.text} primarytypographyprops={{ fontSize: '0.9rem', fontWeight: 500 }} />
                     </ListItemButton>
                 ))}
             </List>

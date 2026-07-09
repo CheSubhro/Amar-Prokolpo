@@ -3,7 +3,7 @@ import React from 'react';
 import { Chip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-const StyledChip = styled(Chip)(({ theme, customStyles }) => ({
+const StyledChip = styled(Chip)(({ theme, customstyles }) => ({
     borderRadius: '16px', 
     fontWeight: 600,
     fontSize: '0.75rem', 
@@ -14,7 +14,7 @@ const StyledChip = styled(Chip)(({ theme, customStyles }) => ({
         paddingLeft: '0',
         paddingRight: '0',
     },
-    ...customStyles
+    ...customstyles
 }));
 
 const CustomBadge = ({ variant, status, children, icon, ...props }) => {
@@ -35,7 +35,7 @@ const CustomBadge = ({ variant, status, children, icon, ...props }) => {
         <StyledChip
             icon={icon} 
             label={children}
-            customStyles={styles}
+            customstyles={styles}
             {...props}
         />
     );

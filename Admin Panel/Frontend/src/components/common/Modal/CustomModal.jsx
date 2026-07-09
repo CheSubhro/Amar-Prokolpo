@@ -12,7 +12,7 @@ const CustomModal = ({ open, onClose, title, children }) => {
     return (
         <Modal open={open} onClose={onClose}>
             <Box sx={style}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Box display="flex" justifycontent="space-between" alignitems="center" mb={2}>
                     <Typography variant="h6">{title}</Typography>
                     <IconButton onClick={onClose}><CloseIcon /></IconButton>
                 </Box>

@@ -15,25 +15,29 @@ import {
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {Spinner,Badge, Modal} from '../../components/common'
+import EditUserModal from '../../features/users/EditUserModal';
 
 const UserList = () => {
     
-    const { users, isLoading, fetchAllUsers } = useUsers();
+    const { users, isLoading, fetchAllUsers, updateUser } = useUsers();
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+
+    useEffect(() => {
+        fetchAllUsers();
+    }, [fetchAllUsers]);
 
     const handleEditClick = (user) => {
         setSelectedUser(user);
         setEditModalOpen(true);
     };
 
-    useEffect(() => {
+    const handleUpdateUser = async (id, data) => {
+        await updateUser({ id, ...data });
         fetchAllUsers();
-    }, [fetchAllUsers]);
+    };
 
-    if (isLoading) {
-        return <Spinner size={50} />;
-    }
+    if (isLoading) return <Spinner size={50} />;
 
     return (
         <Box sx={{ p: 3 }}>
@@ -51,7 +55,7 @@ const UserList = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {users.length > 0 ? (
+                        {users?.length > 0 ? (
                             users.map((user) => (
                                 <TableRow key={user._id} hover>
                                     <TableCell>{user.fullName}</TableCell>
@@ -69,19 +73,19 @@ const UserList = () => {
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={4} align="center">No users found</TableCell>
+                                <TableCell colSpan={5} align="center">No users found</TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Modal 
+
+            <EditUserModal 
                 open={editModalOpen} 
                 onClose={() => setEditModalOpen(false)}
-                title="Edit User"
-            >
-                <p>Editing: {selectedUser?.fullName}</p>
-            </Modal>
+                user={selectedUser}
+                onUpdate={handleUpdateUser}
+            />
         </Box>
     );
 };

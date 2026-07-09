@@ -1,35 +1,22 @@
 
-import React, { useEffect, useState } from 'react';
-import { Box, Container, CircularProgress } from '@mui/material';
+import React from 'react';
+import { Box, Container, CircularProgress, Typography  } from '@mui/material';
 import ProfileForm from '../../features/auth/ProfileForm';
 import {useAuth}  from '../../hooks/useAuth'; 
 
 const ProfilePage = () => {
 
-    const { user: authUser, checkAuth, isLoading: authLoading } = useAuth();
+    const { user: authUser, isLoading: authLoading,checkAuth } = useAuth();
 
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadUser = async () => {
-            try {
-                await checkAuth();
-            } catch (error) {
-                console.error("Failed to load profile", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadUser();
-    }, [checkAuth]);
-
-    if (loading || authLoading) {
+    if (authLoading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
                 <CircularProgress />
             </Box>
         );
     }
+
+    if (!authUser) return <Typography>User data not available.</Typography>;
 
     return (
         <Container maxWidth="sm">
