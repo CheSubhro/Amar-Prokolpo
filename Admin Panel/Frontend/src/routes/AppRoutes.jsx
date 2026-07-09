@@ -8,6 +8,7 @@ import Register from '../pages/Auth/RegisterPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import ChangePasswordPage from '../pages/Profile/ChangePasswordPage';
+import UserList from '../pages/Users/UserList'
 import NotFound from '../pages/NotFound/NotFound';
 
 const AppRoutes = () => {
@@ -21,6 +22,7 @@ const AppRoutes = () => {
             <Route path="/" element={<ProtectedRoute><AdminLayout><Dashboard /></AdminLayout></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><AdminLayout><ProfilePage /></AdminLayout></ProtectedRoute>} />
             <Route path="/change-password" element={<ProtectedRoute><AdminLayout><ChangePasswordPage /></AdminLayout></ProtectedRoute>} />
+            <Route path="/users" element={<ProtectedRoute><AdminLayout><UserList /></AdminLayout></ProtectedRoute>} />
             {/* 404 Not Found Route */}
             <Route path="*" element={<NotFound />} />
         </Routes>

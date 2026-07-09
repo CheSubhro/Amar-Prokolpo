@@ -1,9 +1,17 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useAuth } from '../../../hooks/useAuth';
-import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Divider, Avatar, Typography } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+    Drawer, 
+    List, 
+    ListItemButton, 
+    ListItemIcon, 
+    ListItemText, 
+    Box, 
+    Divider, 
+    Avatar, 
+    Typography 
+} from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -11,28 +19,12 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import SupportIcon from '@mui/icons-material/Support';
-import { Spinner } from '../../common/index';
+import { useAuth } from '../../../hooks/useAuth';
 
-
-const Sidebar = ({ open, onClose }) => {
-
+const Sidebar = () => {
     const navigate = useNavigate();
-
-    const { user, isInitialLoading } = useAuth();
-
-    if (isInitialLoading) {
-        return (
-            <Drawer anchor="left" open={open} onClose={onClose}>
-                <Box sx={{ width: 250, display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <Spinner /> 
-                </Box>
-            </Drawer>
-        );
-    }
-
-    const getInitials = (name) => {
-        return name ? name.split(' ').map(n => n[0]).join('').toUpperCase() : 'A';
-    };
+    const location = useLocation();
+    const { user } = useAuth();
 
     const menuItems = [
         { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
@@ -44,56 +36,60 @@ const Sidebar = ({ open, onClose }) => {
         { text: 'Support Tickets', icon: <SupportIcon />, path: '/support' },
     ];
 
-    const handleNavigation = (path) => {
-        navigate(path);
-        onClose();
-    };
-
     return (
         <Drawer
-            anchor="left"
-            open={open}
-            onClose={onClose}
+            variant="permanent"
             sx={{
-                '& .MuiDrawer-paper': { width: 250, boxSizing: 'border-box', bgcolor: '#fcfcfc' },
+                width: 260,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': { 
+                    width: 260, 
+                    boxSizing: 'border-box', 
+                    bgcolor: '#ffffff',
+                    borderRight: '1px solid #e0e0e0'
+                },
             }}
         >
-            <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: 'primary.main', color: 'white' }}>
-            <Avatar 
-                src={user?.avatar} 
-                alt={user?.name}
-                sx={{ 
-                    width: 60, 
-                    height: 60, 
-                    mb: 1, 
-                    bgcolor: 'secondary.main',
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold'
-                }}
-            >
-                {!user?.avatar && getInitials(user?.name)}
-            </Avatar>
-                <Typography variant="h6">
-                    {user?.fullName || 'Admin Name'} 
+            {/* প্রোফাইল সেকশন */}
+            <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: '#f8f9fa' }}>
+                <Avatar 
+                    src={user?.avatar} 
+                    sx={{ width: 60, height: 60, mb: 1, bgcolor: 'primary.main', fontSize: '1.5rem', fontWeight: 'bold' }}
+                >
+                    {!user?.avatar && (user?.fullName?.charAt(0) || 'A')}
+                </Avatar>
+                <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                    {user?.fullName || 'Admin'}
                 </Typography>
-                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                     {user?.email || 'admin@example.com'}
                 </Typography>
             </Box>
             
             <Divider />
             
-            <List sx={{ mt: 1 }}>
+            {/* মেনু লিস্ট */}
+            <List sx={{ mt: 1, px: 1 }}>
                 {menuItems.map((item) => (
                     <ListItemButton 
                         key={item.text} 
-                        onClick={() => handleNavigation(item.path)} 
-                        sx={{ mb: 0.5, '&:hover': { bgcolor: 'primary.light', color: 'white' } }}
+                        onClick={() => navigate(item.path)}
+                        selected={location.pathname === item.path}
+                        sx={{ 
+                            borderRadius: 1,
+                            mb: 0.5,
+                            '&.Mui-selected': {
+                                bgcolor: 'primary.main',
+                                color: 'white',
+                                '&:hover': { bgcolor: 'primary.dark' },
+                                '& .MuiListItemIcon-root': { color: 'white' }
+                            }
+                        }}
                     >
-                        <ListItemIcon sx={{ color: 'primary.main' }}>{item.icon}</ListItemIcon>
-                        <ListItemText>
-                            <Typography sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{item.text}</Typography>
-                        </ListItemText>
+                        <ListItemIcon sx={{ minWidth: 40, color: location.pathname === item.path ? 'white' : 'text.secondary' }}>
+                            {item.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={item.text} primaryTypographyProps={{ fontSize: '0.9rem', fontWeight: 500 }} />
                     </ListItemButton>
                 ))}
             </List>
