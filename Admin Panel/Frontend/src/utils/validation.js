@@ -2,8 +2,8 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+	identifier: z.string().min(3, "Username or email is required"), 
+	password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export const userProfileSchema = z.object({
@@ -13,10 +13,10 @@ export const userProfileSchema = z.object({
 
 // Helper function to validate any schema
 export const validateData = (schema, data) => {
-  const result = schema.safeParse(data);
-  return {
-    success: result.success,
-    data: result.data,
-    errors: result.error ? result.error.flatten().fieldErrors : null,
-  };
+    const result = schema.safeParse(data);
+    return {
+      success: result.success,
+      data: result.data,
+      errors: result.error ? result.error.flatten().fieldErrors : null,
+    };
 };
