@@ -11,9 +11,15 @@ const logout = async () => {
     return response.data;
 };
 
+const getCurrentUser = async () => {
+    const response = await api.get('/users/current-user');
+    return response.data.data;
+};
+
 const authService = {
     login,
     logout,
+    getCurrentUser
 };
 
 export default authService;

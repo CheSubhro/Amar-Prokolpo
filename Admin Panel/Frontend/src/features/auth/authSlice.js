@@ -10,6 +10,14 @@ export const loginUser = createAsyncThunk('auth/login', async (userData, thunkAP
     }
 });
 
+export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, thunkAPI) => {
+    try {
+        return await authService.getCurrentUser();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || 'Unauthorized');
+    }
+});
+
 export const logoutUser = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     try {
         await authService.logout();
@@ -44,6 +52,12 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
+            })
+            .addCase(getCurrentUser.fulfilled, (state, action) => {
+                state.user = action.payload; 
+            })
+            .addCase(getCurrentUser.rejected, (state) => {
+                state.user = null; 
             })
             .addCase(logoutUser.fulfilled, (state) => {
                 state.user = null;

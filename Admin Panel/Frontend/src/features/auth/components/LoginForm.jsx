@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux'; 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { loginSchema } from '../../../utils/validation';
-import { useAuth } from '../../../hooks/useAuth'; 
+import { loginUser } from '../../../features/auth/authSlice'; 
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Input } from '../../../components/ui/input';
@@ -12,9 +13,10 @@ import { Label } from '../../../components/ui/label';
 
 const LoginForm = ({ onLoginSuccess }) => {
 
+    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState(false);
     
-    const { login, isLoading, isError, message } = useAuth();
+    const { isLoading, isError, message } = useSelector((state) => state.auth);
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema)
@@ -26,11 +28,17 @@ const LoginForm = ({ onLoginSuccess }) => {
             username: !data.identifier.includes('@') ? data.identifier : '',
             password: data.password
         };
-
-        const result = await login(loginData);
         
-        if (result?.meta?.requestStatus === 'fulfilled') {
-            onLoginSuccess?.();
+        try {
+            const resultAction = await dispatch(loginUser(loginData));
+            
+            if (loginUser.fulfilled.match(resultAction)) {
+                onLoginSuccess?.();
+            } else {
+                console.log("Login Failed:", resultAction.payload);
+            }
+        } catch (err) {
+            console.error("Login Error:", err);
         }
     };
 
@@ -48,7 +56,7 @@ const LoginForm = ({ onLoginSuccess }) => {
                         {errors.identifier && <p className="text-red-500 text-sm mt-1">{errors.identifier.message}</p>}
                     </div>
 
-                    {/* Password Field with Eye Icon */}
+                    {/* Password Field */}
                     <div className="relative">
                         <Label>Password</Label>
                         <Input 
@@ -67,9 +75,10 @@ const LoginForm = ({ onLoginSuccess }) => {
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                     </div>
 
+                    {/* Error Message */}
                     {isError && <p className="text-red-600 text-sm text-center">{message}</p>}
                     
-                    <Button className="w-full" disabled={isLoading}>
+                    <Button type="submit" className="w-full" disabled={isLoading}>
                         {isLoading ? 'Signing in...' : 'Sign In'}
                     </Button>
                 </form>

@@ -10,6 +10,9 @@ const api = axios.create({
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+        if (error.response?.status === 401) {
+            console.warn("User not authenticated yet.");
+        }
         return Promise.reject(error);
     }
 );
