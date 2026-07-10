@@ -1,11 +1,10 @@
 
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useDispatch, useSelector } from 'react-redux';
-import { Eye, EyeOff } from 'lucide-react'; 
+import { Eye, EyeOff } from 'lucide-react';
 import { loginSchema } from '../../../utils/validation';
-import { loginUser } from '../authSlice';
+import { useAuth } from '../../../hooks/useAuth'; 
 import { Button } from '../../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Input } from '../../../components/ui/input';
@@ -13,9 +12,9 @@ import { Label } from '../../../components/ui/label';
 
 const LoginForm = ({ onLoginSuccess }) => {
 
-    const [showPassword, setShowPassword] = useState(false); 
-    const dispatch = useDispatch();
-    const { isLoading, isError, message } = useSelector((state) => state.auth);
+    const [showPassword, setShowPassword] = useState(false);
+    
+    const { login, isLoading, isError, message } = useAuth();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(loginSchema)
@@ -28,8 +27,9 @@ const LoginForm = ({ onLoginSuccess }) => {
             password: data.password
         };
 
-        const result = await dispatch(loginUser(loginData));
-        if (result.type === 'auth/login/fulfilled') {
+        const result = await login(loginData);
+        
+        if (result?.meta?.requestStatus === 'fulfilled') {
             onLoginSuccess?.();
         }
     };
