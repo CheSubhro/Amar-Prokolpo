@@ -20,6 +20,33 @@ export const createNewScheme = createAsyncThunk(
     }
 );
 
+export const updateSchemeThunk = createAsyncThunk(
+    "scheme/update",
+    async ({ id, formData }, thunkAPI) => {
+        try {
+            return await schemeService.updateScheme(id, formData);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || "Failed to update scheme"
+            );
+        }
+    }
+);
+
+export const deleteSchemeThunk = createAsyncThunk(
+    "scheme/delete",
+    async (id, thunkAPI) => {
+        try {
+            await schemeService.deleteScheme(id);
+            return id;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+                error.response?.data?.message || "Failed to delete scheme"
+            );
+        }
+    }
+);
+
 const schemeSlice = createSlice({
     name: 'scheme',
     initialState: { 
@@ -58,7 +85,28 @@ const schemeSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload;
-            });
+            })
+            // Update
+            .addCase(updateSchemeThunk.fulfilled, (state, action) => {
+                state.isLoading = false;
+
+                const index = state.items.findIndex(
+                    item => item._id === action.payload._id
+                );
+
+                if (index !== -1) {
+                    state.items[index] = action.payload;
+                }
+            })
+
+            // Delete
+            .addCase(deleteSchemeThunk.fulfilled, (state, action) => {
+                state.isLoading = false;
+
+                state.items = state.items.filter(
+                    item => item._id !== action.payload
+                );
+            })
     }
 });
 

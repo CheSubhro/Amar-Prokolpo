@@ -17,9 +17,22 @@ export const createScheme = async (formData) => {
     }
 };
 
+export const updateScheme = async (id, formData) => {
+    const response = await api.patch(`/scheme/update/${id}`, formData);
+    return response.data.data;
+};
+
+export const deleteScheme = async (id) => {
+    const response = await api.delete(`/scheme/delete/${id}`);
+    return response.data;
+};
+
+
 const schemeService = {
     getAllSchemes,
-    createScheme
+    createScheme,
+    updateScheme,
+    deleteScheme
 };
 
 export default schemeService;

@@ -1,9 +1,11 @@
 
 import { useDispatch, useSelector } from 'react-redux';
-import { 
+import {
     fetchAllSchemes,
-    createNewScheme 
-} from '../features/scheme/schemeSlice';
+    createNewScheme,
+    updateSchemeThunk,
+    deleteSchemeThunk
+} from "../features/scheme/schemeSlice";
 
 export const useScheme = () => {
 
@@ -15,13 +17,21 @@ export const useScheme = () => {
     const addScheme = async (formData) => {
         return await dispatch(createNewScheme(formData));
     };
+
+    const updateScheme = (id, formData) =>
+        dispatch(updateSchemeThunk({ id, formData }));
+
+    const deleteScheme = (id) =>
+        dispatch(deleteSchemeThunk(id));
     
-    return { 
-        schemes: items || [], 
-        loading: isLoading, 
+    return {
+        schemes: items || [],
+        loading: isLoading,
         error: isError,
         message,
-        getSchemes, 
-        addScheme 
+        getSchemes,
+        addScheme,
+        updateScheme,
+        deleteScheme
     };
 };

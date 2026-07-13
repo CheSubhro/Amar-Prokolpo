@@ -149,8 +149,9 @@ const getSchemeBySlug = asyncHandler(async (req, res) => {
 });
 
 const updateScheme = asyncHandler(async (req, res) => {
-
+    
     const { id } = req.params;
+    
     const scheme = await Scheme.findById(id);
     if (!scheme) throw new ApiError(HttpStatus.NOT_FOUND, "Scheme not found");
 
@@ -160,14 +161,25 @@ const updateScheme = asyncHandler(async (req, res) => {
         scheme.image = uploadResult.url;
     }
 
-    const updates = req.body;
-    Object.keys(updates).forEach(key => {
-        if (['benefits', 'eligibility', 'requiredDocuments', 'applicationProcess', 'faqs'].includes(key)) {
-            scheme[key] = typeof updates[key] === 'string' ? JSON.parse(updates[key]) : updates[key];
-        } else {
-            scheme[key] = updates[key];
-        }
-    });
+    const { 
+        title, 
+        description, 
+        shortDescription, 
+        applicationLink, 
+        helplineNumber, 
+        officialEmail, 
+        status, 
+        featured 
+    } = req.body;
+
+    if (title !== undefined) scheme.title = title;
+    if (description !== undefined) scheme.description = description;
+    if (shortDescription !== undefined) scheme.shortDescription = shortDescription;
+    if (applicationLink !== undefined) scheme.applicationLink = applicationLink;
+    if (helplineNumber !== undefined) scheme.helplineNumber = helplineNumber;
+    if (officialEmail !== undefined) scheme.officialEmail = officialEmail;
+    if (status !== undefined) scheme.status = status;
+    if (featured !== undefined) scheme.featured = featured;
 
     await scheme.save();
     await logActivity(req.user?._id, "UPDATE_SCHEME", `Scheme ${scheme.title} updated`);
