@@ -26,6 +26,13 @@ export const schemeSchema = z.object({
   applicationProcess: z.string().min(1, "Application process is required"),
 });
 
+export const categorySchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
+  order: z.string().optional(), 
+  isActive: z.boolean().default(true),
+});
+
 // Helper function to validate any schema
 export const validateData = (schema, data) => {
     const result = schema.safeParse(data);
