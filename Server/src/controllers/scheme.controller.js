@@ -16,7 +16,7 @@ const createScheme = asyncHandler(async (req, res) => {
         const { 
             title, shortDescription, description, category, applicationLink, 
             helplineNumber, officialEmail, deadline, status, featured,
-            benefits, eligibility, requiredDocuments, applicationProcess, faqs,
+            benefits, eligibility, requiredDocuments, applicationProcess,
             isPublished 
         } = req.body;
     
@@ -47,7 +47,6 @@ const createScheme = asyncHandler(async (req, res) => {
             applicationLink, 
             helplineNumber, 
             officialEmail,
-            faqs: parseArray(faqs), 
             deadline: deadline ? new Date(deadline) : null, 
             status, 
             featured,

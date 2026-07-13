@@ -21,10 +21,6 @@ const schemeSchema = new Schema(
         applicationLink: { type: String },
         helplineNumber: { type: String }, 
         officialEmail: { type: String },
-        faqs: [{ 
-            question: { type: String }, 
-            answer: { type: String } 
-        }],
         deadline: { type: Date },
         status: { 
             type: String, 

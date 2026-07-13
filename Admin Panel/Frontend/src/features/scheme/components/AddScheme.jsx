@@ -11,6 +11,7 @@ import { Textarea } from '../../../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
 import { Checkbox } from '../../../components/ui/checkbox';
 import { Label } from '../../../components/ui/label';
+import { toast } from "sonner";
 
 const AddScheme = () => {
 
@@ -33,7 +34,7 @@ const AddScheme = () => {
 	});
 
 	const onSubmit = async (data) => {
-		console.log("Form Data Submitted:", data);
+		
 		const formData = new FormData();
 		
 		Object.keys(data).forEach((key) => {
@@ -43,7 +44,6 @@ const AddScheme = () => {
 					"eligibility",
 					"requiredDocuments",
 					"applicationProcess",
-					"faqs",
 				].includes(key)
 			) {
 				formData.append(key, data[key]);
@@ -59,22 +59,26 @@ const AddScheme = () => {
 		formData.append("eligibility", JSON.stringify(data.eligibility ? data.eligibility.split(',') : []));
 		formData.append("requiredDocuments", JSON.stringify(data.requiredDocuments ? data.requiredDocuments.split(',') : []));
 		formData.append("applicationProcess", JSON.stringify(data.applicationProcess ? data.applicationProcess.split(',') : []));
-		formData.append("faqs", data.faqs || JSON.stringify([])); 
 		
-		formData.append("isPublished", data.isPublished || "true");
+		formData.append(
+			"isPublished",
+			data.isPublished ? "true" : "false"
+		);
 
-		console.log("Submitting FormData...");
 		
 		const result = await addScheme(formData);
 
-		console.log("API Result:", result);
+		// console.log("API Result:", result);
 		
 		if (result.meta.requestStatus === 'fulfilled') {
-			alert("Scheme created successfully!");
+			toast.success("Scheme created successfully!");
 			reset();
 			setImage(null);
+			setSelectedCategory("");
 		} else {
-			alert("Error: " + (result.payload || "Something went wrong"));
+			toast.error(
+				result.payload || "Something went wrong"
+			);
 		}
 	};
 
@@ -125,7 +129,10 @@ const AddScheme = () => {
 			<Input {...register("requiredDocuments")} placeholder="Required Documents (comma separated)" />
 			
 			<Input {...register("applicationProcess")} placeholder="Application Process (comma separated)" />
-			<Select onValueChange={(value) => setValue("status", value)}>
+			<Select 
+				defaultValue="Active"
+				onValueChange={(value) => setValue("status", value)}
+			>
 			<SelectTrigger>
 				<SelectValue placeholder="Select Status" />
 			</SelectTrigger>
@@ -147,7 +154,14 @@ const AddScheme = () => {
 
 		<Textarea {...register("shortDescription")} placeholder="Short Description" className="w-full" />
 		<Textarea {...register("description")} placeholder="Detailed Description" className="w-full" />
-		
+		<Checkbox
+			id="isPublished"
+			onCheckedChange={(checked)=>setValue("isPublished",checked)}
+		/>
+
+		<Label htmlFor="isPublished">
+			Publish Scheme
+		</Label>
 		<Button type="submit" disabled={loading} className="w-full">
 			{loading ? "Creating..." : "Create Scheme"}
 		</Button>
