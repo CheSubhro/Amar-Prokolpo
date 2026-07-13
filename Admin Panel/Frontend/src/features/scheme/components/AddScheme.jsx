@@ -21,7 +21,7 @@ const AddScheme = () => {
 	});
 
 	const onSubmit = async (data) => {
-
+		console.log("Form Data Submitted:", data);
 		const formData = new FormData();
 		
 		Object.keys(data).forEach(key => formData.append(key, data[key]));
@@ -39,7 +39,11 @@ const AddScheme = () => {
 		
 		formData.append("isPublished", data.isPublished || "true");
 
+		console.log("Submitting FormData...");
+		
 		const result = await addScheme(formData);
+
+		console.log("API Result:", result);
 		
 		if (result.meta.requestStatus === 'fulfilled') {
 			alert("Scheme created successfully!");

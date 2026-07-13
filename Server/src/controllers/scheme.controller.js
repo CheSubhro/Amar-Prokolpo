@@ -13,71 +13,81 @@ import { Notification } from "../models/notification.model.js";
 
 const createScheme = asyncHandler(async (req, res) => {
 
-    const { 
-        title, shortDescription, description, category, applicationLink, 
-        helplineNumber, officialEmail, deadline, status, featured,
-        benefits, eligibility, requiredDocuments, applicationProcess, faqs,
-        isPublished 
-    } = req.body;
-
-    const imagePath = req.file?.path;
-    if (!imagePath) throw new ApiError(HttpStatus.BAD_REQUEST, "Scheme image is required");
-
-    const uploadResult = await uploadOnCloudinary(imagePath);
-    if (!uploadResult) throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed");
-
-    const parseArray = (data) => {
-        try {
-            return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
-        } catch (error) {
-            return [];
-        }
-    };
-
-    const scheme = await Scheme.create({
-        title, 
-        shortDescription, 
-        description, 
-        category,
-        image: uploadResult.url,
-        benefits: parseArray(benefits),
-        eligibility: parseArray(eligibility),
-        requiredDocuments: parseArray(requiredDocuments),
-        applicationProcess: parseArray(applicationProcess),
-        applicationLink, 
-        helplineNumber, 
-        officialEmail,
-        faqs: parseArray(faqs), 
-        deadline: deadline ? new Date(deadline) : null, 
-        status, 
-        featured,
-        isPublished: isPublished === 'true' 
-    });
-
-    await logActivity(req.user?._id, "CREATE_SCHEME", `Scheme ${title} created`);
-
-    if (isPublished === 'true') {
-        const deviceTokens = await DeviceToken.find({});
-        
-        deviceTokens.forEach(async (device) => {
-            await sendPushNotification(
-                device.token, 
-                "New Scheme Arrived!", 
-                `New Scheme : ${title} Show।`
-            );
-
-            await Notification.create({
-                user: device.user,
-                title: "New Scheme Arrived!",
-                message: `New Scheme : ${title} show।`,
-                type: 'NEW_SCHEME'
-            });
+    console.log("Create Scheme API hit!"); // এটি চেক করুন
+    console.log("Request Body:", req.body); // ডেটা ঠিকমতো আসছে কি না দেখুন
+    console.log("Request File:", req.file);
+    
+    try {
+        const { 
+            title, shortDescription, description, category, applicationLink, 
+            helplineNumber, officialEmail, deadline, status, featured,
+            benefits, eligibility, requiredDocuments, applicationProcess, faqs,
+            isPublished 
+        } = req.body;
+    
+        const imagePath = req.file?.path;
+        if (!imagePath) throw new ApiError(HttpStatus.BAD_REQUEST, "Scheme image is required");
+    
+        const uploadResult = await uploadOnCloudinary(imagePath);
+        if (!uploadResult) throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed");
+    
+        const parseArray = (data) => {
+            try {
+                return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
+            } catch (error) {
+                return [];
+            }
+        };
+    
+        const scheme = await Scheme.create({
+            title, 
+            shortDescription, 
+            description, 
+            category: new mongoose.Types.ObjectId(category),
+            image: uploadResult.url,
+            benefits: parseArray(benefits),
+            eligibility: parseArray(eligibility),
+            requiredDocuments: parseArray(requiredDocuments),
+            applicationProcess: parseArray(applicationProcess),
+            applicationLink, 
+            helplineNumber, 
+            officialEmail,
+            faqs: parseArray(faqs), 
+            deadline: deadline ? new Date(deadline) : null, 
+            status, 
+            featured,
+            isPublished: isPublished === 'true' 
         });
+    
+        await logActivity(req.user?._id, "CREATE_SCHEME", `Scheme ${title} created`);
+    
+        if (isPublished === 'true') {
+            const deviceTokens = await DeviceToken.find({});
+            
+            deviceTokens.forEach(async (device) => {
+                await sendPushNotification(
+                    device.token, 
+                    "New Scheme Arrived!", 
+                    `New Scheme : ${title} Show।`
+                );
+    
+                await Notification.create({
+                    user: device.user,
+                    title: "New Scheme Arrived!",
+                    message: `New Scheme : ${title} show।`,
+                    type: 'NEW_SCHEME'
+                });
+            });
+        }
+    
+        res.status(HttpStatus.CREATED).json(
+            new ApiResponse(HttpStatus.CREATED, scheme, "Scheme created successfully")
+        );
+    } catch (error) {
+        console.error("Server-side error:", error); 
+        throw error;
     }
-
-    res.status(HttpStatus.CREATED).json(
-        new ApiResponse(HttpStatus.CREATED, scheme, "Scheme created successfully")
-    );
+    
 });
 
 const getAllSchemes = asyncHandler(async (req, res) => {

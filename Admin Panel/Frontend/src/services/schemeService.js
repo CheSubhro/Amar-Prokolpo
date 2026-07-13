@@ -8,10 +8,13 @@ export const getAllSchemes = async (params) => {
 };
 
 export const createScheme = async (formData) => {
-    const response = await api.post('/scheme/create', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    return response.data;
+    try {
+        const response = await api.post('/scheme/create', formData);
+        return response.data;
+    } catch (error) {
+        console.error("Axios Error Details:", error.response || error); 
+        throw error; 
+    }
 };
 
 const schemeService = {
