@@ -6,3 +6,8 @@ export const getAllCategories = async () => {
     return response.data.data;
 };
 
+export const createCategory = async (formData) => {
+    const response = await api.post('/category/create', formData);
+    return response.data;
+};
+

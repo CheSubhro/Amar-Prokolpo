@@ -1,9 +1,13 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllCategories } from '../../services/categoryService';
+import { getAllCategories, createCategory } from '../../services/categoryService';
 
 export const fetchCategories = createAsyncThunk('category/fetchAll', async () => {
     return await getAllCategories();
+});
+
+export const addCategory = createAsyncThunk('category/add', async (formData) => {
+    return await createCategory(formData);
 });
 
 const categorySlice = createSlice({
@@ -15,6 +19,9 @@ const categorySlice = createSlice({
             .addCase(fetchCategories.fulfilled, (state, action) => {
                 state.loading = false;
                 state.list = action.payload;
+            })
+            builder.addCase(addCategory.fulfilled, (state, action) => {
+                state.list.push(action.payload.data); 
             });
     }
 });
