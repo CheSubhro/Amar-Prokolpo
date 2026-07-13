@@ -3,7 +3,6 @@ import { asyncHandler } from '../utils/AsyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import HttpStatus from '../utils/HttpStatus.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
-import { Category } from '../models/category.model.js';
 import { Scheme } from '../models/scheme.model.js';
 import { uploadOnCloudinary, deleteFromCloudinary } from '../utils/Cloudinary.js';
 import { logActivity } from "../utils/Logger.js";
@@ -12,10 +11,6 @@ import { sendPushNotification } from "../services/notification.service.js";
 import { Notification } from "../models/notification.model.js";
 
 const createScheme = asyncHandler(async (req, res) => {
-
-    console.log("Create Scheme API hit!"); // এটি চেক করুন
-    console.log("Request Body:", req.body); // ডেটা ঠিকমতো আসছে কি না দেখুন
-    console.log("Request File:", req.file);
     
     try {
         const { 
@@ -43,7 +38,7 @@ const createScheme = asyncHandler(async (req, res) => {
             title, 
             shortDescription, 
             description, 
-            category: new mongoose.Types.ObjectId(category),
+            category,
             image: uploadResult.url,
             benefits: parseArray(benefits),
             eligibility: parseArray(eligibility),

@@ -1,7 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCategory } from "../../../hooks/useCategory";
 import { useScheme } from '../../../hooks/useScheme';
 import { schemeSchema } from '../../../utils/validation';
 import { Button } from '../../../components/ui/button';
@@ -12,6 +13,17 @@ import { Checkbox } from '../../../components/ui/checkbox';
 import { Label } from '../../../components/ui/label';
 
 const AddScheme = () => {
+
+	const {
+		list: categories,
+		getAll
+	} = useCategory();
+
+	useEffect(() => {
+		getAll();
+	}, []);
+
+	const [selectedCategory, setSelectedCategory] = useState("");
 
 	const { addScheme, loading } = useScheme();
 	const [image, setImage] = useState(null);
@@ -24,7 +36,19 @@ const AddScheme = () => {
 		console.log("Form Data Submitted:", data);
 		const formData = new FormData();
 		
-		Object.keys(data).forEach(key => formData.append(key, data[key]));
+		Object.keys(data).forEach((key) => {
+			if (
+				![
+					"benefits",
+					"eligibility",
+					"requiredDocuments",
+					"applicationProcess",
+					"faqs",
+				].includes(key)
+			) {
+				formData.append(key, data[key]);
+			}
+		});
 		
 		if (image) formData.append("image", image);
 
@@ -62,7 +86,33 @@ const AddScheme = () => {
 			<Input {...register("title")} placeholder="Scheme Title" />
 			<Input type="file" onChange={(e) => setImage(e.target.files[0])} />
 			
-			<Input {...register("category")} placeholder="Category ID" />
+			<Select
+				value={selectedCategory}
+				onValueChange={(value) => {
+					setSelectedCategory(value);
+
+					const category = categories.find(item => item.name === value);
+
+					if (category) {
+						setValue("category", category._id); 
+					}
+				}}
+			>
+				<SelectTrigger>
+					<SelectValue placeholder="Select Category" />
+				</SelectTrigger>
+
+				<SelectContent>
+					{categories.map((category) => (
+						<SelectItem
+							key={category._id}
+							value={category.name}
+						>
+							{category.name}
+						</SelectItem>
+					))}
+				</SelectContent>
+			</Select>
 			<Input {...register("deadline")} type="date" />
 			
 			<Input {...register("applicationLink")} placeholder="Application Link" />

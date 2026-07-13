@@ -7,10 +7,18 @@ export const fetchAllSchemes = createAsyncThunk('scheme/fetchAll', async (params
     catch (error) { return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch Schemes'); }
 });
 
-export const createNewScheme = createAsyncThunk('scheme/create', async (formData, thunkAPI) => {
-    try { return await schemeService.createScheme(data); } 
-    catch (error) { return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to create Scheme'); }
-});
+export const createNewScheme = createAsyncThunk(
+    'scheme/create',
+    async (formData, thunkAPI) => {
+        try {
+            return await schemeService.createScheme(formData);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(
+            error.response?.data?.message || 'Failed to create Scheme'
+            );
+        }
+    }
+);
 
 const schemeSlice = createSlice({
     name: 'scheme',
