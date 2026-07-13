@@ -7,7 +7,7 @@ const login = async (userData) => {
 };
 
 const logout = async () => {
-    const response = await api.post('/users/logout');
+    const response = await api.delete('/users/logout');
     return response.data;
 };
 

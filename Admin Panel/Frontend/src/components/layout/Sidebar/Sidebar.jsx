@@ -2,7 +2,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, ShoppingBag, BarChart3, Settings } from 'lucide-react';
+import { 
+    LayoutDashboard, 
+    Users, 
+    ShoppingBag, 
+    FileText, 
+    MessageSquare, 
+    Bell, 
+    Star, 
+    Heart 
+} from 'lucide-react';
 import { Separator } from '../../ui/separator';
 
 
@@ -11,9 +20,14 @@ const Sidebar = () => {
     const { user } = useSelector((state) => state.auth);
 
     const menuItems = [
-        { name: 'Dashboard', path: '/', roles: ['admin', 'editor'] },
-        { name: 'Users', path: '/users', roles: ['admin'] }, 
-        { name: 'Products', path: '/products', roles: ['admin', 'editor'] },
+        { name: 'Dashboard', path: '/', roles: ['admin', 'editor'], icon: <LayoutDashboard size={20} /> },
+        { name: 'Users', path: '/users', roles: ['admin'], icon: <Users size={20} /> },
+        { name: 'Schemes', path: '/schemes', roles: ['admin', 'editor'], icon: <FileText size={20} /> },
+        { name: 'Categories', path: '/categories', roles: ['admin', 'editor'], icon: <ShoppingBag size={20} /> },
+        { name: 'Support', path: '/support', roles: ['admin', 'editor'], icon: <MessageSquare size={20} /> },
+        { name: 'Notifications', path: '/notifications', roles: ['admin'], icon: <Bell size={20} /> },
+        { name: 'Reviews', path: '/reviews', roles: ['admin', 'editor'], icon: <Star size={20} /> },
+        { name: 'Wishlist', path: '/wishlist', roles: ['admin', 'editor'], icon: <Heart size={20} /> },
     ];
 
     return (
