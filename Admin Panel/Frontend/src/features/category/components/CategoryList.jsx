@@ -1,18 +1,35 @@
 
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../categorySlice';
+import { useCategory } from '../../../hooks/useCategory';
 import { Trash2, Edit2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { toast } from "sonner"; 
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"; 
+import AddCategory from './AddCategory';
+import EditCategory from './EditCategory';
+
 
 const CategoryList = () => {
 
-    const dispatch = useDispatch();
-    const { list, loading } = useSelector((state) => state.category);
+    const { list, loading, getAll, remove } = useCategory();
 
     useEffect(() => {
-        dispatch(fetchCategories());
-    }, [dispatch]);
+        getAll();
+    }, []);
+
+    const handleDelete = (id) => {
+        toast("Are you sure?", {
+            description: "This will permanently delete the category.",
+            action: {
+                label: "Delete",
+                onClick: async () => {
+                    await remove(id);
+                    toast.success("Category deleted successfully!");
+                },
+            },
+            cancel: { label: "Cancel" },
+        });
+    };
 
     if (loading) return <div>Loading categories...</div>;
 
@@ -43,10 +60,24 @@ const CategoryList = () => {
                                 </Badge>
                             </td>
                             <td className="p-2 border">
-                                <button onClick={() => console.log("Edit", cat._id)} className="mr-3 text-blue-600">
-                                    <Edit2 size={18} />
-                                </button>
-                                <button onClick={() => console.log("Delete", cat._id)} className="text-red-600">
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                        <button className="mr-3 text-blue-600">
+                                            <Edit2 size={18} />
+                                        </button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Edit Category</DialogTitle>
+                                        </DialogHeader>
+                                        <EditCategory 
+                                            category={cat} 
+                                            onCancel={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))} 
+                                        />
+                                    </DialogContent>
+                                </Dialog>
+                                <button 
+                                onClick={() => handleDelete(cat._id)} className="text-red-600">
                                     <Trash2 size={18} />
                                 </button>
                             </td>

@@ -7,7 +7,7 @@ import { User } from "../models/user.model.js";
 import HttpStatus from "../utils/HttpStatus.js";
 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
-
+    console.log("Cookies received:", req.cookies);
     try {
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
 

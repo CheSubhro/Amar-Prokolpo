@@ -11,3 +11,12 @@ export const createCategory = async (formData) => {
     return response.data;
 };
 
+export const updateCategory = async (id, formData) => {
+    const response = await api.patch(`/category/update/${id}`, formData);
+    return response.data;
+};
+
+export const deleteCategory = async (id) => {
+    const response = await api.delete(`/category/delete/${id}`);
+    return response.data;
+};
