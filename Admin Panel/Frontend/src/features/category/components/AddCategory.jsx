@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useDispatch } from 'react-redux';
 import { addCategory } from '../categorySlice';
 import { categorySchema } from '../../../utils/validation';
@@ -15,7 +16,10 @@ const AddCategory = ({ onCancel }) => {
     const dispatch = useDispatch();
     const [icon, setIcon] = useState(null);
     const [image, setImage] = useState(null);
-    const { register, handleSubmit, setValue } = useForm();
+    
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+        resolver: zodResolver(categorySchema)
+    });
 
     const onSubmit = async (data) => {
         
@@ -41,6 +45,7 @@ const AddCategory = ({ onCancel }) => {
                 <div className="space-y-2">
                     <Label>Category Name</Label>
                     <Input {...register("name", { required: true })} placeholder="Category Name" />
+                    {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                 </div>
                 
                 <div className="space-y-2">
@@ -62,6 +67,7 @@ const AddCategory = ({ onCancel }) => {
             <div className="space-y-2">
                 <Label>Description</Label>
                 <Textarea {...register("description")} placeholder="Short description" />
+                {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
             </div>
 
             <div className="flex items-center space-x-2">
