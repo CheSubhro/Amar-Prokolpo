@@ -6,6 +6,7 @@ import NotFound from '../pages/NotFound';
 import LoginPage from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import Users from '../pages/Users';
+import Schemes from '../pages/Schemes';
 
 const AppRoutes = () => {
     return (
@@ -14,7 +15,8 @@ const AppRoutes = () => {
 
             <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
             <Route path="/users" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Users /></MainLayout></ProtectedRoute>} />
-            
+            <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
+
             
             <Route path="*" element={<NotFound />} />
         </Routes>
