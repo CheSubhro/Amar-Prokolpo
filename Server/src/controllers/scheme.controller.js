@@ -62,14 +62,14 @@ const createScheme = asyncHandler(async (req, res) => {
         deviceTokens.forEach(async (device) => {
             await sendPushNotification(
                 device.token, 
-                "নতুন স্কিম এসেছে!", 
-                `নতুন স্কিম: ${title} দেখে নিন।`
+                "New Scheme Arrived!", 
+                `New Scheme : ${title} Show।`
             );
 
             await Notification.create({
                 user: device.user,
-                title: "নতুন স্কিম এসেছে!",
-                message: `নতুন স্কিম: ${title} দেখে নিন।`,
+                title: "New Scheme Arrived!",
+                message: `New Scheme : ${title} show।`,
                 type: 'NEW_SCHEME'
             });
         });

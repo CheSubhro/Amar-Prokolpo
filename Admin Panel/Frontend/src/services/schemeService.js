@@ -7,8 +7,16 @@ export const getAllSchemes = async (params) => {
     return response.data.data.schemes || [];
 };
 
+export const createScheme = async (formData) => {
+    const response = await api.post('/scheme/create', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data;
+};
+
 const schemeService = {
-    getAllSchemes
+    getAllSchemes,
+    createScheme
 };
 
 export default schemeService;
