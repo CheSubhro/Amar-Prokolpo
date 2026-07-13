@@ -4,7 +4,10 @@ import CategoryList from '../features/category/components/CategoryList';
 
 const CategoryPage = () => {
 	return (
-		<div>CategoryList</div>
+		<div>
+			<h1>Categories</h1>
+            <CategoryList />
+		</div>
 	)
 }
 

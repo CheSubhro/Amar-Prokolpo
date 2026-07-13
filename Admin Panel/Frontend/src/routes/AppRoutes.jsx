@@ -7,6 +7,7 @@ import LoginPage from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
 import Users from '../pages/Users';
 import Schemes from '../pages/Schemes';
+import CategoryPage from '../pages/CategoryPage';
 
 const AppRoutes = () => {
     return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
             <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
             <Route path="/users" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Users /></MainLayout></ProtectedRoute>} />
             <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
+            <Route path="/categories" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><CategoryPage /></MainLayout></ProtectedRoute>} />
 
             
             <Route path="*" element={<NotFound />} />
