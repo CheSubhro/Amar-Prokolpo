@@ -26,7 +26,7 @@ const Sidebar = () => {
         { name: 'Schemes', path: '/schemes', roles: ['admin', 'editor'], icon: <FileText size={20} /> },
         { name: 'Support', path: '/support', roles: ['admin', 'editor'], icon: <MessageSquare size={20} /> },
         { name: 'Reviews', path: '/reviews', roles: ['admin', 'editor'], icon: <Star size={20} /> },
-        { name: 'Wishlist', path: '/wishlist', roles: ['admin', 'editor'], icon: <Heart size={20} /> },
+        // { name: 'Wishlist', path: '/wishlist', roles: ['admin', 'editor'], icon: <Heart size={20} /> },
     ];
 
     return (
