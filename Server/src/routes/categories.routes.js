@@ -34,7 +34,7 @@ router.route("/create").post(
     createCategory
 )
 
-router.route("/all").get(verifyJWT,verifyAdminOrModerator,getAllCategories);
+router.route("/all").get(getAllCategories);
 
 router.route("/update/:id").patch(
     verifyJWT,

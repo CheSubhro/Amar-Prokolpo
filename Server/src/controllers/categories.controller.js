@@ -42,15 +42,15 @@ const createCategory = asyncHandler ( async (req,res) =>{
     );
 })
 
-const getAllCategories = asyncHandler ( async (req,res) =>{
-
-    const query = req.query.active === 'true' ? { isActive: true } : {};
+const getAllCategories = asyncHandler(async (req, res) => {
+    
+    const { active } = req.query;
+    const query = active === "true" ? { isActive: true } : {};
     const categories = await Category.find(query).sort({ order: 1 });
-
     res.status(HttpStatus.OK).json(
         new ApiResponse(HttpStatus.OK, categories, "Categories fetched successfully")
     );
-})
+});
 
 const updateCategory = asyncHandler ( async (req,res) =>{
 
