@@ -13,6 +13,7 @@ import {
 } from '../../ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
+import NotificationDropdown from "../../../features/notification/components/NotificationDropdown";
 
 const Navbar = () => {
     const { logout, user } = useAuth(); 
@@ -28,6 +29,7 @@ const Navbar = () => {
             <div className="text-lg font-bold">Admin Panel</div>
 
             <div className="flex items-center gap-4">
+                <NotificationDropdown />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="relative h-10 w-10 rounded-full">

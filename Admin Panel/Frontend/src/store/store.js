@@ -5,6 +5,7 @@ import userReducer from '../features/user/userSlice';
 import schemeReducer from '../features/scheme/schemeSlice';
 import categoryReducer from '../features/category/categorySlice';
 import supportReducer from '../features/support/supportSlice';
+import notificationReducer from '../features/notification/notificationSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         user: userReducer,
         scheme: schemeReducer,
         category: categoryReducer,
-        support: supportReducer
+        support: supportReducer,
+        notification: notificationReducer
     },
 });
