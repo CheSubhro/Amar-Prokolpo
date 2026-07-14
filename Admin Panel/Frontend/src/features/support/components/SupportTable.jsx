@@ -1,5 +1,5 @@
 
-import React from "react";
+import React,{ useState } from "react";
 import {
     Table,
     TableBody,
@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"; 
+import TicketResponse from "./TicketResponse";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +21,9 @@ const SupportTable = ({ tickets }) => {
             default: return "secondary";
         }
     };
+
+    const [selectedTicket,setSelectedTicket] = useState(null);
+    const [open,setOpen] = useState(false);
 
     return (
         <div className="rounded-md border shadow-sm">
@@ -49,12 +53,17 @@ const SupportTable = ({ tickets }) => {
                             </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                            <Button variant="ghost" size="sm">Reply</Button>
+                            <Button variant="ghost" size="sm" onClick={()=>{setSelectedTicket(ticket);setOpen(true);}}>
+                                Reply
+                            </Button>
                         </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
+            {
+                selectedTicket && (<TicketResponse ticket={selectedTicket} open={open} setOpen={setOpen} />)
+            }
         </div>
     );
 };
