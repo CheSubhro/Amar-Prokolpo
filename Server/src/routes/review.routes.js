@@ -12,11 +12,13 @@ import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middle
 
 const router = Router();
 
-router.route("/add").post(verifyJWT, addReview);
-router.route("/:schemeId").get(getApprovedReviews);
-router.route("/helpful/:reviewId").patch(verifyJWT, toggleHelpful);
-
 router.route("/admin/pending").get(verifyJWT, verifyAdmin, getPendingReviews);
 router.route("/admin/status/:reviewId").patch(verifyJWT, verifyAdmin, updateReviewStatus);
+
+router.route("/add").post(verifyJWT, addReview);
+router.route("/helpful/:reviewId").patch(verifyJWT, toggleHelpful);
+router.route("/:schemeId").get(getApprovedReviews);
+
+
 
 export default router;

@@ -6,6 +6,7 @@ import schemeReducer from '../features/scheme/schemeSlice';
 import categoryReducer from '../features/category/categorySlice';
 import supportReducer from '../features/support/supportSlice';
 import notificationReducer from '../features/notification/notificationSlice';
+import reviewReducer from '../features/review/reviewSlice';
 
 export const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
         scheme: schemeReducer,
         category: categoryReducer,
         support: supportReducer,
-        notification: notificationReducer
+        notification: notificationReducer,
+        review: reviewReducer
     },
 });

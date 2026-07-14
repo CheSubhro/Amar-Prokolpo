@@ -22,10 +22,9 @@ const Sidebar = () => {
     const menuItems = [
         { name: 'Dashboard', path: '/', roles: ['admin', 'editor'], icon: <LayoutDashboard size={20} /> },
         { name: 'Users', path: '/users', roles: ['admin'], icon: <Users size={20} /> },
-        { name: 'Schemes', path: '/schemes', roles: ['admin', 'editor'], icon: <FileText size={20} /> },
         { name: 'Categories', path: '/categories', roles: ['admin', 'editor'], icon: <ShoppingBag size={20} /> },
+        { name: 'Schemes', path: '/schemes', roles: ['admin', 'editor'], icon: <FileText size={20} /> },
         { name: 'Support', path: '/support', roles: ['admin', 'editor'], icon: <MessageSquare size={20} /> },
-        { name: 'Notifications', path: '/notifications', roles: ['admin'], icon: <Bell size={20} /> },
         { name: 'Reviews', path: '/reviews', roles: ['admin', 'editor'], icon: <Star size={20} /> },
         { name: 'Wishlist', path: '/wishlist', roles: ['admin', 'editor'], icon: <Heart size={20} /> },
     ];

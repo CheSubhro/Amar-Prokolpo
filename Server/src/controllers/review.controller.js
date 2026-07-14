@@ -82,8 +82,23 @@ const updateReviewStatus = asyncHandler(async (req, res) => {
 
 const getPendingReviews = asyncHandler(async (req, res) => {
 
-    const reviews = await Review.find({ status: 'Pending' }).populate("userId", "fullName");
-    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "Pending reviews fetched"));
+    const reviews = await Review.find({
+        status: "Pending"
+    })
+    .populate("userId", "fullName")
+    .populate("schemeId", "title")
+    .sort({
+        createdAt:-1
+    });
+
+
+    res.status(HttpStatus.OK).json(
+        new ApiResponse(
+            HttpStatus.OK,
+            reviews,
+            "Pending reviews fetched"
+        )
+    );
 });
 
 export { 

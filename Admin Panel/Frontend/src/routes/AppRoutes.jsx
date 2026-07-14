@@ -9,6 +9,7 @@ import Users from '../pages/Users';
 import CategoryPage from '../pages/CategoryPage';
 import Schemes from '../pages/Schemes';
 import SupportManagement from '@/pages/SupportManagement';
+import ReviewManagement from '@/pages/ReviewManagement';
 
 const AppRoutes = () => {
     return (
@@ -20,6 +21,7 @@ const AppRoutes = () => {
             <Route path="/categories" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><CategoryPage /></MainLayout></ProtectedRoute>} />
             <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
             <Route path="/support" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><SupportManagement /></MainLayout></ProtectedRoute>} />
+            <Route path="/reviews" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><ReviewManagement /></MainLayout></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
         </Routes>
