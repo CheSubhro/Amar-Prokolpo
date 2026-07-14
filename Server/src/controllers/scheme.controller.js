@@ -181,9 +181,13 @@ const updateScheme = asyncHandler(async (req, res) => {
     if (featured !== undefined) scheme.featured = featured;
 
     await scheme.save();
+
+    const updatedScheme = await Scheme.findById(scheme._id)
+    .populate("category");
+
     await logActivity(req.user?._id, "UPDATE_SCHEME", `Scheme ${scheme.title} updated`);
 
-    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, scheme, "Scheme updated"));
+    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, updatedScheme, "Scheme updated"));
 });
 
 const deleteScheme = asyncHandler(async (req, res) => {
