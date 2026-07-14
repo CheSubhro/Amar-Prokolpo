@@ -4,14 +4,14 @@ import api from "./api";
 
 const getNotifications = async () => {
     const response = await api.get(
-        "/notification/list"
+        "/notifications/list"
     );
     return response.data.data;
 };
 
 const markAsRead = async (notificationId) => {
     const response = await api.patch(
-        `/notification/read/${notificationId}`
+        `/notifications/read/${notificationId}`
     );
     return response.data.data;
 };

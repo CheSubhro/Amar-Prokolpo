@@ -22,14 +22,33 @@ const NotificationDropdown = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative">
+                <div 
+                    className="relative cursor-pointer flex items-center justify-center h-10 w-10 rounded-md hover:bg-muted"
+                >
                     <Bell size={20} />
+
                     {unreadCount > 0 && (
-                        <span className="absolute top-1 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+                        <span 
+                            className="
+                            absolute 
+                            -top-1 
+                            -right-1 
+                            flex 
+                            h-4 
+                            w-4 
+                            items-center 
+                            justify-center 
+                            rounded-full 
+                            bg-red-500 
+                            text-[10px] 
+                            font-bold 
+                            text-white"
+                        >
                             {unreadCount}
                         </span>
                     )}
-                </Button>
+
+                </div>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-80">

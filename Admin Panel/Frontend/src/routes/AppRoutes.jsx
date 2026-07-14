@@ -10,6 +10,8 @@ import CategoryPage from '../pages/CategoryPage';
 import Schemes from '../pages/Schemes';
 import SupportManagement from '@/pages/SupportManagement';
 import ReviewManagement from '@/pages/ReviewManagement';
+import Profile from '@/pages/Profile';
+import ChangePassword from '@/features/auth/components/ChangePassword';
 
 const AppRoutes = () => {
     return (
@@ -22,6 +24,8 @@ const AppRoutes = () => {
             <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
             <Route path="/support" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><SupportManagement /></MainLayout></ProtectedRoute>} />
             <Route path="/reviews" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><ReviewManagement /></MainLayout></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Profile /></MainLayout></ProtectedRoute>} />
+            <Route path="/change-password" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><ChangePassword /></MainLayout></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
         </Routes>
