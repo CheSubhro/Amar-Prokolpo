@@ -18,14 +18,14 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
 
-            <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
-            <Route path="/users" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Users /></MainLayout></ProtectedRoute>} />
-            <Route path="/categories" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><CategoryPage /></MainLayout></ProtectedRoute>} />
-            <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
-            <Route path="/support" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><SupportManagement /></MainLayout></ProtectedRoute>} />
-            <Route path="/reviews" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><ReviewManagement /></MainLayout></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><Profile /></MainLayout></ProtectedRoute>} />
-            <Route path="/change-password" element={<ProtectedRoute allowedRoles={['admin', 'editor']}><MainLayout><ChangePassword /></MainLayout></ProtectedRoute>} />
+            <Route path="/" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><Dashboard /></MainLayout></ProtectedRoute>} />
+            <Route path="/users" element={<ProtectedRoute allowedRoles={['admin']}><MainLayout><Users /></MainLayout></ProtectedRoute>} />
+            <Route path="/categories" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><CategoryPage /></MainLayout></ProtectedRoute>} />
+            <Route path="/schemes" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><Schemes /></MainLayout></ProtectedRoute>} />
+            <Route path="/support" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><SupportManagement /></MainLayout></ProtectedRoute>} />
+            <Route path="/reviews" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><ReviewManagement /></MainLayout></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><Profile /></MainLayout></ProtectedRoute>} />
+            <Route path="/change-password" element={<ProtectedRoute allowedRoles={['admin', 'moderator']}><MainLayout><ChangePassword /></MainLayout></ProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
         </Routes>

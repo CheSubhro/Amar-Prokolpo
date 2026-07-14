@@ -20,13 +20,12 @@ const Sidebar = () => {
     const { user } = useSelector((state) => state.auth);
 
     const menuItems = [
-        { name: 'Dashboard', path: '/', roles: ['admin', 'editor'], icon: <LayoutDashboard size={20} /> },
+        { name: 'Dashboard', path: '/', roles: ['admin', 'moderator'], icon: <LayoutDashboard size={20} /> },
         { name: 'Users', path: '/users', roles: ['admin'], icon: <Users size={20} /> },
-        { name: 'Categories', path: '/categories', roles: ['admin', 'editor'], icon: <ShoppingBag size={20} /> },
-        { name: 'Schemes', path: '/schemes', roles: ['admin', 'editor'], icon: <FileText size={20} /> },
-        { name: 'Support', path: '/support', roles: ['admin', 'editor'], icon: <MessageSquare size={20} /> },
-        { name: 'Reviews', path: '/reviews', roles: ['admin', 'editor'], icon: <Star size={20} /> },
-        // { name: 'Wishlist', path: '/wishlist', roles: ['admin', 'editor'], icon: <Heart size={20} /> },
+        { name: 'Categories', path: '/categories', roles: ['admin', 'moderator'], icon: <ShoppingBag size={20} /> },
+        { name: 'Schemes', path: '/schemes', roles: ['admin', 'moderator'], icon: <FileText size={20} /> },
+        { name: 'Support', path: '/support', roles: ['admin', 'moderator'], icon: <MessageSquare size={20} /> },
+        { name: 'Reviews', path: '/reviews', roles: ['admin', 'moderator'], icon: <Star size={20} /> },
     ];
 
     return (
@@ -34,7 +33,7 @@ const Sidebar = () => {
         <aside className="w-64 h-screen bg-background border-r flex flex-col hidden md:flex">
             {/* Sidebar Header */}
             <div className="p-6">
-                <h1 className="text-xl font-bold text-primary">Admin Panel</h1>
+                <h1 className="text-xl font-bold text-primary">Amar Prokolpo</h1>
             </div>
         
             <Separator />
