@@ -4,12 +4,23 @@ import { Box, Heading, SimpleGrid, Spinner, Center } from "@chakra-ui/react";
 import useHome from "../hooks/useHome";
 import CategoryCard from "../features/home/components/CategoryCard";
 import Hero from "../features/home/components/Hero"; 
+import FeaturedSchemes from "../features/home/components/FeaturedSchemes";
 
 const Home = () => {
-    const { categories, loading, error, getCategories } = useHome();
+    
+    const { 
+        categories,
+        featuredSchemes,
+        loading,
+        error,
+        getCategories,
+        getFeaturedSchemes
+    
+    } = useHome();
 
     useEffect(() => {
         getCategories();
+        getFeaturedSchemes();
     }, []);
 
     if (loading) {
@@ -24,7 +35,9 @@ const Home = () => {
         <Box minH="100vh" bg="gray.50">
             {/* Hero Section */}
             <Hero />
-
+            <FeaturedSchemes 
+                schemes={featuredSchemes}
+            />
             {/* Dashboard Content */}
             <Box p={6} maxW="container.xl" mx="auto">
                 <Heading size="lg" mb={6}>Browse by Category</Heading>

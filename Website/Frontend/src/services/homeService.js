@@ -13,6 +13,18 @@ const homeService = {
             throw error.response?.data || error.message;
         }
     },
+    getFeaturedSchemes: async()=>{
+        try{
+            const response = await api.get(
+                "/scheme/all?featured=true&limit=6"
+            );
+            return response.data;
+        }catch(error){
+            throw error.response?.data || error.message;
+        }
+    }
 };
+
+
 
 export default homeService;

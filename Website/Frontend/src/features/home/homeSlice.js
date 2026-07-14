@@ -15,13 +15,26 @@ export const fetchCategories = createAsyncThunk(
     }
 );
 
+export const fetchFeaturedSchemes = createAsyncThunk(
+    "home/fetchFeaturedSchemes",
+    async(_, {rejectWithValue})=>{
+        try{
+            const response = await homeService.getFeaturedSchemes();
+            return response.data.schemes;
+        }catch(error){
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const initialState = {
     categories: [],
+    featuredSchemes:[],
     loading: false,
     error: null,
 };
 
-const dashboardSlice = createSlice({
+const homeSlice = createSlice({
     name: "home",
     initialState,
     reducers: {},
@@ -38,8 +51,24 @@ const dashboardSlice = createSlice({
         .addCase(fetchCategories.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
-        });
+        })
+        .addCase(
+            fetchFeaturedSchemes.fulfilled,(state,action)=>{
+                state.loading=false;
+                state.featuredSchemes = action.payload;
+        })
+        .addCase(
+            fetchFeaturedSchemes.pending,(state)=>{
+                state.loading=true;
+            }
+        )
+        .addCase(
+            fetchFeaturedSchemes.rejected,(state,action)=>{
+                state.loading=false;
+                state.error=action.payload;
+            }
+        )
     },
 });
 
-export default dashboardSlice.reducer;
+export default homeSlice.reducer;
