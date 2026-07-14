@@ -27,9 +27,22 @@ export const fetchFeaturedSchemes = createAsyncThunk(
     }
 );
 
+export const fetchTopViewedSchemes = createAsyncThunk(
+    "home/fetchTopViewedSchemes",
+    async(_, {rejectWithValue})=>{
+        try{
+            const response = await homeService.getTopViewedSchemes();
+            return response.data;
+        }catch(error){
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const initialState = {
     categories: [],
     featuredSchemes:[],
+    topViewedSchemes: [],
     loading: false,
     error: null,
 };
@@ -66,6 +79,12 @@ const homeSlice = createSlice({
             fetchFeaturedSchemes.rejected,(state,action)=>{
                 state.loading=false;
                 state.error=action.payload;
+            }
+        )
+        .addCase(
+            fetchTopViewedSchemes.fulfilled,(state,action)=>{
+                state.loading=false;
+                state.topViewedSchemes = action.payload;
             }
         )
     },

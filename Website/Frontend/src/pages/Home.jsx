@@ -5,22 +5,26 @@ import useHome from "../hooks/useHome";
 import CategoryCard from "../features/home/components/CategoryCard";
 import Hero from "../features/home/components/Hero"; 
 import FeaturedSchemes from "../features/home/components/FeaturedSchemes";
+import TopViewedSchemes from "../features/home/components/TopViewedSchemes";
 
 const Home = () => {
     
     const { 
         categories,
         featuredSchemes,
+        topViewedSchemes,
         loading,
         error,
         getCategories,
-        getFeaturedSchemes
+        getFeaturedSchemes,
+        getTopViewedSchemes
     
     } = useHome();
 
     useEffect(() => {
         getCategories();
         getFeaturedSchemes();
+        getTopViewedSchemes();
     }, []);
 
     if (loading) {
@@ -51,6 +55,9 @@ const Home = () => {
                     ))}
                 </SimpleGrid>
             </Box>
+            <TopViewedSchemes
+                schemes={topViewedSchemes}
+            />
         </Box>
     );
 };

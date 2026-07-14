@@ -76,15 +76,15 @@ const SchemeCard = ({ scheme }) => {
 
             {/* Action Button */}
             <Button
-            as={RouterLink}
-            to={`/schemes/${scheme.slug}`}
-            size="sm"
-            variant="outline"
-            colorScheme="blue"
-            rightIcon={<IconArrowRight size={16} />}
-            borderRadius="lg"
-            mt={2}
-            _hover={{ bg: "blue.50" }}
+                as={RouterLink}
+                to={`/schemes/${scheme.slug}`}
+                size="sm"
+                variant="outline"
+                colorScheme="blue"
+                rightIcon={<IconArrowRight size={16} />}
+                borderRadius="lg"
+                mt={2}
+                _hover={{ bg: "blue.50" }}
             >
             View Details
             </Button>

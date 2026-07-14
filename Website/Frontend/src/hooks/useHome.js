@@ -1,6 +1,10 @@
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCategories, fetchFeaturedSchemes } from "../features/home/homeSlice";
+import { 
+    fetchCategories, 
+    fetchFeaturedSchemes,
+    fetchTopViewedSchemes 
+} from "../features/home/homeSlice";
 
 const useHome = () => {
     
@@ -8,6 +12,7 @@ const useHome = () => {
     const {
         categories,
         featuredSchemes,
+        topViewedSchemes,
         loading,
         error
     }=useSelector(state=>state.home);
@@ -20,14 +25,20 @@ const useHome = () => {
         dispatch(fetchFeaturedSchemes());
     };
 
+    const getTopViewedSchemes = ()=>{
+        dispatch(fetchTopViewedSchemes());
+    }
+
     return {
 
         categories,
         featuredSchemes,
+        topViewedSchemes,
         loading,
         error,
         getCategories,
-        getFeaturedSchemes
+        getFeaturedSchemes,
+        getTopViewedSchemes
     
     }
 };

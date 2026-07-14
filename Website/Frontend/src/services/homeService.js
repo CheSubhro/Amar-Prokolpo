@@ -22,6 +22,16 @@ const homeService = {
         }catch(error){
             throw error.response?.data || error.message;
         }
+    },
+    getTopViewedSchemes: async()=>{
+        try{
+            const response = await api.get(
+                "/scheme/top-viewed?limit=6"
+            );
+            return response.data;
+        }catch(error){
+            throw error.response?.data || error.message;
+        }
     }
 };
 
