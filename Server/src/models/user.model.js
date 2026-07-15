@@ -31,7 +31,7 @@ const userSchema = new Schema(
         // Avatar field (cloudinary URL)
         avatar: {
             type: String,
-            required: true
+            required: false
         },
         // Cover image field (cloudinary URL)
         coverImage: {
