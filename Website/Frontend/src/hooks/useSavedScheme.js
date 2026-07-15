@@ -1,41 +1,57 @@
-
-import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useCallback } from "react";
 import {
-  fetchSavedSchemes,
-  toggleSaveScheme,
-  clearSavedSchemes,
+    toggleSaveScheme,
+    fetchSavedSchemes
 } from "../features/savedScheme/savedSchemeSlice";
 
 const useSavedScheme = () => {
-  const dispatch = useDispatch();
-  const { savedSchemes, loading, error } = useSelector((state) => state.savedScheme);
 
-  const getSavedSchemes = useCallback(() => {
-    dispatch(fetchSavedSchemes());
-  }, [dispatch]);
+    const dispatch = useDispatch();
 
-  const toggleSave = useCallback(async (schemeId) => {
-    return await dispatch(toggleSaveScheme(schemeId));
-  }, [dispatch]);
+    const { savedSchemes, loading, error } = useSelector(
+        (state) => state.savedScheme
+    );
 
-  const resetSavedSchemes = useCallback(() => {
-    dispatch(clearSavedSchemes());
-  }, [dispatch]);
+	const { user } = useSelector(
+        (state) => state.auth || {} 
+    );
 
-  const isSchemeSaved = useCallback((schemeId) => {
-    return savedSchemes.some((item) => item.scheme?._id === schemeId);
-  }, [savedSchemes]);
+    const toggleSave = useCallback(async (id) => {
+        if (!user) {
+            return {
+                success: false,
+                message: "Please login first"
+            };
+        }
 
-  return {
-    savedSchemes,
-    loading,
-    error,
-    getSavedSchemes,
-    toggleSave,
-    resetSavedSchemes,
-    isSchemeSaved,
-  };
+        try {
+            const response = await dispatch(toggleSaveScheme(id)).unwrap();
+            return { success: true, data: response };
+        } catch (err) {
+            return { success: false, message: err || "Something went wrong" };
+        }
+    }, [dispatch, user]);
+
+    const getSavedSchemes = useCallback(() => {
+        if (user) {
+            dispatch(fetchSavedSchemes());
+        }
+    }, [dispatch, user]);
+
+	const isSchemeSaved = (schemeId) => {
+		return savedSchemes.some((item) => item.scheme?._id === schemeId);
+	};
+
+    return {
+        savedSchemes,
+        loading,
+        error,
+        toggleSave,
+        getSavedSchemes,
+        user , 
+		isSchemeSaved
+    };
 };
 
 export default useSavedScheme;

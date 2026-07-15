@@ -8,18 +8,24 @@ import {
   IconEye, IconHeart, IconHeartFilled,
 } from "@tabler/icons-react";
 import useSavedScheme from "../../../hooks/useSavedScheme";
+import { useNavigate } from "react-router-dom";
 
 const SchemeDetailsCard = ({ scheme }) => {
 	
-	const { toggleSave, isSchemeSaved } = useSavedScheme();
+	const navigate = useNavigate();
+	const { toggleSave, isSchemeSaved, user  } = useSavedScheme();
 
 	if (!scheme) return null;
 
 	const saved = isSchemeSaved(scheme._id);
 
-	const handleSave = useCallback(async () => {
-		await toggleSave(scheme._id);
-	}, [toggleSave, scheme._id]);
+	const handleSave = async()=>{
+        if(!user){
+            navigate("/login");
+            return;
+        }
+        await toggleSave(scheme._id);
+    };
 
 	const formatDate = (date) => {
 		if (!date) return "Not Available";

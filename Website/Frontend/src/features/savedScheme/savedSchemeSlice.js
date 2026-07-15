@@ -57,12 +57,14 @@ const savedSchemeSlice = createSlice({
         })
         .addCase(toggleSaveScheme.fulfilled, (state, action) => {
             state.loading = false;
-            const { schemeId, isSaved } = action.payload;
-
-            if (!isSaved) {
-            state.savedSchemes = state.savedSchemes.filter(
-                (item) => item.scheme._id !== schemeId
-            );
+            const { schemeId, isSaved, scheme } = action.payload; 
+        
+            if (isSaved) {
+                state.savedSchemes.push({ scheme }); 
+            } else {
+                state.savedSchemes = state.savedSchemes.filter(
+                    (item) => item.scheme._id !== schemeId
+                );
             }
         })
         .addCase(toggleSaveScheme.rejected, (state, action) => {
