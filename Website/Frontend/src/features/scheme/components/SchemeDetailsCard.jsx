@@ -9,9 +9,12 @@ import {
 } from "@tabler/icons-react";
 import useSavedScheme from "../../../hooks/useSavedScheme";
 import { useNavigate } from "react-router-dom";
+import { useDisclosure } from "@chakra-ui/react";
+import WishlistModal from "../../wishlist/components/WishlistModal";
 
 const SchemeDetailsCard = ({ scheme }) => {
-	
+
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	const navigate = useNavigate();
 	const { toggleSave, isSchemeSaved, user  } = useSavedScheme();
 
@@ -118,6 +121,15 @@ const SchemeDetailsCard = ({ scheme }) => {
 					Apply Now
 					</Button>
 				)}
+				<Button 
+					mt={3} 
+					variant="solid" 
+					colorScheme="purple" 
+					onClick={onOpen}
+				>
+					Add to Wishlist
+				</Button>
+				<WishlistModal isOpen={isOpen} onClose={onClose} schemeId={scheme._id} />
 				</VStack>
 			</Box>
 			</Box>

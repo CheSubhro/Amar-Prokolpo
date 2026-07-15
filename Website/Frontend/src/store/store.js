@@ -6,6 +6,7 @@ import homeReducer from "../features/home/homeSlice";
 import schemeReducer from "../features/scheme/schemeSlice";
 import savedSchemeReducer from "../features/savedScheme/savedSchemeSlice";
 import reviewReducer from "../features/reviews/reviewSlice";
+import wishlistReducer from "../features/wishlist/wishlistSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
         home: homeReducer,
         scheme:schemeReducer,
         savedScheme: savedSchemeReducer,
-        reviews: reviewReducer
+        reviews: reviewReducer,
+        wishlist: wishlistReducer
     },
 });

@@ -50,7 +50,8 @@ const Navbar = () => {
                     <Text as={RouterLink} to="/categories" cursor="pointer">Categories</Text>
                     <Text as={RouterLink} to="/top-viewed" cursor="pointer">Top Viewed</Text>
                     <Text as={RouterLink} to="/saved-schemes" cursor="pointer">❤️ Saved Schemes</Text>
-
+                    <Text as={RouterLink} to="/wishlist" cursor="pointer">📋 My Wishlist</Text>
+                    
                     {user ? (
                     <HStack>
                         <Avatar.Root size="sm">
