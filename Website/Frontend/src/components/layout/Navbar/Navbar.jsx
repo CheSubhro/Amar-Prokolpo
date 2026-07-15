@@ -7,11 +7,22 @@ import {
   Button,
   Container,
   HStack,
-  Link as ChakraLink,
+  Avatar, 
 } from "@chakra-ui/react";
+
 import { Link as RouterLink } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../../features/auth/authSlice";
 
 const Navbar = () => {
+
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
     return (
         <Box
             borderBottom="1px solid"
@@ -24,7 +35,6 @@ const Navbar = () => {
         >
             <Container maxW="container.xl">
                 <Flex justify="space-between" align="center">
-                {/* Logo */}
                 <Text
                     as={RouterLink}
                     to="/"
@@ -35,28 +45,39 @@ const Navbar = () => {
                     Amar Prokolpo
                 </Text>
 
-                {/* Navigation Links */}
-                <HStack spacing={8} display={{ base: "none", md: "flex" }}>
-                    {[
-                    { name: "Home", path: "/" },
-                    { name: "Categories", path: "/categories" },
-                    { name: "Top Viewed", path: "/top-viewed" },
-                    { name: "❤️ Saved Schemes", path: "/saved-schemes" },
-                    ].map((link) => (
-                    <ChakraLink
-                        key={link.path}
-                        as={RouterLink}
-                        to={link.path}
-                        fontWeight="medium"
-                        _hover={{ textDecoration: "none", color: "blue.500" }}
-                    >
-                        {link.name}
-                    </ChakraLink>
-                    ))}
+                <HStack spacing={6}>
+                    <Text as={RouterLink} to="/" cursor="pointer">Home</Text>
+                    <Text as={RouterLink} to="/categories" cursor="pointer">Categories</Text>
+                    <Text as={RouterLink} to="/top-viewed" cursor="pointer">Top Viewed</Text>
+                    <Text as={RouterLink} to="/saved-schemes" cursor="pointer">❤️ Saved Schemes</Text>
 
-                    <Button size="sm" colorScheme="blue" variant="solid">
-                    Login
+                    {user ? (
+                    <HStack>
+                        <Avatar.Root size="sm">
+                        <Avatar.Fallback name={user.fullName} />
+                        <Avatar.Image src={user.avatar} />
+                        </Avatar.Root>
+
+                        <Text fontSize="sm">{user.fullName}</Text>
+                        
+                        <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleLogout}
+                        >
+                        Logout
+                        </Button>
+                    </HStack>
+                    ) : (
+                    <Button
+                        as={RouterLink}
+                        to="/login"
+                        size="sm"
+                        colorScheme="blue"
+                    >
+                        Login
                     </Button>
+                    )}
                 </HStack>
                 </Flex>
             </Container>

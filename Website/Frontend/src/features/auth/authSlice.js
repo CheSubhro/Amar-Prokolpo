@@ -18,6 +18,22 @@ export const login = createAsyncThunk("auth/login", async (credentials, thunkAPI
     }
 });
 
+export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
+    try {
+        await authService.logout();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Logout failed");
+    }
+});
+
+export const getCurrentUser = createAsyncThunk("auth/getCurrentUser", async (_, thunkAPI) => {
+    try {
+        return await authService.getCurrentUser();
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "User not authenticated");
+    }
+});
+
 const authSlice = createSlice({
     name: "auth",
     initialState: { user: null, loading: false, error: null },
@@ -39,6 +55,16 @@ const authSlice = createSlice({
             .addCase(register.fulfilled, (state) => {
                 state.loading = false;
             })
+            .addCase(getCurrentUser.fulfilled, (state, action) => {
+                state.user = action.payload.data; 
+            })
+            .addCase(getCurrentUser.rejected, (state) => {
+                state.user = null; 
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.user = null; 
+                state.loading = false;
+            });
     }
 });
 
