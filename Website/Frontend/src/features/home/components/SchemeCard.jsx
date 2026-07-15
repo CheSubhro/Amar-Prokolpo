@@ -77,7 +77,7 @@ const SchemeCard = ({ scheme }) => {
             {/* Action Button */}
             <Button
                 as={RouterLink}
-                to={`/schemes/${scheme.slug}`}
+                to={`/scheme/${scheme.slug}`}
                 size="sm"
                 variant="outline"
                 colorScheme="blue"
