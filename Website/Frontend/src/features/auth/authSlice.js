@@ -30,7 +30,7 @@ export const getCurrentUser = createAsyncThunk("auth/getCurrentUser", async (_, 
     try {
         return await authService.getCurrentUser();
     } catch (error) {
-        return thunkAPI.rejectWithValue(error.response?.data?.message || "User not authenticated");
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Not authenticated");
     }
 });
 
@@ -56,9 +56,10 @@ const authSlice = createSlice({
                 state.loading = false;
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
-                state.user = action.payload.data; 
+                state.user = action.payload?.data || null; 
             })
-            .addCase(getCurrentUser.rejected, (state) => {
+            .addCase(getCurrentUser.rejected, (state, action) => {
+                state.loading = false;
                 state.user = null; 
             })
             .addCase(logout.fulfilled, (state) => {

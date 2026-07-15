@@ -6,6 +6,7 @@ import CategoryCard from "../features/home/components/CategoryCard";
 import Hero from "../features/home/components/Hero"; 
 import FeaturedSchemes from "../features/home/components/FeaturedSchemes";
 import TopViewedSchemes from "../features/home/components/TopViewedSchemes";
+import ReviewList from "../features/reviews/components/ReviewList";
 
 const Home = () => {
     
@@ -58,6 +59,7 @@ const Home = () => {
             <TopViewedSchemes
                 schemes={topViewedSchemes}
             />
+            <ReviewList />
         </Box>
     );
 };

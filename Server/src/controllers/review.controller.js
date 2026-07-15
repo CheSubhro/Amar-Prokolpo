@@ -41,6 +41,16 @@ const getApprovedReviews = asyncHandler(async (req, res) => {
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "Reviews fetched"));
 });
 
+const getAllApprovedReviews = asyncHandler(async (req, res) => {
+    const reviews = await Review.find({ status: 'Approved' })
+        .populate("userId", "fullName")
+        .populate("schemeId", "title") 
+        .sort({ createdAt: -1 })
+        .limit(5); 
+
+    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, reviews, "All approved reviews fetched"));
+});
+
 const toggleHelpful = asyncHandler(async (req, res) => {
 
     const { reviewId } = req.params;
@@ -106,5 +116,6 @@ export {
     getApprovedReviews, 
     toggleHelpful,
     updateReviewStatus,
-    getPendingReviews
+    getPendingReviews,
+    getAllApprovedReviews
 };

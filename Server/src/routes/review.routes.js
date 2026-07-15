@@ -4,7 +4,8 @@ import {
     addReview, 
     getApprovedReviews, 
     toggleHelpful, 
-    updateReviewStatus, 
+    updateReviewStatus,
+    getAllApprovedReviews, 
     getPendingReviews } from "../controllers/review.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -17,6 +18,7 @@ router.route("/admin/status/:reviewId").patch(verifyJWT, verifyAdmin, updateRevi
 
 router.route("/add").post(verifyJWT, addReview);
 router.route("/helpful/:reviewId").patch(verifyJWT, toggleHelpful);
+router.route("/all/approved").get(getAllApprovedReviews);
 router.route("/:schemeId").get(getApprovedReviews);
 
 

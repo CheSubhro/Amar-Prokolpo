@@ -5,6 +5,7 @@ import authReducer from "../features/auth/authSlice";
 import homeReducer from "../features/home/homeSlice";
 import schemeReducer from "../features/scheme/schemeSlice";
 import savedSchemeReducer from "../features/savedScheme/savedSchemeSlice";
+import reviewReducer from "../features/reviews/reviewSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
         home: homeReducer,
         scheme:schemeReducer,
         savedScheme: savedSchemeReducer,
+        reviews: reviewReducer
     },
 });
