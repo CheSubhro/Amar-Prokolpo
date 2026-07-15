@@ -2,6 +2,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import authService from "../../services/authService";
 
+export const register = createAsyncThunk("auth/register", async (data, thunkAPI) => {
+    try {
+        return await authService.register(data);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Registration failed");
+    }
+});
+
 export const login = createAsyncThunk("auth/login", async (credentials, thunkAPI) => {
     try {
         return await authService.login(credentials);
@@ -27,7 +35,10 @@ const authSlice = createSlice({
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(register.fulfilled, (state) => {
+                state.loading = false;
+            })
     }
 });
 
