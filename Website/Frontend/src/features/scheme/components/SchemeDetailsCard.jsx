@@ -1,317 +1,123 @@
 
-import React from "react";
+import React, { useCallback } from "react";
 import {
-  Badge,
-  Box,
-  Button,
-  Heading,
-  Image,
-  Link,
-  List,
-  ListItem,
-  SimpleGrid,
-  Stack,
-  Text,
-  VStack,
+  Badge, Box, Button, Heading, Image, Link, Stack, Text, VStack, SimpleGrid,
 } from "@chakra-ui/react";
-
 import {
-  IconCalendar,
-  IconCategory,
-  IconExternalLink,
-  IconMail,
-  IconPhone,
-  IconEye,
-  IconStarFilled,
+  IconCalendar, IconCategory, IconExternalLink, IconMail, IconPhone, 
+  IconEye, IconHeart, IconHeartFilled,
 } from "@tabler/icons-react";
+import useSavedScheme from "../../../hooks/useSavedScheme";
 
 const SchemeDetailsCard = ({ scheme }) => {
+	
+	const { toggleSave, isSchemeSaved } = useSavedScheme();
 
-  if (!scheme) return null;
+	if (!scheme) return null;
 
-  const formatDate = (date) => {
-    if (!date) return "Not Available";
+	const saved = isSchemeSaved(scheme._id);
 
-    return new Date(date).toLocaleDateString("en-IN", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
+	const handleSave = useCallback(async () => {
+		await toggleSave(scheme._id);
+	}, [toggleSave, scheme._id]);
 
-  const ListSection = ({ title, items }) => (
-    <Box
-      bg="white"
-      p={6}
-      borderRadius="xl"
-      border="1px solid"
-      borderColor="gray.200"
-    >
-      <Heading size="md" mb={5}>
-        {title}
-      </Heading>
+	const formatDate = (date) => {
+		if (!date) return "Not Available";
+		return new Date(date).toLocaleDateString("en-IN", {
+		day: "numeric", month: "long", year: "numeric",
+		});
+	};
 
-      {items?.length ? (
-        <VStack align="stretch" gap={2}>
-        {items.map((item, index) => (
-          <Box key={index} display="flex" alignItems="flex-start">
-            <Text color="blue.500" mr={2}>
-              •
-            </Text>
-      
-            <Text>{item}</Text>
-          </Box>
-        ))}
-      </VStack>
-      ) : (
-        <Text color="gray.500">
-          Not Available
-        </Text>
-      )}
-    </Box>
-  );
+	const ListSection = ({ title, items }) => (
+		<Box bg="white" p={6} borderRadius="xl" border="1px solid" borderColor="gray.200">
+		<Heading size="md" mb={5}>{title}</Heading>
+		{items?.length > 0 ? (
+			<VStack align="stretch" gap={2}>
+			{items.map((item, index) => (
+				<Box key={index} display="flex" alignItems="flex-start">
+				<Text color="blue.500" mr={2}>•</Text>
+				<Text>{item}</Text>
+				</Box>
+			))}
+			</VStack>
+		) : (
+			<Text color="gray.500">Not Available</Text>
+		)}
+		</Box>
+	);
 
-  return (
+	return (
+		<Stack spacing={8}>
+		<Image
+			src={scheme.image}
+			alt={scheme.title}
+			w="100%"
+			h={{ base: "220px", md: "320px" }}
+			objectFit="cover"
+			borderRadius="2xl"
+		/>
 
-    <Stack spacing={8}>
+		<Box>
+			<Stack direction="row" flexWrap="wrap" mb={4} spacing={3}>
+			{scheme.category && <Badge colorScheme="blue" px={2} py={1} borderRadius="md">{scheme.category.name}</Badge>}
+			{scheme.featured && <Badge colorScheme="yellow" px={2} py={1} borderRadius="md">Featured</Badge>}
+			<Badge colorScheme={scheme.status === "ACTIVE" ? "green" : "red"} px={2} py={1} borderRadius="md">
+				{scheme.status}
+			</Badge>
+			</Stack>
+			<Heading mb={4} size="xl">{scheme.title}</Heading>
+			<Text fontSize="lg" color="gray.600">{scheme.shortDescription}</Text>
+		</Box>
 
-      {/* Banner */}
+		<SimpleGrid columns={{ base: 1, lg: 3 }} gap={8}>
+			<VStack gridColumn={{ lg: "span 2" }} spacing={6} align="stretch">
+			<Box>
+				<Heading size="md" mb={4}>About this Scheme</Heading>
+				<Text color="gray.700" lineHeight="1.8">{scheme.description}</Text>
+			</Box>
+			<ListSection title="Benefits" items={scheme.benefits} />
+			<ListSection title="Eligibility" items={scheme.eligibility} />
+			<ListSection title="Required Documents" items={scheme.requiredDocuments} />
+			<ListSection title="Application Process" items={scheme.applicationProcess} />
+			</VStack>
 
-      <Image
-        src={scheme.image}
-        alt={scheme.title}
-        w="100%"
-        h={{
-          base: "220px",
-          md: "320px",
-        }}
-        objectFit="cover"
-        borderRadius="2xl"
-      />
+			<Box>
+			<Box bg="white" borderRadius="xl" border="1px solid" borderColor="gray.200" p={6} position="sticky" top="90px">
+				<Heading size="md" mb={6}>Scheme Information</Heading>
+				<VStack align="stretch" spacing={5}>
+				{[
+					{ icon: IconCategory, label: "Category", val: scheme.category?.name },
+					{ icon: IconCalendar, label: "Deadline", val: formatDate(scheme.deadline) },
+					{ icon: IconPhone, label: "Helpline", val: scheme.helplineNumber },
+					{ icon: IconMail, label: "Email", val: scheme.officialEmail },
+					{ icon: IconEye, label: "Views", val: scheme.viewCount },
+				].map((item, idx) => (
+					<Stack key={idx} direction="row" align="center">
+					<item.icon size={20} />
+					<Text><b>{item.label}:</b> {item.val || "N/A"}</Text>
+					</Stack>
+				))}
 
-      {/* Title */}
+				<Button
+					colorScheme={saved ? "green" : "red"}
+					variant={saved ? "solid" : "outline"}
+					leftIcon={saved ? <IconHeartFilled size={18} /> : <IconHeart size={18} />}
+					onClick={handleSave}
+				>
+					{saved ? "Saved" : "Save Scheme"}
+				</Button>
 
-      <Box>
-
-        <Stack
-          direction="row"
-          flexWrap="wrap"
-          mb={4}
-        >
-
-          {scheme.category && (
-            <Badge colorScheme="blue">
-              {scheme.category.name}
-            </Badge>
-          )}
-
-          {scheme.featured && (
-            <Badge colorScheme="yellow">
-              Featured
-            </Badge>
-          )}
-
-          <Badge
-            colorScheme={
-              scheme.status === "ACTIVE"
-                ? "green"
-                : "red"
-            }
-          >
-            {scheme.status}
-          </Badge>
-
-        </Stack>
-
-        <Heading mb={4}>
-          {scheme.title}
-        </Heading>
-
-        <Text
-          fontSize="lg"
-          color="gray.600"
-        >
-          {scheme.shortDescription}
-        </Text>
-
-      </Box>
-
-
-      <SimpleGrid
-        columns={{
-          base: 1,
-          lg: 3,
-        }}
-        gap={8}
-      >
-
-        {/* LEFT */}
-
-        <Box gridColumn="span 2">
-
-          <VStack
-            spacing={8}
-            align="stretch"
-          >
-
-            <Box>
-
-              <Heading
-                size="md"
-                mb={4}
-              >
-                About this Scheme
-              </Heading>
-
-              <Text
-                color="gray.700"
-                lineHeight="2"
-              >
-                {scheme.description}
-              </Text>
-
-            </Box>
-
-            <ListSection
-              title="Benefits"
-              items={scheme.benefits}
-            />
-
-            <ListSection
-              title="Eligibility"
-              items={scheme.eligibility}
-            />
-
-            <ListSection
-              title="Required Documents"
-              items={scheme.requiredDocuments}
-            />
-
-            <ListSection
-              title="Application Process"
-              items={scheme.applicationProcess}
-            />
-
-          </VStack>
-
-        </Box>
-
-        {/* RIGHT */}
-
-        <Box>
-
-          <Box
-            bg="white"
-            borderRadius="xl"
-            border="1px solid"
-            borderColor="gray.200"
-            p={6}
-            position="sticky"
-            top="90px"
-          >
-
-            <Heading
-              size="md"
-              mb={6}
-            >
-              Scheme Information
-            </Heading>
-
-            <VStack
-              align="stretch"
-              spacing={5}
-            >
-
-              <Stack direction="row">
-                <IconCategory size={20}/>
-                <Text>
-                  <b>Category:</b>{" "}
-                  {scheme.category?.name}
-                </Text>
-              </Stack>
-
-              <Stack direction="row">
-                <IconCalendar size={20}/>
-                <Text>
-                  <b>Deadline:</b>{" "}
-                  {formatDate(
-                    scheme.deadline
-                  )}
-                </Text>
-              </Stack>
-
-              <Stack direction="row">
-                <IconPhone size={20}/>
-                <Text>
-                  <b>Helpline:</b>{" "}
-                  {scheme.helplineNumber ||
-                    "N/A"}
-                </Text>
-              </Stack>
-
-              <Stack direction="row">
-                <IconMail size={20}/>
-                <Text>
-                  <b>Email:</b>{" "}
-                  {scheme.officialEmail ||
-                    "N/A"}
-                </Text>
-              </Stack>
-
-              <Stack direction="row">
-                <IconEye size={20}/>
-                <Text>
-                  <b>Views:</b>{" "}
-                  {scheme.viewCount}
-                </Text>
-              </Stack>
-
-              {scheme.featured && (
-                <Stack direction="row">
-                  <IconStarFilled
-                    size={20}
-                    color="#EAB308"
-                  />
-                  <Text>
-                    Featured Scheme
-                  </Text>
-                </Stack>
-              )}
-
-              {scheme.applicationLink && (
-
-                <Button
-                  mt={4}
-                  colorScheme="blue"
-                  size="lg"
-                  as={Link}
-                  href={
-                    scheme.applicationLink
-                  }
-                  isExternal
-                  rightIcon={
-                    <IconExternalLink
-                      size={18}
-                    />
-                  }
-                >
-                  Apply Now
-                </Button>
-
-              )}
-
-            </VStack>
-
-          </Box>
-
-        </Box>
-
-      </SimpleGrid>
-
-    </Stack>
-
-  );
-
+				{scheme.applicationLink && (
+					<Button as={Link} href={scheme.applicationLink} isExternal colorScheme="blue" size="lg" rightIcon={<IconExternalLink size={18} />}>
+					Apply Now
+					</Button>
+				)}
+				</VStack>
+			</Box>
+			</Box>
+		</SimpleGrid>
+		</Stack>
+	);
 };
 
 export default SchemeDetailsCard;
