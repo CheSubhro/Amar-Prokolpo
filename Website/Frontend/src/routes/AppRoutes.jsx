@@ -8,6 +8,7 @@ import SavedSchemes from "../pages/SavedSchemes";
 import WishlistPage from "../pages/WishlistPage";
 import SupportPage from "../pages/SupportPage";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
+import TermsOfService from "../pages/TermsOfService";
 
 
 const AppRoutes = () => {
@@ -21,6 +22,7 @@ const AppRoutes = () => {
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
         </Routes>
     );
 };

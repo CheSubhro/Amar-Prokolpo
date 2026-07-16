@@ -24,7 +24,9 @@ const Footer = () => {
                         <Link as={ReactRouterLink} to="/privacy-policy" color="gray.300" _hover={{ color: "white" }}>
                             Privacy Policy
                         </Link>
-                        <Link href="#" color="gray.300" _hover={{ color: "white" }}>Terms of Service</Link>
+                        <Link as={ReactRouterLink} to="/terms-of-service" color="gray.300" _hover={{ color: "white" }}>
+                            Terms of Service
+                        </Link>
                     </VStack>
 
                     <VStack align={{ base: "center", md: "start" }}>
