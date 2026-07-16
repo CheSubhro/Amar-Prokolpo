@@ -1,5 +1,6 @@
 
 import React, { useEffect } from "react";
+import { Link as RouterLink } from "react-router-dom"; 
 import {
   Box,
   Heading,
@@ -7,17 +8,27 @@ import {
   Spinner,
   Center,
   Text,
+  Button, 
 } from "@chakra-ui/react";
 import useSavedScheme from "../hooks/useSavedScheme";
 import SavedSchemeCard from "../features/savedScheme/components/SavedSchemeCard";
 
 const SavedSchemes = () => {
 
-    const { savedSchemes, loading, error, getSavedSchemes } = useSavedScheme();
+    const { savedSchemes, loading, error, getSavedSchemes, user } = useSavedScheme();
 
     useEffect(() => {
         getSavedSchemes();
     }, [getSavedSchemes]);
+
+    if (!user) {
+        return (
+        <Center h="50vh" flexDirection="column">
+            <Text mb={4} fontSize="lg">Please login to view your saved schemes.</Text>
+            <Button as={RouterLink} to="/login" colorScheme="blue">Login</Button>
+        </Center>
+        );
+    }
 
     if (loading) {
         return (
@@ -36,15 +47,10 @@ const SavedSchemes = () => {
 
             {savedSchemes.length === 0 ? (
             <Center h="30vh">
-                <Text color="gray.500" fontSize="lg">
-                No saved schemes found.
-                </Text>
+                <Text color="gray.500" fontSize="lg">No saved schemes found.</Text>
             </Center>
             ) : (
-            <SimpleGrid
-                columns={{ base: 1, md: 2, lg: 3 }}
-                gap={6}
-            >
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
                 {savedSchemes.map((item) => (
                 <SavedSchemeCard
                     key={item._id}
