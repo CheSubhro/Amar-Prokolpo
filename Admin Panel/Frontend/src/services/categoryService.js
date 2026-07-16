@@ -7,7 +7,15 @@ export const getAllCategories = async () => {
 };
 
 export const createCategory = async (formData) => {
-    const response = await api.post('/category/create', formData);
+    const response = await api.post(
+        "/category/create",
+        formData,
+        {
+            headers:{
+                "Content-Type":"multipart/form-data"
+            }
+        }
+    )
     return response.data;
 };
 

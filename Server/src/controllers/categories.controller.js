@@ -25,7 +25,7 @@ const createCategory = asyncHandler ( async (req,res) =>{
             iconUrl = uploadIcon?.url || "";
         }
     }
-
+    
     const category = await Category.create({
         name,
         description,

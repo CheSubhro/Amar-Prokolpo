@@ -17,8 +17,16 @@ const AddCategory = ({ onCancel }) => {
     const [icon, setIcon] = useState(null);
     const [image, setImage] = useState(null);
     
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-        resolver: zodResolver(categorySchema)
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        formState:{errors}
+    } = useForm({
+        resolver: zodResolver(categorySchema),
+        defaultValues:{
+            isActive:true
+        }
     });
 
     const onSubmit = async (data) => {
@@ -27,8 +35,14 @@ const AddCategory = ({ onCancel }) => {
         
         formData.append("name", data.name);
         formData.append("description", data.description);
-        formData.append("order", data.order || 0);
-        formData.append("isActive", data.isActive || true);
+        formData.append(
+            "order",
+            Number(data.order || 0)
+        );
+        formData.append(
+            "isActive",
+            data.isActive ?? true
+        );
         
         if (icon) formData.append("icon", icon);
         if (image) formData.append("image", image);
@@ -71,10 +85,11 @@ const AddCategory = ({ onCancel }) => {
             </div>
 
             <div className="flex items-center space-x-2">
-                <Checkbox 
-                    id="isActive" 
-                    defaultChecked={true}
-                    onCheckedChange={(checked) => setValue("isActive", checked)} 
+                <Checkbox
+                    defaultChecked
+                    onCheckedChange={(checked)=>{
+                        setValue("isActive", checked);
+                    }}
                 />
                 <Label htmlFor="isActive">Is Active?</Label>
             </div>
