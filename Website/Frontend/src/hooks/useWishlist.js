@@ -1,7 +1,7 @@
 
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWishlist } from "../features/wishlist/wishlistSlice";
+import { fetchWishlist,removeFromWishlistThunk } from "../features/wishlist/wishlistSlice";
 
 export const useWishlist = () => {
     const dispatch = useDispatch();
@@ -11,5 +11,7 @@ export const useWishlist = () => {
         dispatch(fetchWishlist());
     }, [dispatch]);
 
-    return { wishlist: items, loading, error };
+    const remove = (id) => dispatch(removeFromWishlistThunk(id));
+
+    return { wishlist: items, loading, error, remove };
 };

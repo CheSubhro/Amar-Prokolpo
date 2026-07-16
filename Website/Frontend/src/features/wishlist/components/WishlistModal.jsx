@@ -1,23 +1,57 @@
 
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import addToWishlist  from "../../../features/wishlist/wishlistSlice";
+import { useNavigate } from "react-router-dom";
+import { addToWishlistThunk }  from "../../../features/wishlist/wishlistSlice";
 import { Modal, Input, Button } from "../../../components/common"; 
+import useSavedScheme from "../../../hooks/useSavedScheme";
 
 const WishlistModal = ({ isOpen, onClose, schemeId }) => {
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { user } = useSavedScheme();
     const [notes, setNotes] = useState("");
     const [reminderDate, setReminderDate] = useState("");
 
-    const handleSave = () => {
-        dispatch(addToWishlist({ schemeId, notes, reminderDate }));
-        onClose();
+    const handleSave = async () => {
+
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+        try {
+            const result = await dispatch(
+                addToWishlistThunk({
+                    schemeId,
+                    notes,
+                    reminderDate
+                })
+            );
+            if (result.type.endsWith("/fulfilled")) {
+                onClose();
+            } else {
+                console.error("Wishlist failed:", result);
+            }
+        } catch(error) {
+            console.error("Error occurred:", error);
+        }
     };
 
     if (!isOpen) return null;
 
     return (
-        <Modal title="Add to Wishlist" onClose={onClose}>
+        <Modal 
+            isOpen={isOpen} 
+            onClose={onClose} 
+            title="Add to Wishlist"
+            footer={
+                <div style={{ display: "flex", gap: "10px" }}>
+                    <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={onClose} variant="outline">Cancel</Button>
+                </div>
+            }
+        >
             <div style={{ padding: "10px" }}>
                 <label>Notes</label>
                 <textarea 
@@ -33,11 +67,6 @@ const WishlistModal = ({ isOpen, onClose, schemeId }) => {
                     value={reminderDate} 
                     onChange={(e) => setReminderDate(e.target.value)} 
                 />
-
-                <div style={{ marginTop: "20px", display: "flex", gap: "10px" }}>
-                    <Button onClick={handleSave}>Save</Button>
-                    <Button onClick={onClose} variant="outline">Cancel</Button>
-                </div>
             </div>
         </Modal>
     );

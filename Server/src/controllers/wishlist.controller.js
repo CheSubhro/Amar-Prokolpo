@@ -7,20 +7,23 @@ import HttpStatus from "../utils/HttpStatus.js";
 import { logActivity } from "../utils/Logger.js";
 
 const addToWishlist = asyncHandler(async (req, res) => {
-
+    
     const { schemeId, notes, reminderDate, folderName } = req.body;
-
     if (!schemeId) throw new ApiError(HttpStatus.BAD_REQUEST, "Scheme ID is required");
 
+    const userId = req.user?._id || null; 
+
     const wish = await Wishlist.create({
-        userId: req.user._id,
+        userId: userId,
         schemeId,
         notes,
         reminderDate,
         folderName
     });
 
-    await logActivity(req.user._id, "ADD_WISHLIST", `Added scheme ${schemeId} to wishlist`);
+    if (userId) {
+        await logActivity(userId, "ADD_WISHLIST", `Added scheme ${schemeId} to wishlist`);
+    }
 
     res.status(HttpStatus.CREATED).json(new ApiResponse(HttpStatus.CREATED, wish, "Added to wishlist"));
 });

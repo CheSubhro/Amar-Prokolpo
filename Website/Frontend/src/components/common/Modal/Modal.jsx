@@ -2,52 +2,26 @@
 import React from 'react';
 import { Dialog } from '@chakra-ui/react';
 
-const Modal = ({ 
-    isOpen, 
-    onClose, 
-    title, 
-    children, 
-    footer, 
-    size = 'md', 
-    ...props 
-}) => {
+const Modal = ({ isOpen, onClose, title, children, footer, ...props }) => {
     return (
         <Dialog.Root 
-            open={isOpen} 
-            onOpenChange={(e) => !e.open && onClose?.()} 
-            size={size} 
-            motionPreset="slide-in-bottom"
+            open={isOpen} // এটি নিশ্চিত করবে যে বাইরের isOpen ভ্যালু দিয়ে মডাল কন্ট্রোল হচ্ছে
+            onOpenChange={(e) => {
+                if (!e.open) onClose();
+            }}
             {...props}
         >
             <Dialog.Backdrop />
-            
             <Dialog.Positioner>
-                <Dialog.Content borderRadius="xl" boxShadow="2xl" p="2">
-                    
-                    {/* Header and Title Section */}
+                <Dialog.Content>
                     {title && (
                         <Dialog.Header>
-                            <Dialog.Title fontWeight="bold" fontSize="lg" color="slate.800">
-                                {title}
-                            </Dialog.Title>
+                            <Dialog.Title>{title}</Dialog.Title>
                         </Dialog.Header>
                     )}
-                    
-                    {/* 🆕 Dialog.CloseTrigger replaces ModalCloseButton */}
-                    <Dialog.CloseTrigger position="absolute" top="4" right="4" cursor="pointer" />
-                    
-                    {/* 🆕 Dialog.Body replaces ModalBody */}
-                    <Dialog.Body pb="6" pt="2">
-                        {children}
-                    </Dialog.Body>
-                    
-                    {/* 🆕 Dialog.Footer replaces ModalFooter */}
-                    {footer && (
-                        <Dialog.Footer borderTop="1px solid" borderColor="gray.100" pt="4">
-                            {footer}
-                        </Dialog.Footer>
-                    )}
-                    
+                    <Dialog.CloseTrigger />
+                    <Dialog.Body>{children}</Dialog.Body>
+                    {footer && <Dialog.Footer>{footer}</Dialog.Footer>}
                 </Dialog.Content>
             </Dialog.Positioner>
         </Dialog.Root>

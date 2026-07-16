@@ -1,5 +1,5 @@
 
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import {
   Badge, Box, Button, Heading, Image, Link, Stack, Text, VStack, SimpleGrid,
 } from "@chakra-ui/react";
@@ -9,12 +9,14 @@ import {
 } from "@tabler/icons-react";
 import useSavedScheme from "../../../hooks/useSavedScheme";
 import { useNavigate } from "react-router-dom";
-import { useDisclosure } from "@chakra-ui/react";
 import WishlistModal from "../../wishlist/components/WishlistModal";
 
 const SchemeDetailsCard = ({ scheme }) => {
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [isOpen, setIsOpen] = useState(false); 
+
+    const onOpen = () => setIsOpen(true);
+    const onClose = () => setIsOpen(false);
 	const navigate = useNavigate();
 	const { toggleSave, isSchemeSaved, user  } = useSavedScheme();
 
@@ -125,16 +127,17 @@ const SchemeDetailsCard = ({ scheme }) => {
 					mt={3} 
 					variant="solid" 
 					colorScheme="purple" 
-					onClick={onOpen}
+					onClick={onOpen} 
 				>
 					Add to Wishlist
 				</Button>
-				<WishlistModal isOpen={isOpen} onClose={onClose} schemeId={scheme._id} />
 				</VStack>
 			</Box>
 			</Box>
 		</SimpleGrid>
+		<WishlistModal isOpen={isOpen} onClose={onClose} schemeId={scheme._id} />
 		</Stack>
+		
 	);
 };
 

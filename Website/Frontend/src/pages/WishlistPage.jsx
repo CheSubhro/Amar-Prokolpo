@@ -1,27 +1,88 @@
-
+import React from "react";
 import { useWishlist } from "../hooks/useWishlist";
-import { Card, Spinner, EmptyState } from "../components/common"; 
+import {
+  Box,
+  Heading,
+  SimpleGrid,
+  Card,
+  Text,
+  Button,
+  Stack,
+  Badge,
+} from "@chakra-ui/react";
 
 const WishlistPage = () => {
-    
-    const { wishlist, loading, error } = useWishlist();
+  const { wishlist, loading, error, remove } = useWishlist();
 
-    if (loading) return <Spinner />;
-    if (error) return <p>Error: {error}</p>;
-    if (wishlist.length === 0) return <EmptyState message="No items in wishlist" />;
-
+  if (loading) {
     return (
-        <div className="wishlist-container">
-            <h1>My Wishlist</h1>
-            {wishlist.map((item) => (
-                <Card key={item._id}>
-                    <h3>{item.schemeId.title}</h3>
-                    <p>Notes: {item.notes}</p>
-                    <p>Reminder: {new Date(item.reminderDate).toDateString()}</p>
-                </Card>
-            ))}
-        </div>
+      <Box textAlign="center" mt={20}>
+        Loading...
+      </Box>
     );
+  }
+
+  if (error) {
+    return (
+      <Box color="red.500" textAlign="center" mt={10}>
+        Error: {error}
+      </Box>
+    );
+  }
+
+  if (!wishlist || wishlist.length === 0) {
+    return (
+      <Box textAlign="center" mt={10}>
+        No items found.
+      </Box>
+    );
+  }
+
+  return (
+    <Box p={8} maxW="1200px" mx="auto">
+      <Heading mb={8} size="lg">
+        My Wishlist
+      </Heading>
+
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
+        {wishlist.map((item) => (
+          <Card.Root
+            key={item._id}
+            variant="outline"
+            borderRadius="lg"
+            overflow="hidden"
+          >
+            <Card.Body>
+              <Stack gap={4}>
+                <Heading size="md">
+                  {item.schemeId?.title || "Untitled Scheme"}
+                </Heading>
+
+                <Badge colorPalette="purple" width="fit-content">
+                  {item.reminderDate
+                    ? new Date(item.reminderDate).toLocaleDateString("en-IN")
+                    : "No Reminder"}
+                </Badge>
+
+                <Text fontSize="sm" color="gray.600">
+                  <strong>Notes:</strong> {item.notes || "No notes"}
+                </Text>
+
+                <Button
+                  size="sm"
+                  colorPalette="red"
+                  variant="outline"
+                  onClick={() => remove(item._id)}
+                >
+                  Remove
+                </Button>
+              </Stack>
+            </Card.Body>
+          </Card.Root>
+        ))}
+      </SimpleGrid>
+    </Box>
+  );
 };
 
 export default WishlistPage;
