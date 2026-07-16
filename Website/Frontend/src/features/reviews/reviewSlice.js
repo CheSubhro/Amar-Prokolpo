@@ -18,6 +18,14 @@ export const fetchAllReviews = createAsyncThunk("reviews/fetchAll", async (_, th
     }
 });
 
+export const postReview = createAsyncThunk("reviews/add", async (reviewData, thunkAPI) => {
+    try {
+        return await reviewService.addReview(reviewData);
+    } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to post review");
+    }
+});
+
 const reviewSlice = createSlice({
     name: "reviews",
     initialState: { items: [], loading: false, error: null },
@@ -40,7 +48,10 @@ const reviewSlice = createSlice({
             .addCase(fetchAllReviews.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(postReview.fulfilled, (state, action) => {
+                state.items.unshift(action.payload.data); 
+            })
     }
 });
 
