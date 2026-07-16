@@ -7,6 +7,7 @@ import SchemeDetails from "../pages/SchemeDetails";
 import SavedSchemes from "../pages/SavedSchemes";
 import WishlistPage from "../pages/WishlistPage";
 import SupportPage from "../pages/SupportPage";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 
 const AppRoutes = () => {
@@ -19,6 +20,7 @@ const AppRoutes = () => {
             <Route path="/saved-schemes" element={<SavedSchemes/>}/>
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/support" element={<SupportPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         </Routes>
     );
 };
