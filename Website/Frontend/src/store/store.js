@@ -7,6 +7,7 @@ import schemeReducer from "../features/scheme/schemeSlice";
 import savedSchemeReducer from "../features/savedScheme/savedSchemeSlice";
 import reviewReducer from "../features/reviews/reviewSlice";
 import wishlistReducer from "../features/wishlist/wishlistSlice";
+import supportReducer from "../features/support/supportSlice";
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
         scheme:schemeReducer,
         savedScheme: savedSchemeReducer,
         reviews: reviewReducer,
-        wishlist: wishlistReducer
+        wishlist: wishlistReducer,
+        support: supportReducer
     },
 });

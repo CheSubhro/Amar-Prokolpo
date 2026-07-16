@@ -6,6 +6,7 @@ import Login from '../pages/Login';
 import SchemeDetails from "../pages/SchemeDetails";
 import SavedSchemes from "../pages/SavedSchemes";
 import WishlistPage from "../pages/WishlistPage";
+import SupportPage from "../pages/SupportPage";
 
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
             <Route path="/scheme/:slug" element={<SchemeDetails />}/>
             <Route path="/saved-schemes" element={<SavedSchemes/>}/>
             <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/support" element={<SupportPage />} />
         </Routes>
     );
 };
