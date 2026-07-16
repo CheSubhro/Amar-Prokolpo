@@ -32,9 +32,17 @@ const Footer = () => {
                     <VStack align={{ base: "center", md: "start" }}>
                         <Text fontWeight="bold" mb={2}>Follow Us</Text>
                         <HStack spacing={4}>
-                            <Link href="#"><Icon as={FaFacebook} w={6} h={6} /></Link>
-                            <Link href="#"><Icon as={FaTwitter} w={6} h={6} /></Link>
-                            <Link href="#"><Icon as={FaInstagram} w={6} h={6} /></Link>
+                            <Link href="https://www.facebook.com" isExternal>
+                                <Icon as={FaFacebook} w={6} h={6} />
+                            </Link>
+
+                            <Link href="https://twitter.com" isExternal>
+                                <Icon as={FaTwitter} w={6} h={6} />
+                            </Link>
+
+                            <Link href="https://www.instagram.com" isExternal>
+                                <Icon as={FaInstagram} w={6} h={6} />
+                            </Link>
                         </HStack>
                     </VStack>
                 </SimpleGrid>
