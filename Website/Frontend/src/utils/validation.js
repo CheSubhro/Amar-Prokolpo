@@ -17,3 +17,13 @@ export const validateSupportForm = (data) => {
     }
     return { isValid: true };
 };
+
+export const validateReviewForm = (data) => {
+    if (data.rating < 1 || data.rating > 5) {
+        return { isValid: false, message: "Rating must be between 1 and 5." };
+    }
+    if (!data.comment || data.comment.trim().length < 10) {
+        return { isValid: false, message: "Review comment must be at least 10 characters long." };
+    }
+    return { isValid: true };
+};

@@ -5,7 +5,7 @@ import { Dialog } from '@chakra-ui/react';
 const Modal = ({ isOpen, onClose, title, children, footer, ...props }) => {
     return (
         <Dialog.Root 
-            open={isOpen} // এটি নিশ্চিত করবে যে বাইরের isOpen ভ্যালু দিয়ে মডাল কন্ট্রোল হচ্ছে
+            open={isOpen} 
             onOpenChange={(e) => {
                 if (!e.open) onClose();
             }}

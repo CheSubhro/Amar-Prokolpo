@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   Badge, Box, Button, Heading, Image, Link, Stack, Text, VStack, SimpleGrid,
 } from "@chakra-ui/react";
+import { Modal } from "../../../components/common"; 
 import {
   IconCalendar, IconCategory, IconExternalLink, IconMail, IconPhone, 
   IconEye, IconHeart, IconHeartFilled,
@@ -10,16 +11,22 @@ import {
 import useSavedScheme from "../../../hooks/useSavedScheme";
 import { useNavigate } from "react-router-dom";
 import WishlistModal from "../../wishlist/components/WishlistModal";
+import ReviewForm from "../../reviews/components/ReviewForm";
 
 const SchemeDetailsCard = ({ scheme }) => {
 
-	const [isOpen, setIsOpen] = useState(false); 
-
-    const onOpen = () => setIsOpen(true);
-    const onClose = () => setIsOpen(false);
 	const navigate = useNavigate();
 	const { toggleSave, isSchemeSaved, user  } = useSavedScheme();
 
+	const [isWishlistOpen, setIsWishlistOpen] = useState(false);
+	const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+	const openWishlist = () => setIsWishlistOpen(true);
+	const closeWishlist = () => setIsWishlistOpen(false);
+
+	const openReview = () => setIsReviewOpen(true);
+	const closeReview = () => setIsReviewOpen(false);
+	
 	if (!scheme) return null;
 
 	const saved = isSchemeSaved(scheme._id);
@@ -123,19 +130,44 @@ const SchemeDetailsCard = ({ scheme }) => {
 					Apply Now
 					</Button>
 				)}
-				<Button 
-					mt={3} 
-					variant="solid" 
-					colorScheme="purple" 
-					onClick={onOpen} 
+				<Button
+					mt={3}
+					variant="solid"
+					colorScheme="purple"
+					onClick={openWishlist}
 				>
 					Add to Wishlist
 				</Button>
+				{user && (
+					<Button
+						mt={3}
+						variant="solid"
+						colorScheme="blue"
+						onClick={openReview}
+						w="full"
+					>
+						Add Your Review
+					</Button>
+				)}
 				</VStack>
 			</Box>
 			</Box>
 		</SimpleGrid>
-		<WishlistModal isOpen={isOpen} onClose={onClose} schemeId={scheme._id} />
+		<WishlistModal
+			isOpen={isWishlistOpen}
+			onClose={closeWishlist}
+			schemeId={scheme._id}
+		/>
+		<Modal
+			isOpen={isReviewOpen}
+			onClose={closeReview}
+			title="Add Your Success Story"
+		>
+			<ReviewForm
+				schemeId={scheme._id}
+				onClose={closeReview}
+			/>
+		</Modal>
 		</Stack>
 		
 	);
