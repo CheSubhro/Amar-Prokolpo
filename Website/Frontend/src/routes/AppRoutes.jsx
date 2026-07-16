@@ -9,6 +9,7 @@ import WishlistPage from "../pages/WishlistPage";
 import SupportPage from "../pages/SupportPage";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import TermsOfService from "../pages/TermsOfService";
+import NotFound from '../pages/NotFound';
 
 
 const AppRoutes = () => {
@@ -23,6 +24,8 @@ const AppRoutes = () => {
             <Route path="/support" element={<SupportPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
+
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 };
