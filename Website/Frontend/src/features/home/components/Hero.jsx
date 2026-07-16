@@ -15,12 +15,12 @@ import { IconArrowRight, IconBuildingBank } from "@tabler/icons-react";
 const Hero = () => {
     return (
         <Box
-        as="section"
-        position="relative"
-        bg="blue.900"
-        color="white"
-        overflow="hidden"
-        py={{ base: 20, sm: 28 }}
+            as="section"
+            position="relative"
+            bg="blue.900"
+            color="white"
+            overflow="hidden"
+            py={{ base: 20, sm: 28 }}
         >
         {/* Background Pattern */}
         <Box
@@ -81,7 +81,7 @@ const Hero = () => {
             {/* CTA Button */}
             <Button
                 as={RouterLink}
-                to="/schemes"
+                to="/support"
                 size="lg"
                 colorScheme="cyan"
                 rightIcon={<IconArrowRight size={18} />}
@@ -91,7 +91,7 @@ const Hero = () => {
                 _hover={{ transform: "translateY(-2px)", shadow: "lg" }}
                 transition="all 0.3s"
             >
-                Explore Schemes
+                Need Help?
             </Button>
             
             </VStack>
