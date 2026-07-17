@@ -1,21 +1,32 @@
 
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React,{ useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity,ActivityIndicator,Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import axios from 'axios';
+import { BASE_URL } from '@/constants/api';
 
 export default function HomeScreen() {
 
     const router = useRouter();
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const categories = [
-        { name: 'Suraksha', icon: 'shield' },
-        { name: 'Kaushal', icon: 'build' },
-        { name: 'Shiksha', icon: 'school' },
-        { name: 'Krishi', icon: 'leaf' },
-        { name: 'Griha', icon: 'home' },
-        { name: 'Nari', icon: 'woman' },
-    ];
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/category/all`); 
+            setCategories(response.data.data || response.data);
+        } catch (error) {
+            console.error("Error fetching categories:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    if (loading) return <ActivityIndicator size="large" color="#0056b3" style={{ marginTop: 50 }} />;
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -38,8 +49,15 @@ export default function HomeScreen() {
             <Text style={styles.sectionTitle}>Browse by Categories</Text>
             <View style={styles.gridContainer}>
                 {categories.map((cat, index) => (
-                    <TouchableOpacity key={index} style={styles.box}>
-                        <Ionicons name={cat.icon} size={24} color="#0056b3" />
+                    <TouchableOpacity 
+                        key={cat.id ? cat.id.toString() : index.toString()} 
+                        style={styles.box}
+                    >
+                        <Image 
+                            source={{ uri: cat.icon }} 
+                            style={{ width: 30, height: 30 }} 
+                            resizeMode="contain"
+                        />
                         <Text style={styles.boxText}>{cat.name}</Text>
                     </TouchableOpacity>
                 ))}
