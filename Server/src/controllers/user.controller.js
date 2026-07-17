@@ -33,8 +33,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const lowercaseUsername = lowercase(username);
 
-    const DEFAULT_AVATAR = "https://example.com/default-avatar.png"; 
-    const DEFAULT_COVER = "https://example.com/default-cover.png";
+    const DEFAULT_AVATAR = "https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&q=80&w=200&h=200";
+    const DEFAULT_COVER = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800&h=400";
 
     let avatarUrl = DEFAULT_AVATAR; 
     let coverImageUrl = DEFAULT_COVER;
@@ -67,7 +67,13 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong while registering the user");
     }
 
-    await logActivity(user._id, "REGISTER_USER", user._id, `New user registered with username: ${user.username}`, req.ip);
+    await logActivity(
+        user._id,                                             
+        "REGISTER_USER",                                      
+        `New user registered with username: ${user.username}`, 
+        user._id,                                             
+        req.ip                                                
+    );
 
     return res.status(HttpStatus.CREATED).json(
         new ApiResponse(HttpStatus.CREATED, createdUser, "User registered Successfully")
