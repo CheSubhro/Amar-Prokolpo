@@ -9,6 +9,7 @@ export default function HomeScreen() {
 
     const router = useRouter();
     const [categories, setCategories] = useState([]);
+    const [schemes, setSchemes] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchCategories = async () => {
@@ -22,8 +23,18 @@ export default function HomeScreen() {
         }
     };
 
+    const fetchSchemes = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/scheme/top-viewed`); 
+            setSchemes(response.data.data || response.data);
+        } catch (error) {
+            console.error("Error fetching schemes:", error);
+        }
+    };
+
     useEffect(() => {
         fetchCategories();
+        fetchSchemes();
     }, []);
 
     if (loading) return <ActivityIndicator size="large" color="#0056b3" style={{ marginTop: 50 }} />;
@@ -62,6 +73,17 @@ export default function HomeScreen() {
                     </TouchableOpacity>
                 ))}
             </View>
+
+            <Text style={styles.sectionTitle}>Trending Schemes</Text>
+            {schemes.map((scheme) => (
+                <TouchableOpacity key={scheme._id} style={styles.schemeCard}>
+                    <Image source={{ uri: scheme.image }} style={styles.schemeImage} />
+                    <View style={styles.schemeInfo}>
+                        <Text style={styles.schemeName}>{scheme.title}</Text>
+                        <Text numberOfLines={2} style={styles.schemeDesc}>{scheme.description}</Text>
+                    </View>
+                </TouchableOpacity>
+            ))}
         </ScrollView>
     );
 }
@@ -108,5 +130,18 @@ const styles = StyleSheet.create({
         marginBottom: 15, 
         elevation: 2 
     },
-    boxText: { marginTop: 8, fontSize: 10, fontWeight: '600', textAlign: 'center' }
+    boxText: { marginTop: 8, fontSize: 10, fontWeight: '600', textAlign: 'center' },
+    schemeCard: { 
+        flexDirection: 'row', 
+        backgroundColor: '#fff', 
+        marginHorizontal: 20, 
+        marginBottom: 10, 
+        padding: 10, 
+        borderRadius: 12,
+        elevation: 2 
+    },
+    schemeImage: { width: 80, height: 80, borderRadius: 8 },
+    schemeInfo: { flex: 1, marginLeft: 10, justifyContent: 'center' },
+    schemeName: { fontSize: 16, fontWeight: 'bold' },
+    schemeDesc: { fontSize: 12, color: '#666', marginTop: 4 }
 });
