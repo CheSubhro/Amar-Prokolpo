@@ -6,6 +6,7 @@ import axios from 'axios';
 import { BASE_URL } from '@/constants/api'; 
 
 export default function RegisterScreen() {
+    
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState(''); 
