@@ -1,12 +1,13 @@
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { BASE_URL } from '@/constants/api';
-import axios from 'axios';
+import apiClient from '@/constants/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons'; 
 
 export default function LoginScreen() {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false); 
@@ -14,28 +15,30 @@ export default function LoginScreen() {
     const router = useRouter();
 
     const handleLogin = async () => {
+
         if (!email || !password) {
             Alert.alert("Error", "Please fill all fields");
             return;
         }
 
         setLoading(true);
+        
         try {
-            const response = await axios.post(`${BASE_URL}/users/login`, {
-                email: email,
+            const response = await apiClient.post('/users/login', {
+                email: email, 
+                username: email, 
                 password: password
-            }, {
-                headers: { 'Content-Type': 'application/json' }
             });
             
-            Alert.alert("Success", "Login Successful!");
+            const token = response.data.data.accessToken;
+            await AsyncStorage.setItem('accessToken', token);
             
-            // সফল হলে হোমে রিডাইরেক্ট
+            Alert.alert("Success", "Login Successful!");
             router.replace('/(tabs)'); 
-        
         } catch (error) {
-            console.error(error);
-            Alert.alert("Login Failed", error.response?.data?.message || "Something went wrong");
+            console.log("Full Error Object:", JSON.stringify(error, null, 2));
+            const errorMessage = error.response?.data?.message || error.message || "Something went wrong";
+            Alert.alert("Login Failed", errorMessage);
         } finally {
             setLoading(false);
         }
@@ -53,14 +56,13 @@ export default function LoginScreen() {
                 autoCapitalize="none"
             />
             
-            {/* পাসওয়ার্ড কন্টেইনার */}
             <View style={styles.passwordContainer}>
                 <TextInput
                     style={styles.passwordInput}
                     placeholder="Password"
                     value={password}
                     onChangeText={setPassword}
-                    secureTextEntry={!showPassword} // স্টেট অনুযায়ী পাসওয়ার্ড লুকানো/দেখানো
+                    secureTextEntry={!showPassword} 
                     autoCapitalize="none"
                 />
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
@@ -79,6 +81,14 @@ export default function LoginScreen() {
                 ) : (
                     <Text style={styles.buttonText}>Login</Text>
                 )}
+            </TouchableOpacity>
+            <TouchableOpacity 
+                style={{ marginTop: 20 }} 
+                onPress={() => router.push('/register')}
+            >
+                <Text style={styles.registerText}>
+                    Don't have an account? <Text style={{ fontWeight: 'bold', color: '#0056b3' }}>Register</Text>
+                </Text>
             </TouchableOpacity>
         </View>
     );
@@ -130,5 +140,10 @@ const styles = StyleSheet.create({
         color: '#fff', 
         fontSize: 18, 
         fontWeight: 'bold' 
+    },
+    registerText: {
+        textAlign: 'center',
+        fontSize: 14,
+        color: '#555',
     },
 });
