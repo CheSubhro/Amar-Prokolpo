@@ -76,7 +76,11 @@ export default function HomeScreen() {
 
             <Text style={styles.sectionTitle}>Trending Schemes</Text>
             {schemes.map((scheme) => (
-                <TouchableOpacity key={scheme._id} style={styles.schemeCard}>
+                <TouchableOpacity 
+                    key={scheme._id} 
+                    style={styles.schemeCard}
+                    onPress={() => router.push(`/schemes/${scheme.slug}`)}
+                >
                     <Image source={{ uri: scheme.image }} style={styles.schemeImage} />
                     <View style={styles.schemeInfo}>
                         <Text style={styles.schemeName}>{scheme.title}</Text>
