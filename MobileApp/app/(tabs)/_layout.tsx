@@ -5,8 +5,10 @@ import { Ionicons } from '@expo/vector-icons';
 export default function TabLayout() {
 	return (
 		<Tabs screenOptions={{ 
-			tabBarActiveTintColor: '#000', 
-			tabBarInactiveTintColor: '#8e8e93' 
+			tabBarActiveTintColor: '#343a40', 
+			tabBarInactiveTintColor: '#6c757d',
+			headerShown: false,
+			tabBarStyle: { height: 60, paddingBottom: 5 }
 		}}>
 			<Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: ({color}) => <Ionicons name="home" size={24} color={color} /> }} />
 			<Tabs.Screen name="saved" options={{ title: 'Saved', tabBarIcon: ({color}) => <Ionicons name="heart" size={24} color={color} /> }} />
