@@ -8,7 +8,8 @@ import {
     getSchemeBySlug,
     updateScheme,
     deleteScheme,
-    getTopViewedSchemes
+    getTopViewedSchemes,
+    getSchemesByCategory
 } from "../controllers/scheme.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -31,6 +32,8 @@ router.get("/top-viewed", getTopViewedSchemes);
 router.route("/all").get(getAllSchemes);
 
 router.route("/:slug").get(getSchemeBySlug);
+
+router.route("/category/:categoryId").get(getSchemesByCategory);
 
 router.route("/update/:id").patch(
     verifyJWT,

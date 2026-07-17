@@ -216,11 +216,18 @@ const getTopViewedSchemes = asyncHandler(async (req, res) => {
     );
 });
 
+const getSchemesByCategory = asyncHandler(async (req, res) => {
+    const { categoryId } = req.params;
+    const schemes = await Scheme.find({ category: categoryId }); 
+    res.status(200).json({ success: true, data: schemes });
+});
+
 export { 
     createScheme,
     getAllSchemes, 
     getSchemeBySlug, 
     updateScheme,
     deleteScheme,
-    getTopViewedSchemes 
+    getTopViewedSchemes,
+    getSchemesByCategory 
 };

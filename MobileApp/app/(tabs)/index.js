@@ -63,6 +63,10 @@ export default function HomeScreen() {
                     <TouchableOpacity 
                         key={cat.id ? cat.id.toString() : index.toString()} 
                         style={styles.box}
+                        onPress={() => router.push({
+                            pathname: '/category/[id]', 
+                            params: { id: cat._id, name: cat.name }
+                        })}
                     >
                         <Image 
                             source={{ uri: cat.icon }} 
