@@ -1,12 +1,12 @@
 
-import React,{ useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity,ActivityIndicator,Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 import { BASE_URL } from '@/constants/api';
 
 export default function HomeScreen() {
-
+    
     const router = useRouter();
     const [categories, setCategories] = useState([]);
     const [schemes, setSchemes] = useState([]);
@@ -14,18 +14,16 @@ export default function HomeScreen() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/category/all`); 
+            const response = await axios.get(`${BASE_URL}/category/all`);
             setCategories(response.data.data || response.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
-        } finally {
-            setLoading(false);
         }
     };
 
     const fetchSchemes = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/scheme/top-viewed`); 
+            const response = await axios.get(`${BASE_URL}/scheme/top-viewed`);
             setSchemes(response.data.data || response.data);
         } catch (error) {
             console.error("Error fetching schemes:", error);
@@ -33,8 +31,12 @@ export default function HomeScreen() {
     };
 
     useEffect(() => {
-        fetchCategories();
-        fetchSchemes();
+        const loadAllData = async () => {
+            setLoading(true);
+            await Promise.all([fetchCategories(), fetchSchemes()]);
+            setLoading(false);
+        };
+        loadAllData();
     }, []);
 
     if (loading) return <ActivityIndicator size="large" color="#0056b3" style={{ marginTop: 50 }} />;
@@ -56,23 +58,18 @@ export default function HomeScreen() {
                 <Text style={styles.cardText}>Check out the newest schemes and apply based on your eligibility.</Text>
             </View>
 
-            {/* Categories Section */}
             <Text style={styles.sectionTitle}>Browse by Categories</Text>
             <View style={styles.gridContainer}>
                 {categories.map((cat, index) => (
                     <TouchableOpacity 
-                        key={cat.id ? cat.id.toString() : index.toString()} 
+                        key={cat._id || index.toString()} 
                         style={styles.box}
                         onPress={() => router.push({
                             pathname: '/category/[id]', 
                             params: { id: cat._id, name: cat.name }
                         })}
                     >
-                        <Image 
-                            source={{ uri: cat.icon }} 
-                            style={{ width: 30, height: 30 }} 
-                            resizeMode="contain"
-                        />
+                        <Image source={{ uri: cat.icon }} style={{ width: 30, height: 30 }} resizeMode="contain" />
                         <Text style={styles.boxText}>{cat.name}</Text>
                     </TouchableOpacity>
                 ))}
@@ -98,56 +95,21 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#f4f7f6' },
-    heroSection: { 
-        backgroundColor: '#0056b3', 
-        padding: 40, 
-        paddingTop: 60,
-        borderBottomLeftRadius: 30, 
-        borderBottomRightRadius: 30,
-        alignItems: 'center',
-        marginBottom: 20
-    },
+    heroSection: { backgroundColor: '#0056b3', padding: 40, paddingTop: 60, borderBottomLeftRadius: 30, borderBottomRightRadius: 30, alignItems: 'center', marginBottom: 20 },
     heroTitle: { fontSize: 32, fontWeight: 'bold', color: '#fff' },
     heroSubtitle: { color: '#e0e0e0', textAlign: 'center', marginVertical: 10, fontSize: 14 },
     heroButton: { backgroundColor: '#fff', paddingVertical: 10, paddingHorizontal: 25, borderRadius: 20, marginTop: 10 },
     heroButtonText: { color: '#0056b3', fontWeight: 'bold' },
-    card: { backgroundColor: '#fff', padding: 20, marginHorizontal: 20, borderRadius: 15, elevation: 3 },
+    card: { backgroundColor: '#fff', padding: 20, marginHorizontal: 20, borderRadius: 15, elevation: 3, marginBottom: 20 },
     cardTitle: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
     cardText: { fontSize: 14, color: '#444' },
-    section: { marginTop: 20, paddingHorizontal: 20 },
-    sectionTitle: { 
-        fontSize: 18, 
-        fontWeight: 'bold', 
-        marginBottom: 15, 
-        color: '#333',
-        marginLeft: 15, 
-    },
-    row: { flexDirection: 'row', justifyContent: 'space-between' },
-    gridContainer: { 
-        flexDirection: 'row', 
-        flexWrap: 'wrap', 
-        justifyContent: 'space-between', 
-        paddingHorizontal: 20 
-    },
-    box: { 
-        backgroundColor: '#fff', 
-        padding: 15, 
-        borderRadius: 12, 
-        alignItems: 'center', 
-        width: '30%', 
-        marginBottom: 15, 
-        elevation: 2 
-    },
+    sectionTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, color: '#333', marginLeft: 20 },
+    gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', paddingHorizontal: 20 },
+    box: { backgroundColor: '#fff', padding: 15, borderRadius: 12, alignItems: 'center', width: '30%', marginBottom: 15, elevation: 2 },
     boxText: { marginTop: 8, fontSize: 10, fontWeight: '600', textAlign: 'center' },
-    schemeCard: { 
-        flexDirection: 'row', 
-        backgroundColor: '#fff', 
-        marginHorizontal: 20, 
-        marginBottom: 10, 
-        padding: 10, 
-        borderRadius: 12,
-        elevation: 2 
-    },
+    savedCard: { backgroundColor: '#0056b3', padding: 15, borderRadius: 10, marginRight: 10, width: 150, justifyContent: 'center' },
+    savedTitle: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
+    schemeCard: { flexDirection: 'row', backgroundColor: '#fff', marginHorizontal: 20, marginBottom: 10, padding: 10, borderRadius: 12, elevation: 2 },
     schemeImage: { width: 80, height: 80, borderRadius: 8 },
     schemeInfo: { flex: 1, marginLeft: 10, justifyContent: 'center' },
     schemeName: { fontSize: 16, fontWeight: 'bold' },

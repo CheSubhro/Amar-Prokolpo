@@ -1,14 +1,18 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator,
+         Linking, TouchableOpacity,Alert } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { BASE_URL } from '@/constants/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SchemeDetails() {
+
     const { slug } = useLocalSearchParams();
     const [scheme, setScheme] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -23,6 +27,27 @@ export default function SchemeDetails() {
         };
         fetchDetails();
     }, [slug]);
+
+    const toggleSave = async () => {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            if (!token) {
+                Alert.alert("Login Required", "Please login to save schemes");
+                return;
+            }
+
+            const response = await axios.post(`${BASE_URL}/saved-schemes/toggle`, 
+                { schemeId: scheme._id },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            
+            setIsSaved(response.data.data.isSaved);
+            Alert.alert("Success", response.data.message);
+        } catch (error) {
+            console.log(error);
+            Alert.alert("Error", "Something went wrong");
+        }
+    };
 
     if (loading) return <ActivityIndicator size="large" color="#0056b3" style={{ marginTop: 50 }} />;
     if (!scheme) return <Text style={styles.errorText}>Scheme not found!</Text>;
@@ -54,6 +79,12 @@ export default function SchemeDetails() {
                 <Text style={styles.sectionHeading}>Required Documents</Text>
                 {scheme.requiredDocuments.map((item, index) => <Text key={index} style={styles.bullet}>• {item}</Text>)}
 
+                <TouchableOpacity style={styles.saveButton} onPress={toggleSave}>
+                    <Text style={styles.saveButtonText}>
+                        {isSaved ? "★ Saved" : "☆ Save Scheme"}
+                    </Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity style={styles.applyButton} onPress={() => Linking.openURL(scheme.applicationLink)}>
                     <Text style={styles.applyButtonText}>Apply Now</Text>
                 </TouchableOpacity>
@@ -80,7 +111,33 @@ const styles = StyleSheet.create({
     value: { fontWeight: 'normal', color: '#666' },
     sectionHeading: { fontSize: 20, fontWeight: 'bold', marginTop: 15, marginBottom: 10, color: '#0056b3' },
     bullet: { fontSize: 15, color: '#555', marginBottom: 5, paddingLeft: 10 },
-    applyButton: { backgroundColor: '#000000', padding: 15, borderRadius: 10, alignItems: 'center', marginTop: 30, marginBottom: 50 },
-    applyButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-    errorText: { textAlign: 'center', marginTop: 50, fontSize: 16 }
+    errorText: { textAlign: 'center', marginTop: 50, fontSize: 16 },
+    saveButton: { 
+        backgroundColor: '#f0f0f0', 
+        padding: 15, 
+        borderRadius: 10, 
+        alignItems: 'center', 
+        marginTop: 10, 
+        borderWidth: 1,
+        borderColor: '#ccc'
+    },
+    saveButtonText: { 
+        color: '#333', 
+        fontSize: 18, 
+        fontWeight: 'bold' 
+    },
+    applyButton: { 
+        backgroundColor: '#000000', 
+        padding: 15, 
+        borderRadius: 10, 
+        alignItems: 'center', 
+        marginTop: 15, 
+        marginBottom: 50 
+    },
+    applyButtonText: { 
+        color: '#fff', 
+        fontSize: 18, 
+        fontWeight: 'bold' 
+    },
+
 });
