@@ -1,84 +1,74 @@
-Amar Prokolpo: Government Schemes Information Portal
-"Amar Prokolpo" is a comprehensive multi-platform ecosystem designed to aggregate, manage, and distribute information about Central and State government schemes. This project consists of a robust backend, two distinct web frontends (User & Admin), and a native mobile application.
 
-🛠️ Tech Stack & Architecture
-1. Backend (Amar Prokolpo Server)
-The core service layer powering all frontends.
+🏛️ Amar Prokolpo - Government Schemes Portal
+Amar Prokolpo is a production-ready, full-stack ecosystem designed to bridge the gap between citizens and government welfare schemes. This project includes a high-performance backend, two specialized web frontends (User & Admin), and a native mobile application.
 
-Runtime: Node.js, Express
+🚀 Overview
+This repository manages a centralized database of government schemes, offering:
 
-Database: MongoDB, Mongoose
+Centralized Data Management: Secure handling of scheme information.
 
-Security: JWT, Bcrypt, Cookie-Parser, CORS
+Role-Based Access Control: Separate portals for users and administrators.
 
-Storage/Services: Cloudinary (Media), Firebase Admin, Nodemailer (Email), Multer
+Cross-Platform Availability: Accessible via Web (Responsive) and Mobile (Android/iOS).
 
-Utilities: Winston (Logging), Node-Cron (Scheduling), Express-Validator
+🛠️ Technology Stack
+Backend Infrastructure
+Core: Node.js & Express (Fast & Scalable API).
 
-2. Website Frontend (User)
-The primary user-facing interface for citizens.
+Database: MongoDB with Mongoose (Flexible schema design).
 
-Core: React 19, Vite, Redux Toolkit
+Security: JWT Authentication, Bcrypt (Password Hashing), CORS, Cookie-Parser.
 
-UI/Styling: Chakra UI, Sass
+Services: Cloudinary (Cloud Media Storage), Firebase Admin, Nodemailer (Notifications), Node-Cron (Automated tasks).
 
-Navigation: React Router
+Monitoring: Winston (Structured logging for better debugging).
 
-Data Fetching: Axios, TanStack-like patterns
+Frontend (Website & Admin Panel)
+Core: React 19 (Vite build tool) with Redux Toolkit.
 
-3. Admin Panel Frontend
-The dedicated management dashboard for administrators.
+Styling (Website): Chakra UI & Sass (User-centric responsive design).
 
-Core: React 19, Vite, Redux Toolkit
+Styling (Admin): Tailwind CSS & Shadcn UI (Component-driven dashboard).
 
-Form Management: React Hook Form, Zod, Shadcn UI
+Form Logic: React Hook Form with Zod validation.
 
-Styling: Tailwind CSS, Framer Motion (via tw-animate)
+Mobile Application
+Framework: Expo (React Native).
 
-Utilities: Lucide React, Sonner (Toasts)
+Navigation: Expo Router for seamless mobile transitions.
 
-4. Mobile App
-Native experience built for mobile users.
+UX: React Native Reanimated & Gesture Handler for fluid animations.
 
-Framework: Expo (React Native)
-
-Navigation: Expo Router, React Navigation
-
-State/Storage: Async Storage
-
-UI Elements: Expo Vector Icons, Reanimated, Gesture Handler
-
-🚀 Key Features
-Unified Scheme Management: Centralized data management for government schemes.
-
-Role-Based Access: Secure dashboards for administrative control.
-
-Responsive UI/UX: Optimized experiences across desktop and mobile devices.
-
-Secure Authentication: Token-based security across all platforms.
-
-Media Handling: Efficient image uploads and management using Cloudinary.
-
-
-⚙️ Setup Instructions
-Backend
+📂 Project Structure
+Plaintext
+Amar-Prokolpo/
+├── backend/          # RESTful API server & Business Logic
+├── frontend/         # User Web Interface (Chakra UI)
+├── admin-panel/      # Admin Management Dashboard (Shadcn/Tailwind)
+└── mobileapp/        # Native Cross-platform Mobile App (Expo)
+⚙️ Development Setup
+1. Backend Setup
+Bash
 cd backend
-
 npm install
-
-Create .env (add DB_URI, JWT_SECRET, CLOUDINARY_KEYS)
-
+# Setup .env (DB_URI, JWT_SECRET, CLOUDINARY_KEYS, etc.)
 npm start
-
-Web Frontends & Mobile
-cd <directory_name>
-
+2. Frontend/Admin Setup
+Bash
+cd <frontend-or-admin-panel>
 npm install
+npm run dev
+3. Mobile App Setup
+Bash
+cd mobileapp
+npm install
+npx expo start
+🔑 Key Pillars
+Security: Secured API endpoints using JWT and rigorous validation with express-validator and zod.
 
-npm run dev (for web) or npx expo start (for mobile)
+Scalability: Modular folder structure allowing independent deployment for each sub-project.
 
+Performance: Fast build times with Vite and efficient data state management using Redux Toolkit.
 
-
-
-
-
+🛡️ License
+This project is licensed under the ISC License.
