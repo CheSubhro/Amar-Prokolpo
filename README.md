@@ -2,6 +2,7 @@
 🏛️ Amar Prokolpo - Government Schemes Portal
 Amar Prokolpo is a production-ready, full-stack ecosystem designed to bridge the gap between citizens and government welfare schemes. This project includes a high-performance backend, two specialized web frontends (User & Admin), and a native mobile application.
 
+screenshot/website/screencapture-localhost-5173-2026-07-20-15_09_10.png
 🚀 Overview
 This repository manages a centralized database of government schemes, offering:
 
