@@ -35,6 +35,11 @@ export default function SchemeDetails() {
                     );
                     setIsWishlisted(isInWishlist);
 
+                    const savedResponse = await axios.get(`${BASE_URL}/saved-schemes/list`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setIsSaved(savedResponse.data.data.some(item => item.scheme._id === schemeData._id));
+
                 }
             } catch (error) {
                 console.log("Detailed Error:", error.response?.data || error.message);
