@@ -14,6 +14,11 @@ const schemeService = {
                   error.message || 
                   "An unexpected error occurred";
         }
+    },
+
+    getSchemesByCategory: async (categoryId) => {
+        const response = await api.get(`/scheme/category/${categoryId}`);
+        return response.data;
     }
 };
 

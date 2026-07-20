@@ -87,7 +87,7 @@ const updateCategory = asyncHandler ( async (req,res) =>{
     res.status(HttpStatus.OK).json(
         new ApiResponse(HttpStatus.OK, category, "Category updated successfully")
     );
-})
+});
 
 const getCategoryBySlug = asyncHandler(async (req, res) => {
 
@@ -121,7 +121,13 @@ const deleteCategory = asyncHandler ( async (req,res) =>{
     res.status(HttpStatus.OK).json(
         new ApiResponse(HttpStatus.OK, {}, "Category deleted successfully")
     );
-})
+});
+
+const getSchemesByCategory = asyncHandler(async (req, res) => {
+    const { categoryId } = req.params;
+    const schemes = await Scheme.find({ category: categoryId }); 
+    res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, schemes, "Schemes fetched"));
+});
 
 
 
@@ -130,7 +136,8 @@ export {
     getAllCategories,
     getCategoryBySlug,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    getSchemesByCategory
 }
 
 

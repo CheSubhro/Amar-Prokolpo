@@ -15,8 +15,22 @@ export const fetchSchemeBySlug = createAsyncThunk(
     }
 );
 
+// Fetch Schemes By Category
+export const fetchSchemesByCategory = createAsyncThunk(
+    "scheme/fetchSchemesByCategory",
+    async (categoryId, { rejectWithValue }) => {
+        try {
+            const response = await schemeService.getSchemesByCategory(categoryId);
+            return response; 
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
 const initialState = {
     scheme: null,
+    schemes: [],          
     relatedSchemes: [],
     loading: false,
     error: null,
@@ -28,12 +42,14 @@ const schemeSlice = createSlice({
     reducers: {
         clearSchemeState: (state) => {
             state.scheme = null;
+            state.schemes = [];        
             state.relatedSchemes = [];
             state.error = null;
         }
     },
     extraReducers: (builder) => {
         builder
+            // Fetch Scheme By Slug
             .addCase(fetchSchemeBySlug.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -44,6 +60,19 @@ const schemeSlice = createSlice({
                 state.relatedSchemes = action.payload.data.relatedSchemes;
             })
             .addCase(fetchSchemeBySlug.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Fetch Schemes By Category
+            .addCase(fetchSchemesByCategory.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSchemesByCategory.fulfilled, (state, action) => {
+                state.loading = false;
+                state.schemes = action.payload.data; 
+            })
+            .addCase(fetchSchemesByCategory.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

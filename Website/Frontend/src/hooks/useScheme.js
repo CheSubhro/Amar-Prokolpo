@@ -1,18 +1,14 @@
 
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSchemeBySlug, clearSchemeState } from "../features/scheme/schemeSlice";
+import { fetchSchemeBySlug, clearSchemeState,fetchSchemesByCategory  } from "../features/scheme/schemeSlice";
 
 const useScheme = () => {
     
     const dispatch = useDispatch();
-    
-    const { 
-        scheme, 
-        relatedSchemes, 
-        loading, 
-        error 
-    } = useSelector((state) => state.scheme);
+    const { scheme, schemes, relatedSchemes, loading, error } = useSelector((state) => state.scheme);
 
+    const getSchemesByCategory = (categoryId) => dispatch(fetchSchemesByCategory(categoryId));    
+    
     const getSchemeBySlug = (slug) => {
         return dispatch(fetchSchemeBySlug(slug));
     };
@@ -23,10 +19,12 @@ const useScheme = () => {
 
     return {
         scheme,
+        schemes, 
         relatedSchemes,
         loading,
         error,
         getSchemeBySlug,
+        getSchemesByCategory, 
         resetScheme
     };
 };

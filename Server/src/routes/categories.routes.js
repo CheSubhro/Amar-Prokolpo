@@ -7,7 +7,8 @@ import {
         getAllCategories,
         updateCategory,
         getCategoryBySlug,
-        deleteCategory 
+        deleteCategory,
+        getSchemesByCategory 
     } from "../controllers/categories.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin, verifyAdminOrModerator } from "../middlewares/admin.middleware.js";
@@ -48,7 +49,7 @@ router.route("/update/:id").patch(
 );
 
 router.route("/:slug").get(getCategoryBySlug);
-
+router.route("/category/:categoryId").get(getSchemesByCategory);
 router.route("/delete/:id").delete(verifyJWT,verifyAdmin,deleteCategory);
 
 
