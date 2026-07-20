@@ -41,8 +41,34 @@ const removeFromWishlist = asyncHandler(async (req, res) => {
     res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, {}, "Removed from wishlist"));
 });
 
+const toggleWishlist = asyncHandler(async (req, res) => {
+    const { schemeId, notes, reminderDate, folderName } = req.body;
+    if (!schemeId) throw new ApiError(HttpStatus.BAD_REQUEST, "Scheme ID is required");
+
+    const userId = req.user._id;
+
+    const existingWish = await Wishlist.findOne({ userId, schemeId });
+
+    if (existingWish) {
+        await Wishlist.findByIdAndDelete(existingWish._id);
+        await logActivity(userId, "REMOVE_WISHLIST", `Removed scheme ${schemeId} from wishlist`);
+        return res.status(HttpStatus.OK).json(new ApiResponse(HttpStatus.OK, { isWishlisted: false }, "Removed from wishlist"));
+    } else {
+        const wish = await Wishlist.create({
+            userId,
+            schemeId,
+            notes,
+            reminderDate,
+            folderName
+        });
+        await logActivity(userId, "ADD_WISHLIST", `Added scheme ${schemeId} to wishlist`);
+        return res.status(HttpStatus.CREATED).json(new ApiResponse(HttpStatus.CREATED, { isWishlisted: true }, "Added to wishlist"));
+    }
+});
+
 export { 
     addToWishlist, 
     getWishlist, 
-    removeFromWishlist 
+    removeFromWishlist,
+    toggleWishlist 
 };

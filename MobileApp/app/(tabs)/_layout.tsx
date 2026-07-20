@@ -11,6 +11,7 @@ import { useCallback } from 'react';
 export default function TabLayout() {
 
 	const [savedCount, setSavedCount] = useState(0);
+    const [wishlistCount, setWishlistCount] = useState(0);
 
 	const fetchSavedCount = async () => {
         try {
@@ -26,9 +27,24 @@ export default function TabLayout() {
         }
     };
 
+    const fetchWishlistCount = async () => {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            if (token) {
+                const response = await axios.get(`${BASE_URL}/wishlist`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setWishlistCount(response.data.data ? response.data.data.length : 0);
+            }
+        } catch (error) {
+            console.log("Error fetching wishlist count");
+        }
+    };
+
 	useFocusEffect(
         useCallback(() => {
             fetchSavedCount();
+            fetchWishlistCount();
         }, [])
     );
 
@@ -50,7 +66,15 @@ export default function TabLayout() {
 				}} 
 			/>
 
-            <Tabs.Screen name="wishlist" options={{ title: 'Wishlist', tabBarIcon: ({color}) => <Ionicons name="list" size={24} color={color} /> }} />
+            <Tabs.Screen 
+                name="wishlist" 
+                options={{ 
+                    title: 'Wishlist', 
+                    tabBarIcon: ({color}) => <Ionicons name="list" size={24} color={color} />,
+                    tabBarBadge: wishlistCount > 0 ? wishlistCount : undefined 
+                }} 
+            />
+
             <Tabs.Screen name="support" options={{ title: 'Support', tabBarIcon: ({color}) => <Ionicons name="chatbubble" size={24} color={color} /> }} />
             <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({color}) => <Ionicons name="person" size={24} color={color} /> }} />
         </Tabs>

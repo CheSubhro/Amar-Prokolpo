@@ -13,12 +13,29 @@ export default function SchemeDetails() {
     const [scheme, setScheme] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSaved, setIsSaved] = useState(false);
+    const [isWishlisted, setIsWishlisted] = useState(false);
+    
 
     useEffect(() => {
         const fetchDetails = async () => {
             try {
+                const token = await AsyncStorage.getItem('accessToken');
+                
                 const response = await axios.get(`${BASE_URL}/scheme/${slug}`);
-                setScheme(response.data.data.scheme);
+                const schemeData = response.data.data.scheme;
+                setScheme(schemeData);
+
+                if (token) {
+                    const wishlistResponse = await axios.get(`${BASE_URL}/wishlist`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    
+                    const isInWishlist = wishlistResponse.data.data.some(
+                        (item) => item.schemeId?._id === schemeData._id
+                    );
+                    setIsWishlisted(isInWishlist);
+
+                }
             } catch (error) {
                 console.log("Detailed Error:", error.response?.data || error.message);
             } finally {
@@ -45,6 +62,26 @@ export default function SchemeDetails() {
             Alert.alert("Success", response.data.message);
         } catch (error) {
             console.log(error);
+            Alert.alert("Error", "Something went wrong");
+        }
+    };
+
+    const toggleWishlist = async () => {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            if (!token) {
+                Alert.alert("Login Required", "Please login to add to wishlist");
+                return;
+            }
+    
+            const response = await axios.post(`${BASE_URL}/wishlist/toggle`, 
+                { schemeId: scheme._id },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            
+            setIsWishlisted(response.data.data.isWishlisted);
+            Alert.alert("Success", response.data.message);
+        } catch (error) {
             Alert.alert("Error", "Something went wrong");
         }
     };
@@ -82,6 +119,12 @@ export default function SchemeDetails() {
                 <TouchableOpacity style={styles.saveButton} onPress={toggleSave}>
                     <Text style={styles.saveButtonText}>
                         {isSaved ? "★ Saved" : "☆ Save Scheme"}
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={[styles.wishlistButton, { backgroundColor: isWishlisted ? '#d9534f' : '#343a40' }]} onPress={toggleWishlist}>
+                    <Text style={styles.wishlistButtonText}>
+                        {isWishlisted ? "★ Wishlisted" : "+ Add to Wishlist"}
                     </Text>
                 </TouchableOpacity>
 
@@ -137,6 +180,18 @@ const styles = StyleSheet.create({
     applyButtonText: { 
         color: '#fff', 
         fontSize: 18, 
+        fontWeight: 'bold' 
+    },
+    wishlistButton: { 
+        padding: 15, 
+        borderRadius: 10, 
+        alignItems: 'center', 
+        marginTop: 10,
+        marginBottom: 10
+    },
+    wishlistButtonText: { 
+        color: '#fff', 
+        fontSize: 16, 
         fontWeight: 'bold' 
     },
 
