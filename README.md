@@ -3,16 +3,16 @@
 Amar Prokolpo is a production-ready, full-stack ecosystem designed to bridge the gap between citizens and government welfare schemes. This project includes a high-performance backend, two specialized web frontends (User & Admin), and a native mobile application.
 
 ### 1. Home Page
-![Home](screenshot/website/screencapture-localhost-5173-2026-07-20-15_09_10.png)
+![Home](screenshot/Website/screencapture-localhost-5173-2026-07-20-15_09_10.png)
 
 ### 2. Scheme Details (Krishi Unnayan)
-![Krishi](screenshot/website/screencapture-localhost-5173-scheme-krishi-unnayan-equipment-subsidy-2026-07-20-15_14_11.png)
+![Krishi](screenshot/Website/screencapture-localhost-5173-scheme-krishi-unnayan-equipment-subsidy-2026-07-20-15_14_11.png)
 
 ### 3. Saved Schemes
-![Saved Schemes](screenshot/website/screencapture-localhost-5173-saved-schemes-2026-07-20-15_15_44.png)
+![Saved Schemes](screenshot/Website/screencapture-localhost-5173-saved-schemes-2026-07-20-15_15_44.png)
 
 ### 4. Scheme Details (Skill India)
-![Skill India](screenshot/website/screencapture-localhost-5173-scheme-skill-india-2026-07-20-15_15_23.png)
+![Skill India](screenshot/Website/screencapture-localhost-5173-scheme-skill-india-2026-07-20-15_15_23.png)
 
 🚀 Overview
 This repository manages a centralized database of government schemes, offering:
