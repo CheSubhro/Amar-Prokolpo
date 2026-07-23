@@ -82,5 +82,5 @@ Scalability: Modular folder structure allowing independent deployment for each s
 
 Performance: Fast build times with Vite and efficient data state management using Redux Toolkit.
 
-🛡️ License
-This project is licensed under the ISC License.
+👨‍💻 Developed by CheSubhro
+Built with 💜 for a seamless experience.
