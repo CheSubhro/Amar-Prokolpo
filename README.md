@@ -2,6 +2,26 @@
 🏛️ Amar Prokolpo - Government Schemes Portal
 Amar Prokolpo is a production-ready, full-stack ecosystem designed to bridge the gap between citizens and government welfare schemes. This project includes a high-performance backend, two specialized web frontends (User & Admin), and a native mobile application.
 
+#Admin Panel 
+
+![Admin Panel](screenshot/Admin%20Panel/screencapture-localhost-5173-2026-07-20-14_55_47.png)
+![Admin Panel](screenshot/Admin%20Panel/screencapture-localhost-5173-2026-07-20-14_56_41.png)
+![Admin Panel](screenshot/Admin%20Panel/screencapture-localhost-5173-2026-07-20-14_57_00.png)
+![Categories](screenshot/Admin%20Panel/screencapture-localhost-5173-categories-2026-07-20-14_57_57.png)
+![Categories](screenshot/Admin%20Panel/screencapture-localhost-5173-categories-2026-07-20-14_58_10.png)
+![Categories](screenshot/Admin%20Panel/screencapture-localhost-5173-categories-2026-07-20-14_58_24.png)
+![Change Password](screenshot/Admin%20Panel/screencapture-localhost-5173-change-password-2026-07-20-14_57_27.png)
+![Login](screenshot/Admin%20Panel/screencapture-localhost-5173-login-2026-07-20-14_55_28.png)
+![Profile](screenshot/Admin%20Panel/screencapture-localhost-5173-profile-2026-07-20-14_57_13.png)
+![Reviews](screenshot/Admin%20Panel/screencapture-localhost-5173-reviews-2026-07-20-15_18_54.png)
+![Schemes](screenshot/Admin%20Panel/screencapture-localhost-5173-schemes-2026-07-20-14_58_57.png)
+![Schemes](screenshot/Admin%20Panel/screencapture-localhost-5173-schemes-2026-07-20-14_59_05.png)
+![Schemes](screenshot/Admin%20Panel/screencapture-localhost-5173-schemes-2026-07-20-14_59_21.png)
+![Schemes](screenshot/Admin%20Panel/screencapture-localhost-5173-schemes-2026-07-20-14_59_37.png)
+![Support](screenshot/Admin%20Panel/screencapture-localhost-5173-support-2026-07-20-14_59_54.png)
+![Support](screenshot/Admin%20Panel/screencapture-localhost-5173-support-2026-07-20-15_00_11.png)
+![Users](screenshot/Admin%20Panel/screencapture-localhost-5173-users-2026-07-20-14_57_46.png)
+
 ### 1. Home Page
 ![Home](screenshot/Website/screencapture-localhost-5173-2026-07-20-15_09_10.png)
 
